@@ -1,14 +1,34 @@
 {
   "app": {
-    "name": "Memolia",
+    "name": "MemoLia",
     "description": "URL保管アプリ"
   },
-  "home": {
-    "title": "Memolia - URL保管アプリ",
-    "subtitle": "お気に入りのURLを整理して保管しましょう"
+  "top": {
+    "title": "MemoLia",
+    "subtitle": "お気に入りのURLを整理して保管しましょう",
+    "tagline": "シンプルで使いやすいURL管理アプリ",
+    "features": {
+      "bookmark": {
+        "title": "お気に入りURL登録",
+        "description": "お気に入りのURLを簡単に登録・管理できます"
+      },
+      "customize": {
+        "title": "カスタマイズ設定",
+        "description": "カテゴリ、ジャンル、タグで自由に分類設定"
+      },
+      "search": {
+        "title": "高速検索",
+        "description": "カテゴリ、ジャンル、タグで素早くURLを発見"
+      }
+    },
+    "cta": {
+      "title": "今すぐ始めましょう",
+      "description": "無料でアカウントを作成して、URL管理を始めませんか？",
+      "button": "無料で始める"
+    }
   },
   "navigation": {
-    "home": "ホーム",
+    "top": "トップ",
     "dashboard": "ダッシュボード",
     "bookmarks": "ブックマーク",
     "settings": "設定"

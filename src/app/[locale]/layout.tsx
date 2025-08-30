@@ -1,3 +1,4 @@
+import { Background } from "@/components/ui";
 import type { PageMetaOptions } from "@/types";
 import { generateMetadata as generateMeta, isLocaleEnglish } from "@/utils/meta";
 import type { Metadata } from "next";
@@ -29,6 +30,12 @@ export async function generateMetadata({
   return generateMeta(locale, metaOptions);
 }
 
+/**
+ * ロケールレイアウト
+ * @param children - 子要素
+ * @param params - パラメータ
+ * @returns ロケールレイアウト
+ */
 export default async function LocaleLayout({
   children,
   params,
@@ -40,9 +47,11 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
-      <body className="antialiased">
-        <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+    <html lang={locale} className="dark:bg-gray-900 h-full">
+      <body className="antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 h-full overflow-hidden">
+        <Background className="h-full">
+          <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+        </Background>
       </body>
     </html>
   );

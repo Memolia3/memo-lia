@@ -1,14 +1,34 @@
 {
   "app": {
-    "name": "Memolia",
+    "name": "MemoLia",
     "description": "URL Bookmark App"
   },
-  "home": {
-    "title": "Memolia - URL Bookmark App",
-    "subtitle": "Organize and store your favorite URLs"
+  "top": {
+    "title": "MemoLia",
+    "subtitle": "Organize and store your favorite URLs",
+    "tagline": "Simple and easy-to-use URL management app",
+    "features": {
+      "bookmark": {
+        "title": "Favorite URL Registration",
+        "description": "Easily register and manage your favorite URLs"
+      },
+      "customize": {
+        "title": "Customization Settings",
+        "description": "Freely categorize with categories, genres, and tags"
+      },
+      "search": {
+        "title": "Fast Search",
+        "description": "Quickly discover URLs with categories, genres, and tags"
+      }
+    },
+    "cta": {
+      "title": "Start Now",
+      "description": "Create a free account and start URL management?",
+      "button": "Start Free"
+    }
   },
   "navigation": {
-    "home": "Home",
+    "top": "Top",
     "dashboard": "Dashboard",
     "bookmarks": "Bookmarks",
     "settings": "Settings"
