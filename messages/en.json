@@ -1,0 +1,26 @@
+{
+  "app": {
+    "name": "Memolia",
+    "description": "URL Bookmark App"
+  },
+  "home": {
+    "title": "Memolia - URL Bookmark App",
+    "subtitle": "Organize and store your favorite URLs"
+  },
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "bookmarks": "Bookmarks",
+    "settings": "Settings"
+  },
+  "common": {
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "search": "Search",
+    "loading": "Loading...",
+    "error": "Error occurred"
+  }
+}
