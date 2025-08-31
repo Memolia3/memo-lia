@@ -6,7 +6,11 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import "../globals.css";
 
-// 動的メタデータ生成関数
+/**
+ * 動的メタデータ生成関数
+ * @param params - パラメータ
+ * @returns メタデータ
+ */
 export async function generateMetadata({
   params,
 }: {

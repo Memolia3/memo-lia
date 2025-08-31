@@ -1,6 +1,7 @@
-import { Button, GlassBackground, Icon, Typography } from "@/components/ui";
+import { Button, Divider, GlassBackground, Icon, Image, Typography } from "@/components/ui";
 import { AdSense } from "@/features/google";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 
 /**
  * デスクトップ版TOPページ
@@ -13,7 +14,7 @@ export const TopDesktop: React.FC = () => {
       {/* メインコンテンツ */}
       <div className="grid grid-cols-2 gap-12 items-center flex-1">
         {/* 左半分: 主要機能3つ（縦並び） */}
-        <div className="space-y-6 overflow-y-auto max-h-full">
+        <div className="space-y-6 overflow-y-auto overflow-x-hidden max-h-full py-4 px-4">
           <GlassBackground variant="default" className="p-6">
             <div className="flex items-center space-x-4">
               <Icon name="bookmark" size="xl" color="accent" />
@@ -62,9 +63,12 @@ export const TopDesktop: React.FC = () => {
           {/* アプリ名・キャッチコピー */}
           <div className="space-y-6 text-center w-full">
             {/* メインタイトル */}
-            <Typography as="h1" variant="display" weight="bold" color="primary" align="center">
-              {t("top.title")}
-            </Typography>
+            <div className="flex items-center justify-center space-x-4">
+              <Image name="memo-lia-icon" size="3xl" alt="MemoLia Icon" />
+              <Typography as="h1" variant="display" weight="bold" color="primary">
+                {t("top.title")}
+              </Typography>
+            </div>
 
             {/* タグライン（短い説明） */}
             <Typography variant="h4" color="accent" align="center" className="font-medium">
@@ -82,17 +86,22 @@ export const TopDesktop: React.FC = () => {
             </Typography>
           </div>
 
+          {/* 境界線 */}
+          <Divider variant="gradient" thickness="normal" color="gray" />
+
           {/* CTA */}
           <div className="space-y-4 text-center w-full">
             <Typography as="h2" variant="h3" weight="bold" color="primary" align="center">
               {t("top.cta.title")}
             </Typography>
-            <Typography variant="body" color="muted" align="center">
+            <Typography variant="body" color="muted" align="center" className="whitespace-pre-line">
               {t("top.cta.description")}
             </Typography>
-            <Button size="xl" rounded="xl" className="shadow-lg hover:shadow-xl">
-              {t("top.cta.button")}
-            </Button>
+            <Link href="/auth" className="inline-block">
+              <Button size="xl" rounded="xl" className="shadow-lg hover:shadow-xl">
+                {t("top.cta.button")}
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

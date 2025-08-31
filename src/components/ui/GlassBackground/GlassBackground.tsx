@@ -62,6 +62,8 @@ export const GlassBackground: React.FC<GlassBackgroundProps> = ({
         "shadow-2xl",
         // 背景のぼかし
         backdrop && blurStyles[blur],
+        // ホバー効果（スケールとシャドウ）
+        "transition-all duration-300 ease-out transform hover:scale-105 hover:shadow-3xl",
         // カスタムクラス
         className
       )}

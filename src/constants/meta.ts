@@ -1,3 +1,4 @@
+// 言語定数
 export const LOCALES: {
   ENGLISH: string;
   JAPANESE: string;
@@ -6,6 +7,7 @@ export const LOCALES: {
   JAPANESE: "ja",
 } as const;
 
+// サイト定数
 export const SITE_NAME = "MemoLia";
 export const AUTHOR = "Memolia";
 
@@ -72,4 +74,10 @@ export const LOCALE_CONFIG = {
     description: META.DESCRIPTIONS.JA,
     keywords: [...META.KEYWORDS.COMMON, ...META.KEYWORDS.JA],
   },
+} as const;
+
+// ページ定数
+export const PAGES = {
+  TOP: "/",
+  AUTH: "/auth",
 } as const;

@@ -21,3 +21,11 @@ export type { BackgroundProps } from "./Background";
 // Icon
 export { Icon } from "./Icon";
 export type { IconProps } from "./Icon";
+
+// Image
+export { Image } from "./Image";
+export type { ImageProps } from "./Image";
+
+// Divider
+export { Divider } from "./Divider";
+export type { DividerProps } from "./Divider";
