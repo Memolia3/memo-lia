@@ -10,6 +10,8 @@ import { TypographyProps } from "./Typography.types";
  * @param weight - テキストの太さ
  * @param color - テキストの色
  * @param align - テキストの揃え
+ * @param padding - パディングのサイズ (none, sm, md, lg, xl)
+ * @param className - クラス名
  */
 export const Typography: React.FC<TypographyProps> = ({
   children,
@@ -19,6 +21,7 @@ export const Typography: React.FC<TypographyProps> = ({
   weight = "normal",
   color = "primary",
   align = "left",
+  padding = "none",
 }) => {
   const variantStyles = {
     display: "text-6xl lg:text-7xl",
@@ -58,6 +61,14 @@ export const Typography: React.FC<TypographyProps> = ({
     justify: "text-justify",
   };
 
+  const paddingStyles = {
+    none: "",
+    sm: "p-2",
+    md: "p-4",
+    lg: "p-6",
+    xl: "p-8",
+  };
+
   return (
     <Component
       className={cn(
@@ -65,6 +76,7 @@ export const Typography: React.FC<TypographyProps> = ({
         weightStyles[weight],
         colorStyles[color],
         alignStyles[align],
+        paddingStyles[padding],
         align === "center" && "text-center !important",
         className
       )}

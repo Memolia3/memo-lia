@@ -8,6 +8,8 @@ export interface DividerProps {
   thickness?: "thin" | "normal" | "thick";
   /** 境界線の色 */
   color?: "gray" | "accent" | "primary" | "custom";
+  /** パディングのサイズ */
+  padding?: "none" | "sm" | "md" | "lg" | "xl";
   /** カスタムクラス名 */
   className?: string;
   /** カスタムスタイル */

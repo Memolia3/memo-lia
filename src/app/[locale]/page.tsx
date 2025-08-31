@@ -7,7 +7,7 @@ import { Container } from "@/components/ui";
  */
 export default function Top() {
   return (
-    <Container padding="md" maxWidth="7xl" className="h-full">
+    <Container padding="md" maxWidth="7xl" className="h-full overflow-hidden lg:overflow-hidden">
       {/* PC画面 */}
       <TopDesktop />
       {/* スマホ画面 */}

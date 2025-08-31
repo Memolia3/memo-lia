@@ -1,4 +1,5 @@
 import { Background } from "@/components/ui";
+import { AuthProvider } from "@/features/auth/components/AuthProvider";
 import type { PageMetaOptions } from "@/types";
 import { generateMetadata as generateMeta, isLocaleEnglish } from "@/utils/meta";
 import type { Metadata } from "next";
@@ -52,9 +53,11 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} className="dark:bg-gray-900 h-full">
-      <body className="antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 h-full overflow-hidden">
+      <body className="antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 h-full">
         <Background className="h-full">
-          <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+          <AuthProvider>
+            <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+          </AuthProvider>
         </Background>
       </body>
     </html>

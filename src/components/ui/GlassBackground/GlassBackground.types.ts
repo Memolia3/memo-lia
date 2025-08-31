@@ -9,4 +9,5 @@ export interface GlassBackgroundProps {
   opacity?: number;
   borderRadius?: "none" | "sm" | "md" | "lg" | "full";
   backdrop?: boolean;
+  enableScale?: boolean;
 }

@@ -16,4 +16,5 @@ export interface TypographyProps {
   weight?: "light" | "normal" | "medium" | "semibold" | "bold" | "extrabold";
   color?: "primary" | "secondary" | "muted" | "accent" | "white" | "black";
   align?: "left" | "center" | "right" | "justify";
+  padding?: "none" | "sm" | "md" | "lg" | "xl";
 }

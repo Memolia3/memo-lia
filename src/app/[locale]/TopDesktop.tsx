@@ -1,4 +1,5 @@
 import { Button, Divider, GlassBackground, Icon, Image, Typography } from "@/components/ui";
+import { ROUTE } from "@/constants";
 import { AdSense } from "@/features/google";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -10,7 +11,7 @@ export const TopDesktop: React.FC = () => {
   const t = useTranslations();
 
   return (
-    <div className="hidden lg:flex lg:flex-col h-full">
+    <div className="hidden lg:flex lg:flex-col h-full overflow-hidden">
       {/* メインコンテンツ */}
       <div className="grid grid-cols-2 gap-12 items-center flex-1">
         {/* 左半分: 主要機能3つ（縦並び） */}
@@ -97,7 +98,7 @@ export const TopDesktop: React.FC = () => {
             <Typography variant="body" color="muted" align="center" className="whitespace-pre-line">
               {t("top.cta.description")}
             </Typography>
-            <Link href="/auth" className="inline-block">
+            <Link href={ROUTE.AUTH} className="inline-block">
               <Button size="xl" rounded="xl" className="shadow-lg hover:shadow-xl">
                 {t("top.cta.button")}
               </Button>

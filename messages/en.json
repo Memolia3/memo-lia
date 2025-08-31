@@ -27,6 +27,29 @@
       "button": "Start Free"
     }
   },
+  "auth": {
+    "title": "Authentication",
+    "subtitle": "Sign in to your account to start using MemoLia",
+    "description": "Please sign in using one of the following methods",
+    "providers": {
+      "google": {
+        "name": "Sign in with Google",
+        "description": "Sign in with your Google account"
+      },
+      "github": {
+        "name": "Sign in with GitHub",
+        "description": "Sign in with your GitHub account"
+      },
+      "discord": {
+        "name": "Sign in with Discord",
+        "description": "Sign in with your Discord account"
+      }
+    },
+    "terms": "By signing in, you agree to our Terms of Service and Privacy Policy",
+    "backToTop": "Back to Top",
+    "loginDescription": "Safe and Easy Login",
+    "loginSubDescription": "No password required, login with your preferred account"
+  },
   "navigation": {
     "top": "Top",
     "dashboard": "Dashboard",

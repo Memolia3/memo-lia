@@ -31,5 +31,5 @@ export async function generateMetadata({
  * @returns 認証レイアウト
  */
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
-  return <div>{children}</div>;
+  return children;
 }

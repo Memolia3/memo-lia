@@ -11,6 +11,7 @@ import type { GlassBackgroundProps } from "./GlassBackground.types";
  * @param opacity - 透明度（0-1）
  * @param borderRadius - 角丸のサイズ
  * @param backdrop - 背景のぼかし効果を有効にするか
+ * @param enableScale - ホバー時の拡大アニメーションを有効にするか
  */
 export const GlassBackground: React.FC<GlassBackgroundProps> = ({
   children,
@@ -20,6 +21,7 @@ export const GlassBackground: React.FC<GlassBackgroundProps> = ({
   opacity = 0.8,
   borderRadius = "md",
   backdrop = true,
+  enableScale = true,
 }) => {
   const variantStyles = {
     default:
@@ -63,7 +65,8 @@ export const GlassBackground: React.FC<GlassBackgroundProps> = ({
         // 背景のぼかし
         backdrop && blurStyles[blur],
         // ホバー効果（スケールとシャドウ）
-        "transition-all duration-300 ease-out transform hover:scale-105 hover:shadow-3xl",
+        "transition-all duration-300 ease-out transform",
+        enableScale && "hover:scale-105 hover:shadow-3xl",
         // カスタムクラス
         className
       )}

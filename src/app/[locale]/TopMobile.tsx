@@ -1,4 +1,5 @@
 import { Button, Divider, GlassBackground, Icon, Image, Typography } from "@/components/ui";
+import { ROUTE } from "@/constants";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
@@ -9,7 +10,7 @@ export const TopMobile: React.FC = () => {
   const t = useTranslations();
 
   return (
-    <div className="lg:hidden flex flex-col h-full">
+    <div className="lg:hidden flex flex-col w-full">
       {/* 上部: アプリ名・キャッチコピー (35%) */}
       <div className="flex-shrink-0 pt-8 pb-8 text-center space-y-4">
         {/* メインタイトル */}
@@ -43,7 +44,7 @@ export const TopMobile: React.FC = () => {
           <Typography variant="body" color="muted" align="center">
             {t("top.cta.description")}
           </Typography>
-          <Link href="/auth" className="inline-block">
+          <Link href={ROUTE.AUTH} className="inline-block">
             <Button size="lg" className="shadow-lg hover:shadow-xl w-full">
               {t("top.cta.button")}
             </Button>

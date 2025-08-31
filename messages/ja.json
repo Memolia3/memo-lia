@@ -27,6 +27,29 @@
       "button": "無料で始める"
     }
   },
+  "auth": {
+    "title": "認証",
+    "subtitle": "アカウントにログインして、\nMemoLiaを始めましょう",
+    "description": "以下のいずれかの方法でログインしてください",
+    "providers": {
+      "google": {
+        "name": "Googleでログイン",
+        "description": "Googleアカウントでログイン"
+      },
+      "github": {
+        "name": "GitHubでログイン",
+        "description": "GitHubアカウントでログイン"
+      },
+      "discord": {
+        "name": "Discordでログイン",
+        "description": "Discordアカウントでログイン"
+      }
+    },
+    "terms": "ログインすることで、利用規約とプライバシーポリシーに同意したことになります",
+    "backToTop": "トップに戻る",
+    "loginDescription": "安全で簡単なログイン",
+    "loginSubDescription": "パスワード不要で、お好みのアカウントでログインできます"
+  },
   "navigation": {
     "top": "トップ",
     "dashboard": "ダッシュボード",

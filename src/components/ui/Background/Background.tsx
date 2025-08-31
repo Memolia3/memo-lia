@@ -5,8 +5,17 @@ import { BackgroundProps } from "./Background.types";
  * バックグラウンドコンポーネント
  * @param className - クラス名
  * @param children - 子要素
+ * @param padding - パディングのサイズ
  */
-export const Background: React.FC<BackgroundProps> = ({ className, children }) => {
+export const Background: React.FC<BackgroundProps> = ({ className, children, padding = "md" }) => {
+  const paddingStyles = {
+    none: "",
+    sm: "p-4",
+    md: "p-6",
+    lg: "p-8",
+    xl: "p-10",
+  };
+
   return (
     <div
       className={cn(
@@ -17,7 +26,7 @@ export const Background: React.FC<BackgroundProps> = ({ className, children }) =
       )}
     >
       {/* 動的な背景要素 */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0">
         {/* 装飾的な円形要素 - ライトモード */}
         <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full filter blur-3xl transition-all duration-500 bg-gradient-to-br from-blue-400/30 via-indigo-400/30 to-purple-400/30 dark:hidden" />
         <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full filter blur-3xl transition-all duration-500 bg-gradient-to-br from-indigo-400/30 via-purple-400/30 to-pink-400/30 dark:hidden" />
@@ -34,7 +43,9 @@ export const Background: React.FC<BackgroundProps> = ({ className, children }) =
       </div>
 
       {/* メインコンテンツ */}
-      <div className="relative z-10 h-full overflow-hidden">{children}</div>
+      <div className={cn("relative z-10 h-full overflow-hidden", paddingStyles[padding])}>
+        {children}
+      </div>
     </div>
   );
 };

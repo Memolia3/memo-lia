@@ -41,7 +41,7 @@ export const Container: React.FC<ContainerProps> = ({
   return (
     <div
       className={cn(
-        "mx-auto h-full overflow-hidden",
+        "mx-auto h-full",
         size !== "full" && maxWidthStyles[maxWidth],
         paddingStyles[padding],
         className
