@@ -35,18 +35,22 @@ export const ProviderButton: React.FC<ProviderButtonProps> = ({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "w-full h-14 px-6 border-2 transition-all duration-200 font-medium",
+        "w-full h-12 lg:h-14 px-4 lg:px-6 border-2 transition-all duration-200 font-medium",
         config.bgColor,
         config.textColor,
         config.borderColor,
         config.shadow,
-        "flex items-center justify-center space-x-3",
+        "flex items-center justify-center gap-2 lg:gap-3 space-x-2 lg:space-x-3",
         className
       )}
       rounded="xl"
     >
-      <Icon name={config.icon as OAuthProviderValue} size="lg" className="flex-shrink-0" />
-      <Typography variant="body" weight="semibold">
+      <Icon
+        name={config.icon as OAuthProviderValue}
+        size="md"
+        className="flex-shrink-0 lg:size-lg"
+      />
+      <Typography variant="body" weight="semibold" className="text-sm lg:text-base">
         {getProviderName()}
       </Typography>
     </Button>

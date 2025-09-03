@@ -3,7 +3,7 @@ import Discord from "next-auth/providers/discord";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 
-import { sql } from "@/lib/neon";
+import { getUserForSession, syncUserOnAuth } from "@/actions/user";
 
 import type { Session } from "next-auth";
 
@@ -40,56 +40,26 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     async signIn({ user, account }) {
       if (account && user.email) {
         try {
-          // ユーザーが既に存在するかチェック
-          const existingUser = await sql`
-            SELECT id FROM users WHERE email = ${user.email}
-          `;
-
-          let userId: string;
-
-          if (existingUser.length === 0) {
-            // 新規ユーザーの場合、usersテーブルに挿入
-            const newUser = await sql`
-              INSERT INTO users (email, name, avatar_url)
-              VALUES (${user.email}, ${user.name}, ${user.image || "/assets/images/default-icon.png"})
-              RETURNING id
-            `;
-            userId = newUser[0].id;
-          } else {
-            // 既存ユーザーの場合、IDを取得
-            userId = existingUser[0].id;
-          }
-
-          // user_providersテーブルにOAuth情報を挿入または更新
-          await sql`
-            INSERT INTO user_providers (
-              user_id, provider, provider_id, access_token, refresh_token, expires_at
-            )
-            VALUES (
-              ${userId}, ${account.provider}, ${account.providerAccountId},
-              ${account.access_token}, ${account.refresh_token},
-              ${account.expires_at ? new Date(account.expires_at * 1000) : null}
-            )
-            ON CONFLICT (provider, provider_id)
-            DO UPDATE SET
-              access_token = EXCLUDED.access_token,
-              refresh_token = EXCLUDED.refresh_token,
-              expires_at = EXCLUDED.expires_at,
-              updated_at = now()
-          `;
+          // サーバアクションを使用してユーザー情報を同期
+          const { user: userData, provider } = await syncUserOnAuth(
+            user.email,
+            user.name || undefined,
+            user.image || undefined,
+            account
+          );
 
           // userオブジェクトを更新
           Object.assign(user, {
-            id: userId,
-            accessToken: account.access_token,
-            refreshToken: account.refresh_token,
-            expiresAt: account.expires_at,
+            id: userData.id,
+            accessToken: provider?.access_token,
+            refreshToken: provider?.refresh_token,
+            expiresAt: provider?.expires_at
+              ? Math.floor(new Date(provider.expires_at).getTime() / 1000)
+              : undefined,
           });
-        } catch (error) {
-          console.error("OAuth認証に失敗:", error);
-          if (error instanceof Error) {
-            console.error("エラー詳細:", error.message);
-          }
+        } catch {
+          // エラーが発生した場合は認証を拒否
+          throw new Error("認証処理に失敗しました");
         }
       }
     },
@@ -114,33 +84,25 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       // 初回サインイン時またはユーザー情報更新時
       if (account && user) {
         try {
-          // ユーザー情報をデータベースから取得
-          const userData = await sql`
-            SELECT
-              u.id, u.email, u.name, u.avatar_url,
-              up.access_token, up.refresh_token, up.expires_at
-            FROM users u
-            LEFT JOIN user_providers up ON u.id = up.user_id
-            WHERE u.email = ${user.email} AND up.provider = ${account.provider}
-          `;
+          // サーバアクションを使用してユーザー情報を取得
+          const userData = await getUserForSession(user.email!, account.provider);
 
-          if (userData.length > 0) {
-            const userRow = userData[0];
+          if (userData) {
             return {
               ...token,
-              id: userRow.id,
-              email: userRow.email,
-              name: userRow.name,
-              picture: userRow.avatar_url,
-              accessToken: userRow.access_token,
-              refreshToken: userRow.refresh_token,
-              expiresAt: userRow.expires_at
-                ? Math.floor(new Date(userRow.expires_at).getTime() / 1000)
+              id: userData.user.id,
+              email: userData.user.email,
+              name: userData.user.name,
+              picture: userData.user.avatar_url,
+              accessToken: userData.provider.access_token,
+              refreshToken: userData.provider.refresh_token,
+              expiresAt: userData.provider.expires_at
+                ? Math.floor(new Date(userData.provider.expires_at).getTime() / 1000)
                 : undefined,
             };
           }
-        } catch (error) {
-          console.error("ユーザー情報の取得に失敗:", error);
+        } catch {
+          // ユーザー情報の取得に失敗
         }
       }
 
@@ -154,10 +116,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           // リフレッシュトークンを使用して新しいアクセストークンを取得
           // ここではOAuthプロバイダーに直接リクエストする必要があります
           // 実装は各プロバイダーによって異なります
-          console.log("トークンの更新が必要です");
           return { ...token, error: "RefreshAccessTokenError" };
-        } catch (error) {
-          console.error("トークン更新エラー:", error);
+        } catch {
           return { ...token, error: "RefreshAccessTokenError" };
         }
       }

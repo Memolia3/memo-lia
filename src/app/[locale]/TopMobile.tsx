@@ -10,7 +10,7 @@ export const TopMobile: React.FC = () => {
   const t = useTranslations();
 
   return (
-    <div className="lg:hidden flex flex-col w-full">
+    <div className="lg:hidden flex flex-col w-full h-full overflow-y-auto overflow-x-hidden">
       {/* 上部: アプリ名・キャッチコピー (35%) */}
       <div className="flex-shrink-0 pt-8 pb-8 text-center space-y-4">
         {/* メインタイトル */}
