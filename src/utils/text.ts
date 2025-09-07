@@ -15,3 +15,16 @@ export function truncateText(text: string, maxLength: number = 4, suffix: string
   }
   return text.slice(0, maxLength) + suffix;
 }
+
+/**
+ * テキストをURLセーフな形式に変換する
+ * @param text 変換するテキスト
+ * @returns URLセーフな文字列
+ */
+export function toUrlSafe(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\u3040-\u309f\u30a0-\u30ff\u4e00-\u9faf]/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}

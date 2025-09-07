@@ -3,6 +3,7 @@
 import type { CategoryData } from "@/actions/categories";
 import { useSession } from "@/features/auth/hooks";
 import { useNotificationHelpers } from "@/hooks/useNotificationHelpers";
+import { toUrlSafe } from "@/utils";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { useCategories } from "./useCategories";
@@ -36,8 +37,11 @@ export const useDashboard = () => {
   const handleCategoryClick = useCallback(
     (category: CategoryData) => {
       try {
+        // カテゴリ名をURLセーフな形式に変換
+        const urlSafeName = toUrlSafe(category.name);
+
         // カテゴリクリック時の処理（ジャンル表示画面への遷移）
-        router.push(`/dashboard/category/${category.id}`);
+        router.push(`/dashboard/category/${category.id}/${urlSafeName}`);
       } catch (error) {
         // ナビゲーションエラーの通知
         showError({

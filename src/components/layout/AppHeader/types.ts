@@ -8,6 +8,8 @@ export interface AppHeaderProps {
   title: string;
   /** 右側に表示するユーザー情報コンポーネント */
   userInfo: ReactNode;
+  /** タイトルとユーザー情報の間に表示するアクションボタン */
+  actions?: ReactNode;
   /** 追加のCSSクラス */
   className?: string;
 }

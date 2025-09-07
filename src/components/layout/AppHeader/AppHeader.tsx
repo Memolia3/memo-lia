@@ -8,7 +8,7 @@ import type { AppHeaderProps } from "./types";
  * アプリケーション共通ヘッダーコンポーネント
  * 左上にタイトル、右上にユーザー情報を表示
  */
-export const AppHeader: React.FC<AppHeaderProps> = ({ title, userInfo, className }) => {
+export const AppHeader: React.FC<AppHeaderProps> = ({ title, userInfo, actions, className }) => {
   return (
     <header
       className={cn(
@@ -26,6 +26,9 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ title, userInfo, className
           {title}
         </Typography>
       </div>
+
+      {/* 中央: アクションボタン */}
+      {actions && <div className="flex items-center flex-shrink-0 mx-4">{actions}</div>}
 
       {/* 右側: ユーザー情報 */}
       <div className="flex items-center flex-shrink-0 ml-auto">{userInfo}</div>
