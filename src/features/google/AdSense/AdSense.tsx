@@ -20,7 +20,7 @@ export const AdSense: React.FC<AdSenseProps> = ({
     <div
       className={cn(
         "w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden",
-        "flex items-center justify-center min-h-[90px]",
+        "flex items-center justify-center min-h-[100px]",
         responsive && "responsive",
         className
       )}
@@ -32,8 +32,11 @@ export const AdSense: React.FC<AdSenseProps> = ({
         style={{
           display: "block",
           textAlign: "center",
+          width: "100%",
+          height: "auto",
           ...(adFormat === "banner" && { height: "90px", width: "728px" }),
           ...(adFormat === "rectangle" && { height: "250px", width: "300px" }),
+          ...(adFormat === "fluid" && { width: "100%", height: "auto" }),
         }}
         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" // 実際のAdSenseクライアントIDに置き換え
         data-ad-slot={adSlot}
@@ -46,13 +49,6 @@ export const AdSense: React.FC<AdSenseProps> = ({
         <div className="flex items-center space-x-2">
           <div className="w-4 h-4 bg-gray-300 dark:bg-gray-600 rounded" />
           <span>Google AdSense</span>
-        </div>
-        <div className="text-xs mt-1">
-          {adFormat === "banner"
-            ? "728x90 Banner"
-            : adFormat === "rectangle"
-              ? "300x250 Rectangle"
-              : "Responsive Ad"}
         </div>
       </div>
     </div>

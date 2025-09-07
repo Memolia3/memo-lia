@@ -2,24 +2,15 @@
 
 import { Button } from "@/components/ui/Button";
 import { Typography } from "@/components/ui/Typography";
-import { NotificationState } from "@/types/notification";
 import { cn } from "@/utils";
 import { AlertCircle, AlertTriangle, CheckCircle, Info, X } from "lucide-react";
 import { memo, useCallback, useEffect, useState } from "react";
-
-/**
- * 通知アイテムのプロパティ
- */
-interface NotificationItemProps {
-  notification: NotificationState;
-  onClose: (id: string) => void;
-  onAction?: (action: () => void) => void;
-}
+import { NotificationItemProps } from "./NotificationItem.types";
 
 /**
  * 通知のアイコンを取得
  */
-const getNotificationIcon = (type: string, severity?: string) => {
+const getNotificationIcon = (type: string) => {
   const iconProps = { className: "w-5 h-5" };
 
   switch (type) {
@@ -38,7 +29,7 @@ const getNotificationIcon = (type: string, severity?: string) => {
 /**
  * 通知の背景色を取得
  */
-const getNotificationBgColor = (type: string, severity?: string) => {
+const getNotificationBgColor = (type: string) => {
   switch (type) {
     case "success":
       return "bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800";
@@ -55,20 +46,33 @@ const getNotificationBgColor = (type: string, severity?: string) => {
 /**
  * 通知のアニメーションクラスを取得
  */
-const getAnimationClasses = (animation: string, visible: boolean) => {
-  const baseClasses = "transition-all duration-300 ease-in-out";
+const getAnimationClasses = (animation: string, visible: boolean, isAnimating: boolean) => {
+  const baseClasses = "transition-all duration-300 ease-in-out transform";
 
   switch (animation) {
     case "slide":
-      return cn(baseClasses, visible ? "translate-x-0 opacity-100" : "translate-x-full opacity-0");
+      return cn(
+        baseClasses,
+        visible && !isAnimating ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+      );
     case "fade":
-      return cn(baseClasses, visible ? "opacity-100" : "opacity-0");
+      return cn(baseClasses, visible && !isAnimating ? "opacity-100" : "opacity-0");
     case "scale":
-      return cn(baseClasses, visible ? "scale-100 opacity-100" : "scale-95 opacity-0");
+      return cn(
+        baseClasses,
+        visible && !isAnimating ? "scale-100 opacity-100" : "scale-95 opacity-0"
+      );
     case "bounce":
-      return cn(baseClasses, visible ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0");
+      return cn(
+        baseClasses,
+        visible && !isAnimating ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0"
+      );
     default:
-      return cn(baseClasses, visible ? "translate-x-0 opacity-100" : "translate-x-full opacity-0");
+      // デフォルトは右にスライド＆フェードアウト
+      return cn(
+        baseClasses,
+        visible && !isAnimating ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+      );
   }
 };
 
@@ -121,9 +125,13 @@ export const NotificationItem: React.FC<NotificationItemProps> = memo(
       [handleClose, notification.closable]
     );
 
-    const bgColor = getNotificationBgColor(notification.type, notification.severity);
-    const animationClasses = getAnimationClasses(notification.animation || "slide", isVisible);
-    const icon = notification.icon || getNotificationIcon(notification.type, notification.severity);
+    const bgColor = getNotificationBgColor(notification.type);
+    const animationClasses = getAnimationClasses(
+      notification.animation || "slide",
+      isVisible,
+      isAnimating
+    );
+    const icon = notification.icon || getNotificationIcon(notification.type);
 
     return (
       <div
@@ -183,7 +191,8 @@ export const NotificationItem: React.FC<NotificationItemProps> = memo(
               <div className="flex space-x-2 mt-3">
                 {notification.actions.map((action, index) => (
                   <Button
-                    key={index}
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={`${notification.id}-action-${index}`}
                     variant={action.variant || "ghost"}
                     size="sm"
                     onClick={() => handleAction(action.action)}
@@ -198,12 +207,12 @@ export const NotificationItem: React.FC<NotificationItemProps> = memo(
         </div>
 
         {/* プログレスバー（自動削除の場合） */}
-        {notification.duration > 0 && (
+        {(notification.duration ?? 0) > 0 && (
           <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/10 dark:bg-white/10 rounded-b-lg overflow-hidden">
             <div
               className="h-full bg-current opacity-30 animate-pulse"
               style={{
-                animationDuration: `${notification.duration}ms`,
+                animationDuration: `${notification.duration ?? 0}ms`,
               }}
             />
           </div>

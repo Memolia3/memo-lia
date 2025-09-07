@@ -51,6 +51,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           // userオブジェクトを更新
           Object.assign(user, {
             id: userData.id,
+            provider: account.provider,
             accessToken: provider?.access_token,
             refreshToken: provider?.refresh_token,
             expiresAt: provider?.expires_at
@@ -94,6 +95,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               email: userData.user.email,
               name: userData.user.name,
               picture: userData.user.avatar_url,
+              provider: account.provider,
               accessToken: userData.provider.access_token,
               refreshToken: userData.provider.refresh_token,
               expiresAt: userData.provider.expires_at
@@ -114,12 +116,43 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
         try {
           // リフレッシュトークンを使用して新しいアクセストークンを取得
-          // ここではOAuthプロバイダーに直接リクエストする必要があります
-          // 実装は各プロバイダーによって異なります
-          return { ...token, error: "RefreshAccessTokenError" };
+          const { refreshAccessToken } = await import("@/lib/auth/refresh-token");
+          const { updateUserProviderTokens } = await import("@/actions/user");
+
+          const tokenData = await refreshAccessToken(
+            token.provider as string,
+            token.refreshToken as string
+          );
+
+          // データベースのトークン情報を更新
+          await updateUserProviderTokens(
+            token.id as string,
+            token.provider as string,
+            tokenData.access_token,
+            tokenData.refresh_token || (token.refreshToken as string),
+            tokenData.expires_in
+          );
+
+          return {
+            ...token,
+            accessToken: tokenData.access_token,
+            refreshToken: tokenData.refresh_token || token.refreshToken,
+            expiresAt: Math.floor(Date.now() / 1000) + tokenData.expires_in,
+            error: undefined,
+            // 自動ログイン成功フラグを追加（リフレッシュ時のみ）
+            autoLoginSuccess: true,
+          };
         } catch {
           return { ...token, error: "RefreshAccessTokenError" };
         }
+      }
+
+      // 既存のトークンが有効な場合、autoLoginSuccessフラグをクリア
+      if (token.autoLoginSuccess) {
+        return {
+          ...token,
+          autoLoginSuccess: undefined,
+        };
       }
 
       return token;
@@ -142,6 +175,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         refreshToken: token.refreshToken as string | undefined,
         expiresAt: token.expiresAt as number | undefined,
         error: token.error as "RefreshAccessTokenError" | undefined,
+        autoLoginSuccess: token.autoLoginSuccess as boolean | undefined,
       };
     },
   },

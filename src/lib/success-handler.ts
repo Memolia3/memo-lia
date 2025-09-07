@@ -1,19 +1,15 @@
+import { getNotificationMessage, NOTIFICATION_MESSAGES } from "@/constants/notification";
 import { SuccessNotificationConfig } from "@/types/notification";
-// import { NOTIFICATION_TYPES, NOTIFICATION_SEVERITY, NOTIFICATION_CATEGORIES } from "@/constants";
+
+/**
+ * 成功通知のカテゴリ型
+ */
+type SuccessNotificationCategory = NonNullable<SuccessNotificationConfig["category"]>;
 
 /**
  * 成功の種類
  */
-export type SuccessType =
-  | "save"
-  | "delete"
-  | "update"
-  | "create"
-  | "login"
-  | "logout"
-  | "upload"
-  | "download"
-  | "other";
+export type SuccessType = SuccessNotificationCategory;
 
 /**
  * 成功の詳細情報
@@ -27,9 +23,12 @@ export interface SuccessDetails {
 
 /**
  * 成功詳細から通知設定を生成
+ * @param successDetails 成功の詳細情報
+ * @param locale 言語（オプション）
  */
 export const createSuccessNotificationConfig = (
-  successDetails: SuccessDetails
+  successDetails: SuccessDetails,
+  locale?: string
 ): SuccessNotificationConfig => {
   const baseConfig = {
     type: "success" as const,
@@ -38,50 +37,103 @@ export const createSuccessNotificationConfig = (
     severity: "medium" as const,
   };
 
+  // 言語設定（デフォルトは日本語）
+  const currentLocale = locale || "ja";
+
   // 成功の種類に応じて詳細設定
   switch (successDetails.type) {
     case "save":
       return {
         ...baseConfig,
-        message: successDetails.item ? `${successDetails.item}を保存しました` : "保存しました",
-        description: "変更が正常に保存されました",
+        message: successDetails.item
+          ? getNotificationMessage(
+              { ja: `${successDetails.item}を保存しました`, en: `${successDetails.item} saved` },
+              currentLocale
+            )
+          : getNotificationMessage(NOTIFICATION_MESSAGES.SUCCESS.SAVED, currentLocale),
+        description: getNotificationMessage(
+          NOTIFICATION_MESSAGES.SUCCESS.SAVE_DESCRIPTION,
+          currentLocale
+        ),
       };
 
     case "delete":
       return {
         ...baseConfig,
-        message: successDetails.item ? `${successDetails.item}を削除しました` : "削除しました",
-        description: "アイテムが正常に削除されました",
+        message: successDetails.item
+          ? getNotificationMessage(
+              { ja: `${successDetails.item}を削除しました`, en: `${successDetails.item} deleted` },
+              currentLocale
+            )
+          : getNotificationMessage(NOTIFICATION_MESSAGES.SUCCESS.DELETED, currentLocale),
+        description: getNotificationMessage(
+          NOTIFICATION_MESSAGES.SUCCESS.DELETE_DESCRIPTION,
+          currentLocale
+        ),
         duration: 4000,
       };
 
     case "update":
       return {
         ...baseConfig,
-        message: successDetails.item ? `${successDetails.item}を更新しました` : "更新しました",
-        description: "変更が正常に適用されました",
+        message: successDetails.item
+          ? getNotificationMessage(
+              { ja: `${successDetails.item}を更新しました`, en: `${successDetails.item} updated` },
+              currentLocale
+            )
+          : getNotificationMessage(NOTIFICATION_MESSAGES.SUCCESS.UPDATED, currentLocale),
+        description: getNotificationMessage(
+          NOTIFICATION_MESSAGES.SUCCESS.UPDATE_DESCRIPTION,
+          currentLocale
+        ),
       };
 
     case "create":
       return {
         ...baseConfig,
-        message: successDetails.item ? `${successDetails.item}を作成しました` : "作成しました",
-        description: "新しいアイテムが正常に作成されました",
+        message: successDetails.item
+          ? getNotificationMessage(
+              { ja: `${successDetails.item}を作成しました`, en: `${successDetails.item} created` },
+              currentLocale
+            )
+          : getNotificationMessage(NOTIFICATION_MESSAGES.SUCCESS.CREATED, currentLocale),
+        description: getNotificationMessage(
+          NOTIFICATION_MESSAGES.SUCCESS.CREATE_DESCRIPTION,
+          currentLocale
+        ),
       };
 
     case "login":
       return {
         ...baseConfig,
-        message: "ログインしました",
-        description: "アカウントに正常にログインしました",
+        message: getNotificationMessage(NOTIFICATION_MESSAGES.SUCCESS.LOGGED_IN, currentLocale),
+        description: getNotificationMessage(
+          NOTIFICATION_MESSAGES.SUCCESS.LOGIN_DESCRIPTION,
+          currentLocale
+        ),
         duration: 4000,
+      };
+
+    case "auto-login":
+      return {
+        ...baseConfig,
+        message: getNotificationMessage(NOTIFICATION_MESSAGES.SUCCESS.LOGGED_IN, currentLocale),
+        description: getNotificationMessage(
+          NOTIFICATION_MESSAGES.SUCCESS.AUTO_LOGIN_DESCRIPTION,
+          currentLocale
+        ),
+        duration: 3000,
+        severity: "low",
       };
 
     case "logout":
       return {
         ...baseConfig,
-        message: "ログアウトしました",
-        description: "アカウントから正常にログアウトしました",
+        message: getNotificationMessage(NOTIFICATION_MESSAGES.SUCCESS.LOGGED_OUT, currentLocale),
+        description: getNotificationMessage(
+          NOTIFICATION_MESSAGES.SUCCESS.LOGOUT_DESCRIPTION,
+          currentLocale
+        ),
         duration: 3000,
       };
 
@@ -89,9 +141,18 @@ export const createSuccessNotificationConfig = (
       return {
         ...baseConfig,
         message: successDetails.item
-          ? `${successDetails.item}をアップロードしました`
-          : "アップロードしました",
-        description: "ファイルが正常にアップロードされました",
+          ? getNotificationMessage(
+              {
+                ja: `${successDetails.item}をアップロードしました`,
+                en: `${successDetails.item} uploaded`,
+              },
+              currentLocale
+            )
+          : getNotificationMessage(NOTIFICATION_MESSAGES.SUCCESS.UPLOADED, currentLocale),
+        description: getNotificationMessage(
+          NOTIFICATION_MESSAGES.SUCCESS.UPLOAD_DESCRIPTION,
+          currentLocale
+        ),
         duration: 4000,
       };
 
@@ -99,9 +160,18 @@ export const createSuccessNotificationConfig = (
       return {
         ...baseConfig,
         message: successDetails.item
-          ? `${successDetails.item}をダウンロードしました`
-          : "ダウンロードしました",
-        description: "ファイルが正常にダウンロードされました",
+          ? getNotificationMessage(
+              {
+                ja: `${successDetails.item}をダウンロードしました`,
+                en: `${successDetails.item} downloaded`,
+              },
+              currentLocale
+            )
+          : getNotificationMessage(NOTIFICATION_MESSAGES.SUCCESS.DOWNLOADED, currentLocale),
+        description: getNotificationMessage(
+          NOTIFICATION_MESSAGES.SUCCESS.DOWNLOAD_DESCRIPTION,
+          currentLocale
+        ),
         duration: 4000,
       };
 
@@ -109,7 +179,10 @@ export const createSuccessNotificationConfig = (
       return {
         ...baseConfig,
         message: successDetails.message,
-        description: "操作が正常に完了しました",
+        description: getNotificationMessage(
+          NOTIFICATION_MESSAGES.SUCCESS.DEFAULT_DESCRIPTION,
+          currentLocale
+        ),
       };
   }
 };
@@ -121,7 +194,8 @@ export const globalSuccessHandler = (
   type: SuccessType,
   message?: string,
   item?: string,
-  context?: Record<string, unknown>
+  context?: Record<string, unknown>,
+  locale?: string
 ) => {
   const successDetails: SuccessDetails = {
     type,
@@ -130,17 +204,29 @@ export const globalSuccessHandler = (
     context,
   };
 
-  return createSuccessNotificationConfig(successDetails);
+  return createSuccessNotificationConfig(successDetails, locale);
 };
 
 /**
  * 認証成功ハンドラー
  */
-export const authSuccessHandler = (provider?: string) => {
-  return globalSuccessHandler(
-    "login",
-    provider ? `${provider}でログインしました` : "ログインしました"
-  );
+export const authSuccessHandler = (provider?: string, locale?: string) => {
+  const currentLocale = locale || "ja";
+  const message = provider
+    ? getNotificationMessage(
+        { ja: `${provider}でログインしました`, en: `Logged in with ${provider}` },
+        currentLocale
+      )
+    : getNotificationMessage(NOTIFICATION_MESSAGES.SUCCESS.LOGGED_IN, currentLocale);
+
+  return globalSuccessHandler("login", message, undefined, undefined, locale);
+};
+
+/**
+ * 自動ログイン成功ハンドラー
+ */
+export const autoLoginSuccessHandler = (locale?: string) => {
+  return globalSuccessHandler("auto-login", undefined, undefined, undefined, locale);
 };
 
 /**
@@ -148,9 +234,10 @@ export const authSuccessHandler = (provider?: string) => {
  */
 export const dataOperationSuccessHandler = (
   operation: "save" | "delete" | "update" | "create",
-  item?: string
+  item?: string,
+  locale?: string
 ) => {
-  return globalSuccessHandler(operation, undefined, item);
+  return globalSuccessHandler(operation, undefined, item, undefined, locale);
 };
 
 /**
@@ -158,7 +245,8 @@ export const dataOperationSuccessHandler = (
  */
 export const fileOperationSuccessHandler = (
   operation: "upload" | "download",
-  filename?: string
+  filename?: string,
+  locale?: string
 ) => {
-  return globalSuccessHandler(operation, undefined, filename);
+  return globalSuccessHandler(operation, undefined, filename, undefined, locale);
 };

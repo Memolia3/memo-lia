@@ -23,7 +23,7 @@ export interface ErrorDetails {
   code?: string | number;
   status?: number;
   originalError?: unknown;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
 }
 
 /**
@@ -77,7 +77,7 @@ export const parseError = (error: unknown): ErrorDetails => {
 
   // オブジェクトの場合（APIエラーレスポンスなど）
   if (typeof error === "object" && error !== null) {
-    const errorObj = error as any;
+    const errorObj = error as Record<string, unknown>;
 
     // HTTPステータスコードによる判定
     if (errorObj.status || errorObj.statusCode) {
@@ -254,6 +254,7 @@ export const globalErrorHandler = (error: unknown, context?: string) => {
 
   // コンソールにエラーを出力（開発環境のみ）
   if (process.env.NODE_ENV === "development") {
+    // eslint-disable-next-line no-console
     console.error("Global Error Handler:", errorDetails);
   }
 

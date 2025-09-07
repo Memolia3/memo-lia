@@ -39,13 +39,13 @@ export interface AuthResult {
 export const signInWithGoogle = async (): Promise<AuthResult> => {
   try {
     await signIn(OAUTH_PROVIDER.GOOGLE, {
-      redirectTo: ROUTE.TOP,
+      redirectTo: ROUTE.DASHBOARD,
     });
 
     const successConfig = authSuccessHandler("Google");
     return {
       success: true,
-      redirectTo: ROUTE.TOP,
+      redirectTo: ROUTE.DASHBOARD,
       notification: {
         type: NOTIFICATION_TYPES.SUCCESS,
         message: successConfig.message,
@@ -99,13 +99,13 @@ export const signInWithGoogle = async (): Promise<AuthResult> => {
 export const signInWithGitHub = async (): Promise<AuthResult> => {
   try {
     await signIn(OAUTH_PROVIDER.GITHUB, {
-      redirectTo: ROUTE.TOP,
+      redirectTo: ROUTE.DASHBOARD,
     });
 
     const successConfig = authSuccessHandler("GitHub");
     return {
       success: true,
-      redirectTo: ROUTE.TOP,
+      redirectTo: ROUTE.DASHBOARD,
       notification: {
         type: NOTIFICATION_TYPES.SUCCESS,
         message: successConfig.message,
@@ -158,13 +158,13 @@ export const signInWithGitHub = async (): Promise<AuthResult> => {
 export const signInWithDiscord = async (): Promise<AuthResult> => {
   try {
     await signIn(OAUTH_PROVIDER.DISCORD, {
-      redirectTo: ROUTE.TOP,
+      redirectTo: ROUTE.DASHBOARD,
     });
 
     const successConfig = authSuccessHandler("Discord");
     return {
       success: true,
-      redirectTo: ROUTE.TOP,
+      redirectTo: ROUTE.DASHBOARD,
       notification: {
         type: NOTIFICATION_TYPES.SUCCESS,
         message: successConfig.message,

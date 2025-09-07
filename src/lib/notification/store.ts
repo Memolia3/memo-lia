@@ -31,6 +31,8 @@ interface NotificationStoreActions {
   getNotifications: () => NotificationState[];
   /** 通知を削除 */
   removeNotification: (id: string) => void;
+  /** 通知をアニメーション付きで削除 */
+  removeNotificationWithAnimation: (id: string) => void;
   /** 通知を更新 */
   updateNotification: (id: string, config: Partial<NotificationConfig>) => void;
   /** すべての通知をクリア */
@@ -128,7 +130,7 @@ export const useNotificationStore = create<NotificationStore>()(
           setTimeout(() => {
             const currentNotifications = get().notifications;
             if (currentNotifications.some(n => n.id === id)) {
-              get().removeNotification(id);
+              get().removeNotificationWithAnimation(id);
             }
           }, notification.duration);
         }
@@ -146,6 +148,20 @@ export const useNotificationStore = create<NotificationStore>()(
         set(state => ({
           notifications: state.notifications.filter(n => n.id !== id),
         }));
+      },
+
+      // 通知をアニメーション付きで削除
+      removeNotificationWithAnimation: (id: string) => {
+        set(state => ({
+          notifications: state.notifications.map(n =>
+            n.id === id ? { ...n, animating: true, visible: false } : n
+          ),
+        }));
+
+        // アニメーション完了後に削除
+        setTimeout(() => {
+          get().removeNotification(id);
+        }, 300);
       },
 
       // 通知を更新

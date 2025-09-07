@@ -6,6 +6,7 @@ import {
   getUserProvider as dbGetUserProvider,
   getUserWithProvider as dbGetUserWithProvider,
   updateUser as dbUpdateUser,
+  updateUserProvider as dbUpdateUserProvider,
   upsertUserProvider as dbUpsertUserProvider,
   type UserData,
   type UserProviderData,
@@ -109,3 +110,27 @@ export async function getUserForSession(
 ): Promise<{ user: UserData; provider: UserProviderData } | null> {
   return dbGetUserWithProvider(email, provider);
 }
+
+/**
+ * ユーザープロバイダーのトークン情報を更新
+ */
+export const updateUserProviderTokens = async (
+  userId: string,
+  provider: string,
+  accessToken: string,
+  refreshToken: string,
+  expiresIn: number
+): Promise<UserProviderData | null> => {
+  try {
+    const expiresAt = new Date(Date.now() + expiresIn * 1000);
+
+    return await dbUpdateUserProvider(userId, provider, accessToken, refreshToken, expiresAt);
+  } catch (error) {
+    // エラーログは本番環境では適切なログサービスを使用
+    if (process.env.NODE_ENV === "development") {
+      // eslint-disable-next-line no-console
+      console.error("Error updating user provider tokens:", error);
+    }
+    return null;
+  }
+};

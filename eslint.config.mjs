@@ -35,7 +35,6 @@ const eslintConfig = [
       "no-var": "error",
       semi: ["error", "always"],
       quotes: ["error", "double"],
-      indent: ["error", 2, { SwitchCase: 1 }],
       "no-trailing-spaces": "error",
       "eol-last": "error",
       "max-len": ["error", { code: 100, ignoreUrls: true, ignoreStrings: true }],

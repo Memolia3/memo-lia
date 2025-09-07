@@ -12,10 +12,12 @@ declare module "next-auth" {
     refreshToken?: string;
     expiresAt?: number;
     error?: "RefreshAccessTokenError";
+    autoLoginSuccess?: boolean;
   }
 
   interface User {
     id?: string;
+    provider?: string;
     accessToken?: string;
     refreshToken?: string;
     expiresAt?: number;
@@ -25,9 +27,11 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
   interface JWT {
     id?: string;
+    provider?: string;
     accessToken?: string;
     refreshToken?: string;
     expiresAt?: number;
     error?: "RefreshAccessTokenError";
+    autoLoginSuccess?: boolean;
   }
 }

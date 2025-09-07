@@ -29,3 +29,11 @@ export type { ImageProps } from "./Image";
 // Divider
 export { Divider } from "./Divider";
 export type { DividerProps } from "./Divider";
+
+// UserInfo
+export { UserInfo } from "./UserInfo";
+export type { UserInfoProps } from "./UserInfo";
+
+// AuthGuard
+export { AuthGuard } from "./AuthGuard";
+export type { AuthGuardProps } from "./AuthGuard";

@@ -44,7 +44,9 @@ export const NotificationContainer: React.FC = memo(() => {
   // 直接ストアから状態を取得（セレクターを使わない）
   const notifications = useNotificationStore(state => state.notifications);
   const position = useNotificationStore(state => state.position);
-  const removeNotification = useNotificationStore(state => state.removeNotification);
+  const removeNotificationWithAnimation = useNotificationStore(
+    state => state.removeNotificationWithAnimation
+  );
 
   // 表示中の通知のみをフィルタリング（メモ化）
   const visibleNotifications = useMemo(() => notifications.filter(n => n.visible), [notifications]);
@@ -65,7 +67,7 @@ export const NotificationContainer: React.FC = memo(() => {
             zIndex: 50 + (visibleNotifications.length - visibleNotifications.indexOf(notification)),
           }}
         >
-          <NotificationItem notification={notification} onClose={removeNotification} />
+          <NotificationItem notification={notification} onClose={removeNotificationWithAnimation} />
         </div>
       ))}
     </div>

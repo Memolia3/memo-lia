@@ -2,20 +2,8 @@
 
 import { useNotificationStore } from "@/lib/notification/store";
 import { NotificationContextType } from "@/types/notification";
-import { createContext, ReactNode } from "react";
 import { NotificationContainer } from "./NotificationContainer";
-
-/**
- * 通知コンテキスト
- */
-const NotificationContext = createContext<NotificationContextType | null>(null);
-
-/**
- * 通知プロバイダーのプロパティ
- */
-interface NotificationProviderProps {
-  children: ReactNode;
-}
+import { NotificationProviderProps } from "./NotificationProvider.types";
 
 /**
  * 通知プロバイダーコンポーネント
@@ -35,7 +23,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
 export const useNotification = (): NotificationContextType => {
   // 直接ストアの関数を取得
   const addNotification = useNotificationStore(state => state.addNotification);
-  const removeNotification = useNotificationStore(state => state.removeNotification);
+  const removeNotification = useNotificationStore(state => state.removeNotificationWithAnimation);
   const updateNotification = useNotificationStore(state => state.updateNotification);
   const clearAllNotifications = useNotificationStore(state => state.clearAllNotifications);
   const clearGroupNotifications = useNotificationStore(state => state.clearGroupNotifications);

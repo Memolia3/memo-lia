@@ -6,7 +6,8 @@
  * ユーザープロバイダー情報を取得するクエリ
  */
 export const GET_USER_PROVIDER = `
-  SELECT id, user_id, provider, provider_id, access_token, refresh_token, expires_at, created_at, updated_at
+  SELECT id, user_id, provider, provider_id,
+    access_token, refresh_token, expires_at, created_at, updated_at
   FROM user_providers
   WHERE user_id = $1 AND provider = $2
 `;
@@ -25,7 +26,8 @@ export const UPSERT_USER_PROVIDER = `
     refresh_token = EXCLUDED.refresh_token,
     expires_at = EXCLUDED.expires_at,
     updated_at = now()
-  RETURNING id, user_id, provider, provider_id, access_token, refresh_token, expires_at, created_at, updated_at
+  RETURNING id, user_id, provider, provider_id,
+    access_token, refresh_token, expires_at, created_at, updated_at
 `;
 
 /**
@@ -53,7 +55,8 @@ export const UPDATE_USER_PROVIDER = `
     expires_at = $5,
     updated_at = now()
   WHERE user_id = $1 AND provider = $2
-  RETURNING id, user_id, provider, provider_id, access_token, refresh_token, expires_at, created_at, updated_at
+  RETURNING id, user_id, provider, provider_id,
+    access_token, refresh_token, expires_at, created_at, updated_at
 `;
 
 /**

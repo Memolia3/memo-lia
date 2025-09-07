@@ -65,5 +65,20 @@
     "search": "Search",
     "loading": "Loading...",
     "error": "Error occurred"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "loading": "Loading...",
+    "unauthenticated": "Authentication required",
+    "error": "Failed to load data",
+    "errorSubMessage": "Please check notifications",
+    "userInfo": {
+      "unauthenticated": "Unauthenticated",
+      "user": "User"
+    },
+    "emptyState": {
+      "title": "No categories found",
+      "description": "Create a new category folder to organize your URLs"
+    }
   }
 }

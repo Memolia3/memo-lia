@@ -4,26 +4,8 @@ import { Button } from "@/components/ui/Button";
 import { Typography } from "@/components/ui/Typography";
 import { globalErrorHandler } from "@/lib/error-handler";
 import { AlertTriangle, RefreshCw } from "lucide-react";
-import React, { Component, ErrorInfo, ReactNode } from "react";
-
-/**
- * エラーバウンダリのプロパティ
- */
-interface ErrorBoundaryProps {
-  children: ReactNode;
-  fallback?: ReactNode;
-  onError?: (error: Error, errorInfo: ErrorInfo) => void;
-  showErrorDetails?: boolean;
-}
-
-/**
- * エラーバウンダリの状態
- */
-interface ErrorBoundaryState {
-  hasError: boolean;
-  error: Error | null;
-  errorInfo: ErrorInfo | null;
-}
+import React, { Component } from "react";
+import { ErrorBoundaryProps, ErrorBoundaryState } from "./ErrorBoundary.types";
 
 /**
  * エラーバウンダリコンポーネント
@@ -46,7 +28,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     // Next.jsのリダイレクトエラーは正常な動作なので無視
     if (error.message === "NEXT_REDIRECT") {
       return;
@@ -58,7 +40,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     });
 
     // エラーハンドラーを呼び出し
-    const errorConfig = globalErrorHandler(error, "ErrorBoundary");
+    globalErrorHandler(error, "ErrorBoundary");
 
     // カスタムエラーハンドラーがあれば呼び出し
     if (this.props.onError) {
@@ -67,6 +49,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
     // 開発環境ではコンソールに詳細を出力
     if (process.env.NODE_ENV === "development") {
+      // eslint-disable-next-line no-console
       console.error("ErrorBoundary caught an error:", error, errorInfo);
     }
   }
@@ -168,14 +151,17 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 /**
  * グローバルエラーバウンダリ
  */
-export const GlobalErrorBoundary: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const GlobalErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <ErrorBoundary
       showErrorDetails={process.env.NODE_ENV === "development"}
       onError={(error, errorInfo) => {
         // エラーを外部サービスに送信（例：Sentry）
-        if (typeof window !== "undefined" && (window as any).Sentry) {
-          (window as any).Sentry.captureException(error, {
+        const windowWithSentry = window as unknown as {
+          Sentry?: { captureException: (error: Error, context: unknown) => void };
+        };
+        if (typeof window !== "undefined" && windowWithSentry.Sentry) {
+          windowWithSentry.Sentry.captureException(error, {
             contexts: {
               react: {
                 componentStack: errorInfo.componentStack,

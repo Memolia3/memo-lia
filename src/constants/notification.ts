@@ -45,6 +45,81 @@ export const NOTIFICATION_MESSAGES = {
       en: "Server error",
     },
   },
+  // 成功通知関連
+  SUCCESS: {
+    LOGGED_IN: {
+      ja: "ログインしました",
+      en: "Logged in",
+    },
+    LOGGED_OUT: {
+      ja: "ログアウトしました",
+      en: "Logged out",
+    },
+    SAVED: {
+      ja: "保存しました",
+      en: "Saved",
+    },
+    DELETED: {
+      ja: "削除しました",
+      en: "Deleted",
+    },
+    UPDATED: {
+      ja: "更新しました",
+      en: "Updated",
+    },
+    CREATED: {
+      ja: "作成しました",
+      en: "Created",
+    },
+    UPLOADED: {
+      ja: "アップロードしました",
+      en: "Uploaded",
+    },
+    DOWNLOADED: {
+      ja: "ダウンロードしました",
+      en: "Downloaded",
+    },
+    LOGIN_DESCRIPTION: {
+      ja: "アカウントに正常にログインしました",
+      en: "Successfully logged into your account",
+    },
+    AUTO_LOGIN_DESCRIPTION: {
+      ja: "認証が完了してダッシュボードに移動しました",
+      en: "Authentication completed and moved to dashboard",
+    },
+    LOGOUT_DESCRIPTION: {
+      ja: "アカウントから正常にログアウトしました",
+      en: "Successfully logged out of your account",
+    },
+    SAVE_DESCRIPTION: {
+      ja: "変更が正常に保存されました",
+      en: "Changes saved successfully",
+    },
+    DELETE_DESCRIPTION: {
+      ja: "アイテムが正常に削除されました",
+      en: "Item deleted successfully",
+    },
+    UPDATE_DESCRIPTION: {
+      ja: "変更が正常に適用されました",
+      en: "Changes applied successfully",
+    },
+    CREATE_DESCRIPTION: {
+      ja: "新しいアイテムが正常に作成されました",
+      en: "New item created successfully",
+    },
+    UPLOAD_DESCRIPTION: {
+      ja: "ファイルが正常にアップロードされました",
+      en: "File uploaded successfully",
+    },
+    DOWNLOAD_DESCRIPTION: {
+      ja: "ファイルが正常にダウンロードされました",
+      en: "File downloaded successfully",
+    },
+    DEFAULT_DESCRIPTION: {
+      ja: "操作が正常に完了しました",
+      en: "Operation completed successfully",
+    },
+  },
 } as const;
 
 /**

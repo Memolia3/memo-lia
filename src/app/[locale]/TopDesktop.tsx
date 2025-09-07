@@ -109,7 +109,7 @@ export const TopDesktop: React.FC = () => {
 
       {/* PC画面専用: 下部の横長AdSense広告 */}
       <div className="mt-8">
-        <AdSense adSlot="1234567890" adFormat="banner" responsive={true} className="w-full" />
+        <AdSense adSlot="1234567890" adFormat="fluid" responsive={true} className="w-full" />
       </div>
     </div>
   );

@@ -146,6 +146,7 @@ export interface SuccessNotificationConfig extends Omit<NotificationConfig, "typ
     | "update"
     | "create"
     | "login"
+    | "auto-login"
     | "logout"
     | "upload"
     | "download"

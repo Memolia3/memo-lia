@@ -39,4 +39,5 @@ export const AUTH_PROVIDERS = [
 export const ROUTE = {
   TOP: "/",
   AUTH: "/auth",
+  DASHBOARD: "/dashboard",
 } as const;

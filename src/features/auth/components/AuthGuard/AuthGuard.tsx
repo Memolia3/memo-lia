@@ -4,11 +4,7 @@ import { Container } from "@/components/ui";
 import { useSession } from "@/features/auth/hooks";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-
-interface AuthGuardProps {
-  children: React.ReactNode;
-  fallback?: React.ReactNode;
-}
+import type { AuthGuardProps } from "./AuthGuard.types";
 
 /**
  * 認証ガードコンポーネント
