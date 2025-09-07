@@ -4,7 +4,7 @@ import type { CategoryData } from "@/actions/categories";
 import { useSession } from "@/features/auth/hooks";
 import { useNotificationHelpers } from "@/hooks/useNotificationHelpers";
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useCategories } from "./useCategories";
 
 /**
@@ -21,6 +21,17 @@ export const useDashboard = () => {
     isLoading: categoriesLoading,
     error: categoriesError,
   } = useCategories(userId || "");
+
+  const [localCategories, setLocalCategories] = useState<CategoryData[]>(categories);
+
+  // ローカルカテゴリを初期化
+  useEffect(() => {
+    setLocalCategories(categories);
+  }, [categories]);
+
+  const handleCategoryDelete = useCallback((categoryId: string) => {
+    setLocalCategories(prev => prev.filter(category => category.id !== categoryId));
+  }, []);
 
   const handleCategoryClick = useCallback(
     (category: CategoryData) => {
@@ -46,8 +57,9 @@ export const useDashboard = () => {
     user: session?.user,
     isAuthenticated,
     isLoading: isLoading || categoriesLoading,
-    categories,
+    categories: localCategories,
     error: categoriesError,
     handleCategoryClick,
+    handleCategoryDelete,
   };
 };

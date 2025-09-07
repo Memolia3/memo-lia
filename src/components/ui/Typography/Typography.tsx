@@ -34,6 +34,7 @@ export const Typography: React.FC<TypographyProps> = ({
     body: "text-base lg:text-lg",
     "body-sm": "text-sm lg:text-base",
     caption: "text-xs lg:text-sm",
+    label: "text-sm font-medium",
   };
 
   const weightStyles = {

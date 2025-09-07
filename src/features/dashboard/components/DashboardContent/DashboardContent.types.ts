@@ -7,4 +7,5 @@ export interface DashboardContentProps {
 export interface ExtendedDashboardContentProps extends DashboardContentProps {
   categories: CategoryData[];
   onCategoryClick: (category: CategoryData) => void;
+  onCategoryDelete?: (categoryId: string) => void;
 }

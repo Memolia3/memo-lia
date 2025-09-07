@@ -1,6 +1,6 @@
 "use client";
 
-import { useNotification } from "@/components/notification";
+import { useNotification } from "@/components/notification/NotificationProvider";
 import { autoLoginSuccessHandler } from "@/lib/success-handler";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef } from "react";

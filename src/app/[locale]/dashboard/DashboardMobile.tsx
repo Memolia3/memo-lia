@@ -17,19 +17,30 @@ export interface DashboardMobileProps {
  * スマホ画面用のレイアウト
  */
 export const DashboardMobile: React.FC<DashboardMobileProps> = ({ className }) => {
-  const { isAuthenticated, isLoading, categories, error, handleCategoryClick } = useDashboard();
+  const {
+    isAuthenticated,
+    isLoading,
+    categories,
+    error,
+    handleCategoryClick,
+    handleCategoryDelete,
+  } = useDashboard();
   const t = useTranslations("dashboard");
 
   return (
     <AuthGuard
       isAuthenticated={isAuthenticated}
       isLoading={isLoading}
-      error={error}
+      error={error ? error.message : null}
       className={className}
     >
       <div className={cn("h-full flex flex-col", className)}>
         <AppHeader title={t("title")} userInfo={<UserInfo />} />
-        <DashboardContent categories={categories} onCategoryClick={handleCategoryClick} />
+        <DashboardContent
+          categories={categories}
+          onCategoryClick={handleCategoryClick}
+          onCategoryDelete={handleCategoryDelete}
+        />
 
         {/* AdSense広告 - 画面の一番下 */}
         <div className="px-4 py-4 sm:px-6 sm:py-6 border-t border-gray-200 dark:border-gray-700">

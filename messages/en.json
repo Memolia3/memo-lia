@@ -80,5 +80,27 @@
       "title": "No categories found",
       "description": "Create a new category folder to organize your URLs"
     }
+  },
+    "categoryForm": {
+      "title": "Add Category",
+    "fields": {
+      "name": "Category Name",
+      "description": "Description",
+      "color": "Color"
+    },
+    "placeholders": {
+      "name": "Enter category name",
+      "description": "Enter category description (optional)"
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "create": "Create",
+      "creating": "Creating..."
+    },
+    "errors": {
+      "nameRequired": "Category name is required",
+      "nameTooLong": "Category name must be 50 characters or less",
+      "descriptionTooLong": "Description must be 200 characters or less"
+    }
   }
 }

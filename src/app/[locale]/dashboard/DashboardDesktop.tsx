@@ -17,7 +17,14 @@ export interface DashboardDesktopProps {
  * PC画面用のレイアウト
  */
 export const DashboardDesktop: React.FC<DashboardDesktopProps> = ({ className }) => {
-  const { isAuthenticated, isLoading, categories, error, handleCategoryClick } = useDashboard();
+  const {
+    isAuthenticated,
+    isLoading,
+    categories,
+    error,
+    handleCategoryClick,
+    handleCategoryDelete,
+  } = useDashboard();
   const t = useTranslations("dashboard");
 
   return (
@@ -27,9 +34,13 @@ export const DashboardDesktop: React.FC<DashboardDesktopProps> = ({ className })
       error={error ? error.message : null}
       className={className}
     >
-      <div className={cn("h-full flex flex-col", className)}>
+      <div className={cn("h-full flex flex-col overflow-visible", className)}>
         <AppHeader title={t("title")} userInfo={<UserInfo />} />
-        <DashboardContent categories={categories} onCategoryClick={handleCategoryClick} />
+        <DashboardContent
+          categories={categories}
+          onCategoryClick={handleCategoryClick}
+          onCategoryDelete={handleCategoryDelete}
+        />
 
         {/* AdSense広告 - 画面の一番下 */}
         <div className="px-4 py-4 sm:px-6 sm:py-6 border-t border-gray-200 dark:border-gray-700">

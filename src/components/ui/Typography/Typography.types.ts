@@ -12,7 +12,18 @@ export interface TypographyProps {
   children: React.ReactNode;
   className?: string;
   as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span" | "div";
-  variant?: "display" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "body" | "body-sm" | "caption";
+  variant?:
+    | "display"
+    | "h1"
+    | "h2"
+    | "h3"
+    | "h4"
+    | "h5"
+    | "h6"
+    | "body"
+    | "body-sm"
+    | "caption"
+    | "label";
   weight?: "light" | "normal" | "medium" | "semibold" | "bold" | "extrabold";
   color?: "primary" | "secondary" | "muted" | "accent" | "white" | "black";
   align?: "left" | "center" | "right" | "justify";

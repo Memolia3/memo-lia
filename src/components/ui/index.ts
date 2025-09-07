@@ -37,3 +37,7 @@ export type { UserInfoProps } from "./UserInfo";
 // AuthGuard
 export { AuthGuard } from "./AuthGuard";
 export type { AuthGuardProps } from "./AuthGuard";
+
+// Tooltip
+export { Tooltip } from "./Tooltip";
+export type { TooltipProps } from "./Tooltip";

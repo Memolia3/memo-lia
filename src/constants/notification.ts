@@ -119,6 +119,38 @@ export const NOTIFICATION_MESSAGES = {
       ja: "操作が正常に完了しました",
       en: "Operation completed successfully",
     },
+    CATEGORY_CREATED: {
+      ja: "カテゴリを作成しました",
+      en: "Category created",
+    },
+    CATEGORY_CREATE_DESCRIPTION: {
+      ja: "新しいカテゴリフォルダが正常に作成されました",
+      en: "New category folder has been created successfully",
+    },
+    CATEGORY_CREATE_ERROR: {
+      ja: "カテゴリの作成に失敗しました",
+      en: "Failed to create category",
+    },
+    CATEGORY_CREATE_ERROR_DESCRIPTION: {
+      ja: "カテゴリの作成中にエラーが発生しました",
+      en: "An error occurred while creating the category",
+    },
+    CATEGORY_DELETED: {
+      ja: "カテゴリを削除しました",
+      en: "Category deleted",
+    },
+    CATEGORY_DELETE_DESCRIPTION: {
+      ja: "カテゴリフォルダが正常に削除されました",
+      en: "Category folder has been deleted successfully",
+    },
+    CATEGORY_DELETE_ERROR: {
+      ja: "カテゴリの削除に失敗しました",
+      en: "Failed to delete category",
+    },
+    CATEGORY_DELETE_ERROR_DESCRIPTION: {
+      ja: "カテゴリの削除中にエラーが発生しました",
+      en: "An error occurred while deleting the category",
+    },
   },
 } as const;
 

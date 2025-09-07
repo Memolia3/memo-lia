@@ -3,7 +3,7 @@
  */
 export interface IconProps {
   /** アイコン名 */
-  name: "bookmark" | "search" | "sell" | "google" | "github" | "discord" | "user";
+  name: string;
   /** アイコンのサイズ */
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
   /** アイコンの色 */

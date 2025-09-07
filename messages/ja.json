@@ -80,5 +80,27 @@
       "title": "カテゴリが0件です",
       "description": "新しいカテゴリフォルダを作成して、URLを整理しましょう"
     }
+  },
+    "categoryForm": {
+      "title": "カテゴリ追加",
+    "fields": {
+      "name": "カテゴリ名",
+      "description": "説明",
+      "color": "色"
+    },
+    "placeholders": {
+      "name": "カテゴリ名を入力してください",
+      "description": "カテゴリの説明を入力してください（任意）"
+    },
+    "buttons": {
+      "cancel": "キャンセル",
+      "create": "作成",
+      "creating": "作成中..."
+    },
+    "errors": {
+      "nameRequired": "カテゴリ名は必須です",
+      "nameTooLong": "カテゴリ名は50文字以内で入力してください",
+      "descriptionTooLong": "説明は200文字以内で入力してください"
+    }
   }
 }
