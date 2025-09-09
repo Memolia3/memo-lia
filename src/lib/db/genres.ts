@@ -69,7 +69,7 @@ export async function getGenresByCategory(
       ORDER BY g.sort_order ASC, g.created_at ASC
     `;
 
-    return result.map((row: any) => ({
+    return result.map((row: Record<string, unknown>) => ({
       id: row.id,
       userId: row.user_id,
       categoryId: row.category_id,
@@ -82,8 +82,7 @@ export async function getGenresByCategory(
       createdAt: row.created_at,
       updatedAt: row.updated_at,
     }));
-  } catch (error) {
-    console.error("Error fetching genres:", error);
+  } catch {
     throw new Error("ジャンルの取得に失敗しました");
   }
 }
@@ -130,8 +129,7 @@ export const getGenreById = async (genreId: string, userId: string): Promise<Gen
       createdAt: row.created_at,
       updatedAt: row.updated_at,
     };
-  } catch (error) {
-    console.error("Error fetching genre:", error);
+  } catch {
     throw new Error("Failed to fetch genre");
   }
 };
@@ -193,27 +191,6 @@ function validateGenreData(data: CreateGenreData): void {
 
   if (data.color && !/^#[0-9A-Fa-f]{6}$/.test(data.color)) {
     throw new Error("カラーコードの形式が正しくありません");
-  }
-}
-
-/**
- * カテゴリの更新日を更新
- */
-async function updateCategoryTimestamp(categoryId: string, userId: string): Promise<void> {
-  try {
-    const result = await sql`
-      UPDATE categories
-      SET updated_at = now()
-      WHERE id = ${categoryId} AND user_id = ${userId}
-      RETURNING updated_at
-    `;
-
-    if (result.length === 0) {
-      throw new Error(GENRE_ERROR_MESSAGES.CATEGORY_NOT_FOUND);
-    }
-  } catch (error) {
-    console.error("Error updating category timestamp:", error);
-    throw error;
   }
 }
 
@@ -288,7 +265,6 @@ export async function createGenre(userId: string, genreData: CreateGenreData): P
       updatedAt: result.updated_at as string,
     };
   } catch (error) {
-    console.error("ジャンル作成エラー:", error);
     if (error instanceof Error) {
       throw error;
     }
@@ -380,7 +356,6 @@ export async function deleteGenre(genreId: string, userId: string): Promise<stri
 
     return genreId;
   } catch (error) {
-    console.error("ジャンル削除エラー:", error);
     if (error instanceof Error) {
       throw error;
     }

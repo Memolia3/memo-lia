@@ -8,8 +8,14 @@ import { cn } from "@/utils";
 import { ArrowLeft, Folder } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+interface CategoryData {
+  id: string;
+  name: string;
+  userId: string;
+}
+
 export interface GenreDetailDesktopProps {
-  category: any; // CategoryData type
+  category: CategoryData;
   genreId: string;
   locale: string;
   className?: string;

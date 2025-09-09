@@ -2,15 +2,20 @@
 
 import { AppHeader } from "@/components/layout";
 import { Button, Divider, Icon, ScrollArea, Typography, UserInfo } from "@/components/ui";
-import { UrlCreateButton, UrlGrid } from "@/features/genreDetail";
+import { UrlCreateButton, UrlGrid, useGenreDetail } from "@/features/genreDetail";
 import { AdSense } from "@/features/google";
 import { cn } from "@/utils";
 import { ArrowLeft, Folder } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useGenreDetail } from "@/features/genreDetail";
+
+interface CategoryData {
+  id: string;
+  name: string;
+  userId: string;
+}
 
 export interface GenreDetailMobileProps {
-  category: any; // CategoryData type
+  category: CategoryData;
   genreId: string;
   locale: string;
   className?: string;
@@ -19,7 +24,6 @@ export interface GenreDetailMobileProps {
 export const GenreDetailMobile: React.FC<GenreDetailMobileProps> = ({
   category,
   genreId,
-  locale,
   className,
 }) => {
   const t = useTranslations("genreDetail");

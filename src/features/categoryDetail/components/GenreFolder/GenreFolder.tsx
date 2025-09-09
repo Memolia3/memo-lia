@@ -58,7 +58,9 @@ export const GenreFolder: React.FC<GenreFolderProps> = ({
 
     if (categoryMatch) {
       const [, categoryId, categoryName] = categoryMatch;
-      const genreDetailUrl = `/${currentLocale}/dashboard/category/${categoryId}/${categoryName}/genre/${genre.id}/${encodeURIComponent(genre.name)}`;
+      const encodedGenreName = encodeURIComponent(genre.name);
+      const basePath = `/${currentLocale}/dashboard/category/${categoryId}/${categoryName}`;
+      const genreDetailUrl = `${basePath}/genre/${genre.id}/${encodedGenreName}`;
       router.push(genreDetailUrl);
     } else {
       // フォールバック: 既存のonClick処理

@@ -5,18 +5,7 @@ import React from "react";
 import { ScrollAreaProps } from "./ScrollArea.types";
 
 const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
-  (
-    {
-      className,
-      children,
-      hideScrollbar = false,
-      variant = "default",
-      size = "md",
-      orientation = "vertical",
-      ...props
-    },
-    ref
-  ) => {
+  ({ className, children, orientation = "vertical", ...props }, ref) => {
     return (
       <div
         ref={ref}

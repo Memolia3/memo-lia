@@ -8,9 +8,15 @@ const withNextIntl = createNextIntlPlugin();
  */
 const nextConfig: NextConfig = {
   images: {
-    domains: [
-      "lh3.googleusercontent.com", // Google認証のアバター画像
-      "avatars.githubusercontent.com", // GitHub認証のアバター画像
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+      {
+        protocol: "http",
+        hostname: "**",
+      },
     ],
   },
   // 静的ファイルの生成設定

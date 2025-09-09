@@ -96,8 +96,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(metadata);
-  } catch (error) {
-    console.error("Error fetching URL metadata:", error);
+  } catch {
     return NextResponse.json({ error: "Failed to fetch URL metadata" }, { status: 500 });
   }
 }

@@ -3,6 +3,7 @@
 import { Button, Typography } from "@/components/ui";
 import { cn } from "@/utils";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { UrlFormData, UrlFormProps } from "./UrlForm.types";
 
@@ -16,7 +17,6 @@ interface UrlMetadata {
 export const UrlForm: React.FC<UrlFormProps> = ({
   initialData,
   onSubmit,
-  onCancel,
   isLoading = false,
   className,
 }) => {
@@ -78,8 +78,7 @@ export const UrlForm: React.FC<UrlFormProps> = ({
           setPreviewError("URL情報の取得に失敗しました");
           setMetadata(null);
         }
-      } catch (error) {
-        console.error("Failed to fetch URL metadata:", error);
+      } catch {
         setPreviewError("URL情報の取得に失敗しました");
         setMetadata(null);
       } finally {
@@ -142,7 +141,7 @@ export const UrlForm: React.FC<UrlFormProps> = ({
           )}
           {isValidating && (
             <div className="flex items-center gap-2 mt-2">
-              <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
               <Typography variant="caption" color="muted">
                 {t("messages.fetchingMetadata")}
               </Typography>
@@ -236,9 +235,11 @@ export const UrlForm: React.FC<UrlFormProps> = ({
                 {/* Favicon */}
                 <div className="flex-shrink-0">
                   {metadata.faviconUrl ? (
-                    <img
+                    <Image
                       src={metadata.faviconUrl}
                       alt="Favicon"
+                      width={32}
+                      height={32}
                       className="w-8 h-8 rounded"
                       onError={e => {
                         const target = e.target as HTMLImageElement;

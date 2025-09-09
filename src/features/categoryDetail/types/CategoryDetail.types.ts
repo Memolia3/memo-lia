@@ -6,6 +6,6 @@ export interface CategoryDetailProps {
   className?: string;
 }
 
-export interface CategoryDetailDesktopProps extends CategoryDetailProps {}
+export type CategoryDetailDesktopProps = CategoryDetailProps;
 
-export interface CategoryDetailMobileProps extends CategoryDetailProps {}
+export type CategoryDetailMobileProps = CategoryDetailProps;

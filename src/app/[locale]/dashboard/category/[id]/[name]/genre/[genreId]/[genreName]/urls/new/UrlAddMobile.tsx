@@ -11,9 +11,19 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+interface CategoryData {
+  id: string;
+  name: string;
+}
+
+interface GenreData {
+  id: string;
+  name: string;
+}
+
 export interface UrlAddMobileProps {
-  category: any; // CategoryData type
-  genre: any; // Genre type
+  category: CategoryData;
+  genre: GenreData;
   locale: string;
   className?: string;
 }
@@ -28,7 +38,11 @@ export default function UrlAddMobile({ category, genre, locale, className }: Url
     setIsLoading(true);
     try {
       // URLメタデータを取得
-      let urlMetadata = { title: data.title, description: data.description, faviconUrl: undefined };
+      let urlMetadata = {
+        title: data.title,
+        description: data.description,
+        faviconUrl: undefined as string | undefined,
+      };
 
       try {
         const metadataResponse = await fetch("/api/urls/metadata", {
@@ -45,8 +59,8 @@ export default function UrlAddMobile({ category, genre, locale, className }: Url
             faviconUrl: metadata.faviconUrl,
           };
         }
-      } catch (error) {
-        console.warn("Failed to fetch URL metadata:", error);
+      } catch {
+        // メタデータ取得に失敗した場合は元のデータを使用
       }
 
       await createUrlAction({
@@ -63,11 +77,12 @@ export default function UrlAddMobile({ category, genre, locale, className }: Url
         description: "URLが正常に作成されました。",
       });
 
-      router.push(
-        `/${locale}/dashboard/category/${category.id}/${encodeURIComponent(category.name)}/genre/${genre.id}/${encodeURIComponent(genre.name)}`
-      );
+      const encodedCategoryName = encodeURIComponent(category.name);
+      const encodedGenreName = encodeURIComponent(genre.name);
+      const basePath = `/${locale}/dashboard/category/${category.id}/${encodedCategoryName}`;
+      const redirectPath = `${basePath}/genre/${genre.id}/${encodedGenreName}`;
+      router.push(redirectPath);
     } catch (error) {
-      console.error("Error creating URL:", error);
       addNotification({
         type: "error",
         title: "URL作成エラー",

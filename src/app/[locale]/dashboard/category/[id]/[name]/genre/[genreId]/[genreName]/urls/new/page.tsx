@@ -39,7 +39,7 @@ export default async function UrlAddPage({ params }: PageProps) {
     redirect("/auth");
   }
 
-  const { locale, id, name, genreId, genreName } = await params;
+  const { locale, id, genreId } = await params;
   const userId = session.user.id;
 
   try {
@@ -69,8 +69,7 @@ export default async function UrlAddPage({ params }: PageProps) {
         </Container>
       </>
     );
-  } catch (error) {
-    console.error("Error loading URL add page:", error);
+  } catch {
     notFound();
   }
 }

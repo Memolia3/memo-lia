@@ -3,6 +3,7 @@
 import { Typography } from "@/components/ui";
 import { cn } from "@/utils";
 import { ExternalLink, Globe, MoreVertical, Trash2 } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { UrlCardProps } from "./UrlCard.types";
 
@@ -87,9 +88,11 @@ export const UrlCard: React.FC<UrlCardProps> = ({ url, onClick, onDelete, classN
         {/* ファビコン */}
         <div className="flex-shrink-0">
           {url.faviconUrl ? (
-            <img
+            <Image
               src={url.faviconUrl}
               alt={`${url.title} favicon`}
+              width={32}
+              height={32}
               className="w-8 h-8 rounded object-cover group-hover:scale-110 transition-transform duration-300"
               onError={e => {
                 // ファビコン読み込み失敗時のフォールバック

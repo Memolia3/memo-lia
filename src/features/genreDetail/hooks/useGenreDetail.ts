@@ -25,7 +25,6 @@ export const useGenreDetail = (
 ): UseGenreDetailReturn => {
   const router = useRouter();
   const [genre, setGenre] = useState<Genre | null>(null);
-  const [categoryName, setCategoryName] = useState<string>("");
   const [urls, setUrls] = useState<UrlData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -70,7 +69,7 @@ export const useGenreDetail = (
     // URLからカテゴリ名を取得
     const currentPath = typeof window !== "undefined" ? window.location.pathname : "";
     const categoryMatch = currentPath.match(/\/dashboard\/category\/[^\/]+\/([^\/]+)/);
-    const currentCategoryName = categoryMatch ? categoryMatch[1] : categoryName;
+    const currentCategoryName = categoryMatch ? categoryMatch[1] : "";
 
     if (currentCategoryName) {
       router.push(`/${currentLocale}/dashboard/category/${categoryId}/${currentCategoryName}`);
@@ -85,7 +84,6 @@ export const useGenreDetail = (
   const handleUrlDelete = (urlId: string) => {
     // URL削除の処理（今後実装予定）
     setUrls(prevUrls => prevUrls.filter(url => url.id !== urlId));
-    console.log("URL deleted:", urlId);
   };
 
   const handleCreateUrl = () => {
@@ -101,9 +99,11 @@ export const useGenreDetail = (
     const currentGenreName = genreMatch ? decodeURIComponent(genreMatch[1]) : "";
 
     if (currentCategoryName && currentGenreName) {
-      router.push(
-        `/${currentLocale}/dashboard/category/${categoryId}/${encodeURIComponent(currentCategoryName)}/genre/${genreId}/${encodeURIComponent(currentGenreName)}/urls/new`
-      );
+      const encodedCategoryName = encodeURIComponent(currentCategoryName);
+      const encodedGenreName = encodeURIComponent(currentGenreName);
+      const basePath = `/${currentLocale}/dashboard/category/${categoryId}/${encodedCategoryName}`;
+      const urlPath = `${basePath}/genre/${genreId}/${encodedGenreName}/urls/new`;
+      router.push(urlPath);
     }
   };
 

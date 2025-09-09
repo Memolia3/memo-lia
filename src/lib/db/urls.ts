@@ -111,11 +111,16 @@ export const createUrl = async (data: CreateUrlData): Promise<UrlData> => {
       updatedAt: result.updated_at as string,
       lastAccessedAt: result.last_accessed_at as string | undefined,
     };
-  } catch (error: any) {
-    console.error("Error creating URL:", error);
-
+  } catch (error: unknown) {
     // PostgreSQL unique constraint violation
-    if (error?.code === "23505" && error?.constraint === "idx_urls_user_url") {
+    if (
+      error &&
+      typeof error === "object" &&
+      "code" in error &&
+      "constraint" in error &&
+      error.code === "23505" &&
+      error.constraint === "idx_urls_user_url"
+    ) {
       throw new Error(URL_ERROR_MESSAGES.URL_ALREADY_EXISTS);
     }
 
@@ -123,8 +128,8 @@ export const createUrl = async (data: CreateUrlData): Promise<UrlData> => {
     if (error instanceof Error) {
       // 既知のエラーメッセージの場合はそのまま投げ直し
       if (
-        Object.values(GENRE_ERROR_MESSAGES).includes(error.message as any) ||
-        Object.values(URL_ERROR_MESSAGES).includes(error.message as any)
+        (Object.values(GENRE_ERROR_MESSAGES) as string[]).includes(error.message) ||
+        (Object.values(URL_ERROR_MESSAGES) as string[]).includes(error.message)
       ) {
         throw error;
       }
@@ -156,7 +161,7 @@ export const getUrlsByGenre = async (genreId: string, userId: string): Promise<U
       ORDER BY u.created_at DESC
     `;
 
-    return result.map((row: any) => ({
+    return result.map((row: Record<string, unknown>) => ({
       id: row.id,
       userId: row.user_id,
       title: row.title,
@@ -169,8 +174,7 @@ export const getUrlsByGenre = async (genreId: string, userId: string): Promise<U
       updatedAt: row.updated_at,
       lastAccessedAt: row.last_accessed_at,
     }));
-  } catch (error) {
-    console.error("Error fetching URLs by genre:", error);
+  } catch {
     throw new Error("URLの取得に失敗しました");
   }
 };
@@ -186,7 +190,6 @@ export const deleteUrl = async (urlId: string, userId: string): Promise<void> =>
       throw new Error("削除するURLが見つかりません");
     }
   } catch (error) {
-    console.error("Error deleting URL:", error);
     throw error;
   }
 };
