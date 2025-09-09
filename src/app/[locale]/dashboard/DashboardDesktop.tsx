@@ -34,17 +34,26 @@ export const DashboardDesktop: React.FC<DashboardDesktopProps> = ({ className })
       error={error ? error.message : null}
       className={className}
     >
-      <div className={cn("h-full flex flex-col overflow-visible", className)}>
+      <div className={cn("h-full flex flex-col overflow-visible zoom-safe", className)}>
         <AppHeader title={t("title")} userInfo={<UserInfo />} />
-        <DashboardContent
-          categories={categories}
-          onCategoryClick={handleCategoryClick}
-          onCategoryDelete={handleCategoryDelete}
-        />
+        <div className="flex-1 flex flex-col overflow-hidden zoom-container">
+          <div className="max-w-7xl mx-auto w-full flex flex-col h-full zoom-safe">
+            <DashboardContent
+              categories={categories}
+              onCategoryClick={handleCategoryClick}
+              onCategoryDelete={handleCategoryDelete}
+            />
+          </div>
+        </div>
 
         {/* AdSense広告 - 画面の一番下 */}
-        <div className="px-4 py-4 sm:px-6 sm:py-6 border-t border-gray-200 dark:border-gray-700">
-          <AdSense adSlot="1234567890" adFormat="fluid" responsive={true} className="w-full" />
+        <div className="px-4 py-4 sm:px-6 sm:py-6 border-t border-gray-200 dark:border-gray-700 zoom-container">
+          <AdSense
+            adSlot="1234567890"
+            adFormat="fluid"
+            responsive={true}
+            className="w-full zoom-safe"
+          />
         </div>
       </div>
     </AuthGuard>

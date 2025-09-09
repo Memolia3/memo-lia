@@ -9,6 +9,24 @@ const config: Config = {
   darkMode: "media", // OSの設定に応じて自動切り替え
   theme: {
     extend: {
+      // 拡大率対応のブレークポイント
+      screens: {
+        xs: "320px", // 最小サイズ
+        sm: "640px", // 小さいタブレット
+        md: "768px", // タブレット
+        lg: "1024px", // デスクトップ
+        xl: "1280px", // 大画面
+        "2xl": "1536px", // 超大画面
+        // 高DPI対応
+        retina: "2dppx",
+        // 拡大率対応
+        "zoom-150": "150%",
+        "zoom-200": "200%",
+        // 拡大率150%以上でpy-8を無効化
+        "zoom-150+": {
+          raw: "(min-zoom: 150%)",
+        },
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
