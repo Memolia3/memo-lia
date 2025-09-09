@@ -3,7 +3,7 @@
 import { createCategory } from "@/actions/categories";
 import { AppHeader } from "@/components/layout";
 import { useNotification } from "@/components/notification/NotificationProvider";
-import { UserInfo } from "@/components/ui";
+import { ScrollArea, UserInfo } from "@/components/ui";
 import { getNotificationMessage, NOTIFICATION_MESSAGES } from "@/constants/notification";
 import { CategoryForm } from "@/features/categories/components/CategoryForm";
 import { AdSense } from "@/features/google";
@@ -88,9 +88,11 @@ export const CategoryAddMobile: React.FC<CategoryAddMobileProps> = ({ className 
     <div className={cn("h-full flex flex-col", className)}>
       <AppHeader title={t("title")} userInfo={<UserInfo />} />
 
-      <main className="flex-1 overflow-auto px-4 py-6 sm:px-6 sm:py-8 flex items-center">
-        <CategoryForm onSubmit={handleCreateCategory} isLoading={isLoading} className="w-full" />
-      </main>
+      <ScrollArea className="flex-1 px-4 py-6 sm:px-6 sm:py-8">
+        <div className="flex items-center min-h-full">
+          <CategoryForm onSubmit={handleCreateCategory} isLoading={isLoading} className="w-full" />
+        </div>
+      </ScrollArea>
 
       {/* AdSense広告 - 画面の一番下 */}
       <div className="px-4 py-4 border-t border-gray-200 dark:border-gray-700">

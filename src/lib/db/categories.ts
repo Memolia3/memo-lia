@@ -1,76 +1,6 @@
 import { neon } from "@neondatabase/serverless";
 
-/**
- * ユーザーのカテゴリ一覧を取得するクエリ（フォルダのみ）
- */
-const GET_USER_CATEGORIES = `
-  SELECT
-    id,
-    user_id,
-    parent_id,
-    name,
-    description,
-    color,
-    icon,
-    sort_order,
-    level,
-    path,
-    is_active,
-    is_folder,
-    created_at,
-    updated_at
-  FROM categories
-  WHERE user_id = $1
-    AND is_active = true
-    AND is_folder = true
-  ORDER BY sort_order ASC, created_at ASC
-`;
-
-/**
- * カテゴリの詳細情報を取得するクエリ
- */
-const GET_CATEGORY_BY_ID = `
-  SELECT
-    id,
-    user_id,
-    parent_id,
-    name,
-    description,
-    color,
-    icon,
-    sort_order,
-    level,
-    path,
-    is_active,
-    is_folder,
-    created_at,
-    updated_at
-  FROM categories
-  WHERE id = $1 AND user_id = $2 AND is_active = true
-`;
-
-/**
- * カテゴリ内のジャンル一覧を取得するクエリ
- */
-const GET_GENRES_BY_CATEGORY = `
-  SELECT
-    g.id,
-    g.user_id,
-    g.category_id,
-    g.name,
-    g.description,
-    g.color,
-    g.icon,
-    g.sort_order,
-    g.is_active,
-    g.created_at,
-    g.updated_at
-  FROM genres g
-  WHERE g.category_id = $1
-    AND g.user_id = $2
-    AND g.is_active = true
-  ORDER BY g.sort_order ASC, g.created_at ASC
-`;
+// Note: ジャンル関連機能は src/lib/db/genres.ts に移動しました
 
 const sql = neon(process.env.DATABASE_URL!);
 
@@ -94,29 +24,35 @@ export interface CategoryData {
   updatedAt: string;
 }
 
-/**
- * ジャンルデータの型定義
- */
-export interface GenreData {
-  id: string;
-  userId: string;
-  categoryId: string;
-  name: string;
-  description?: string;
-  color?: string;
-  icon?: string;
-  sortOrder: number;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+// Note: GenreData は src/lib/db/genres.ts に移動しました
 
 /**
  * ユーザーのカテゴリ一覧を取得
  */
 export async function getCategories(userId: string): Promise<CategoryData[]> {
   try {
-    const result = await sql.query(GET_USER_CATEGORIES, [userId]);
+    const result = await sql`
+      SELECT
+        id,
+        user_id,
+        parent_id,
+        name,
+        description,
+        color,
+        icon,
+        sort_order,
+        level,
+        path,
+        is_active,
+        is_folder,
+        created_at,
+        updated_at
+      FROM categories
+      WHERE user_id = ${userId}
+        AND is_active = true
+        AND is_folder = true
+      ORDER BY sort_order ASC, created_at ASC
+    `;
     return result.map((row: Record<string, unknown>) => ({
       id: row.id as string,
       userId: row.user_id as string,
@@ -148,7 +84,25 @@ export async function getCategoryById(
   userId: string
 ): Promise<CategoryData | null> {
   try {
-    const result = await sql.query(GET_CATEGORY_BY_ID, [categoryId, userId]);
+    const result = await sql`
+      SELECT
+        id,
+        user_id,
+        parent_id,
+        name,
+        description,
+        color,
+        icon,
+        sort_order,
+        level,
+        path,
+        is_active,
+        is_folder,
+        created_at,
+        updated_at
+      FROM categories
+      WHERE id = ${categoryId} AND user_id = ${userId} AND is_active = true
+    `;
     if (result.length === 0) return null;
 
     const row = result[0] as Record<string, unknown>;
@@ -175,57 +129,7 @@ export async function getCategoryById(
   }
 }
 
-/**
- * カテゴリ内のジャンル一覧を取得
- */
-export async function getGenresByCategory(
-  categoryId: string,
-  userId: string
-): Promise<GenreData[]> {
-  try {
-    const result = await sql.query(GET_GENRES_BY_CATEGORY, [categoryId, userId]);
-    return result.map((row: Record<string, unknown>) => ({
-      id: row.id as string,
-      userId: row.user_id as string,
-      categoryId: row.category_id as string,
-      name: row.name as string,
-      description: row.description as string | undefined,
-      color: row.color as string | undefined,
-      icon: row.icon as string | undefined,
-      sortOrder: row.sort_order as number,
-      isActive: row.is_active as boolean,
-      createdAt: row.created_at as string,
-      updatedAt: row.updated_at as string,
-    }));
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error("Error fetching genres:", error);
-    throw new Error("ジャンルの取得に失敗しました");
-  }
-}
-
-/**
- * カテゴリ作成のクエリ
- */
-const CREATE_CATEGORY = `
-  INSERT INTO categories (
-    id,
-    user_id,
-    parent_id,
-    name,
-    description,
-    color,
-    icon,
-    sort_order,
-    level,
-    path,
-    is_active,
-    is_folder
-  ) VALUES (
-    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
-  )
-  RETURNING *
-`;
+// Note: getGenresByCategory は src/lib/db/genres.ts に移動しました
 
 /**
  * カテゴリ作成の入力データ型
@@ -271,10 +175,13 @@ async function checkCategoryNameExists(
   parentId: string | null = null
 ): Promise<boolean> {
   try {
-    const result = await sql.query(
-      "SELECT id FROM categories WHERE user_id = $1 AND name = $2 AND parent_id = $3 AND is_active = true",
-      [userId, name.trim(), parentId]
-    );
+    const result = await sql`
+      SELECT id FROM categories
+      WHERE user_id = ${userId}
+        AND name = ${name.trim()}
+        AND parent_id = ${parentId}
+        AND is_active = true
+    `;
     return result.length > 0;
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -288,10 +195,13 @@ async function checkCategoryNameExists(
  */
 async function getNextSortOrder(userId: string, parentId: string | null = null): Promise<number> {
   try {
-    const result = await sql.query(
-      "SELECT COALESCE(MAX(sort_order), 0) as max_order FROM categories WHERE user_id = $1 AND parent_id = $2 AND is_folder = true",
-      [userId, parentId]
-    );
+    const result = await sql`
+      SELECT COALESCE(MAX(sort_order), 0) as max_order
+      FROM categories
+      WHERE user_id = ${userId}
+        AND parent_id = ${parentId}
+        AND is_folder = true
+    `;
     return (result[0] as { max_order: number }).max_order + 1;
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -322,20 +232,36 @@ export async function createCategory(
     const parentId = null; // トップレベルカテゴリ
     const sortOrder = await getNextSortOrder(userId, parentId);
 
-    const result = await sql.query(CREATE_CATEGORY, [
-      categoryId,
-      userId,
-      parentId,
-      categoryData.name.trim(),
-      categoryData.description?.trim() || null,
-      categoryData.color || null,
-      categoryData.icon || null,
-      sortOrder,
-      0, // level (トップレベル)
-      `/${categoryId}`, // path (スラッシュで始まる形式)
-      true, // is_active
-      true, // is_folder
-    ]);
+    const result = await sql`
+      INSERT INTO categories (
+        id,
+        user_id,
+        parent_id,
+        name,
+        description,
+        color,
+        icon,
+        sort_order,
+        level,
+        path,
+        is_active,
+        is_folder
+      ) VALUES (
+        ${categoryId},
+        ${userId},
+        ${parentId},
+        ${categoryData.name.trim()},
+        ${categoryData.description?.trim() || null},
+        ${categoryData.color || null},
+        ${categoryData.icon || null},
+        ${sortOrder},
+        ${0},
+        ${`/${categoryId}`},
+        ${true},
+        ${true}
+      )
+      RETURNING *
+    `;
 
     if (result.length === 0) {
       throw new Error("カテゴリの作成に失敗しました");
@@ -372,20 +298,76 @@ export async function createCategory(
 }
 
 /**
- * カテゴリ削除用のSQLクエリ
- */
-const DELETE_CATEGORY = `
-  DELETE FROM categories
-  WHERE id = $1 AND user_id = $2
-`;
-
-/**
  * カテゴリ削除のデータ型
  */
 export interface DeleteCategoryData {
   categoryId: string;
   userId: string;
 }
+
+/**
+ * カテゴリ削除時の影響統計
+ */
+export interface CategoryDeletionStats {
+  categoryName: string;
+  genreCount: number;
+  urlCount: number;
+  genreNames: string[];
+  urlTitles: string[];
+}
+
+/**
+ * カテゴリ削除時の影響を事前に取得
+ * @param categoryId カテゴリID
+ * @param userId ユーザーID
+ * @returns 削除影響の統計情報
+ */
+export async function getCategoryDeletionStats(
+  categoryId: string,
+  userId: string
+): Promise<CategoryDeletionStats | null> {
+  try {
+    // カテゴリ情報を取得
+    const category = await getCategoryById(categoryId, userId);
+    if (!category) {
+      return null;
+    }
+
+    // 関連ジャンル数とジャンル名を取得
+    const genreResult = await sql`
+      SELECT id, name FROM genres
+      WHERE category_id = ${categoryId} AND user_id = ${userId} AND is_active = true
+    `;
+
+    const genreNames = genreResult.map(row => row.name as string);
+
+    // 関連URLの詳細情報を取得
+    const urlResult = await sql`
+      SELECT DISTINCT u.title
+      FROM urls u
+      INNER JOIN url_categories uc ON u.id = uc.url_id
+      WHERE uc.category_id = ${categoryId} AND uc.user_id = ${userId}
+      ORDER BY u.title
+    `;
+
+    const urlCount = urlResult.length;
+    const urlTitles = urlResult.map(row => row.title as string);
+
+    return {
+      categoryName: category.name,
+      genreCount: genreResult.length,
+      urlCount,
+      genreNames,
+      urlTitles,
+    };
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("Error getting category deletion stats:", error);
+    throw new Error("削除影響の取得に失敗しました");
+  }
+}
+
+// Note: CreateGenreData は src/lib/db/genres.ts に移動しました
 
 /**
  * カテゴリを削除する
@@ -417,8 +399,21 @@ export async function deleteCategory(data: DeleteCategoryData): Promise<string> 
       throw new Error("カテゴリが見つかりません");
     }
 
-    // カテゴリを削除
-    await sql.query(DELETE_CATEGORY, [categoryId, userId]);
+    // 関連するURLを削除（カテゴリに紐づくURLレコード自体を削除）
+    await sql`
+      DELETE FROM urls
+      WHERE id IN (
+        SELECT DISTINCT uc.url_id
+        FROM url_categories uc
+        WHERE uc.category_id = ${categoryId} AND uc.user_id = ${userId}
+      )
+    `;
+
+    // カテゴリを削除（CASCADE設定により関連するジャンルとurl_categoriesも自動削除される）
+    await sql`
+      DELETE FROM categories
+      WHERE id = ${categoryId} AND user_id = ${userId}
+    `;
 
     return categoryId;
   } catch (error) {

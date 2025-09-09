@@ -133,7 +133,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 
         {/* 送信ボタン */}
         <div className="w-full">
-          <div className="flex space-x-3 pt-4" style={{ justifyContent: "flex-end" }}>
+          <div className="flex space-x-3" style={{ justifyContent: "flex-end" }}>
             <Button
               type="button"
               variant="secondary"

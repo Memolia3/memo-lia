@@ -151,6 +151,38 @@ export const NOTIFICATION_MESSAGES = {
       ja: "カテゴリの削除中にエラーが発生しました",
       en: "An error occurred while deleting the category",
     },
+    GENRE_CREATED: {
+      ja: "ジャンルを作成しました",
+      en: "Genre created",
+    },
+    GENRE_CREATE_DESCRIPTION: {
+      ja: "新しいジャンルが正常に作成されました",
+      en: "New genre has been created successfully",
+    },
+    GENRE_CREATE_ERROR: {
+      ja: "ジャンルの作成に失敗しました",
+      en: "Failed to create genre",
+    },
+    GENRE_CREATE_ERROR_DESCRIPTION: {
+      ja: "ジャンルの作成中にエラーが発生しました",
+      en: "An error occurred while creating the genre",
+    },
+    GENRE_DELETED: {
+      ja: "ジャンルを削除しました",
+      en: "Genre deleted",
+    },
+    GENRE_DELETE_DESCRIPTION: {
+      ja: "ジャンルが正常に削除されました",
+      en: "Genre deleted successfully",
+    },
+    GENRE_DELETE_ERROR: {
+      ja: "ジャンル削除に失敗しました",
+      en: "Failed to delete genre",
+    },
+    GENRE_DELETE_ERROR_DESCRIPTION: {
+      ja: "ジャンルの削除中にエラーが発生しました",
+      en: "An error occurred while deleting the genre",
+    },
   },
 } as const;
 

@@ -12,9 +12,10 @@ export const useCategoryDetail = (category: CategoryData) => {
   }, [router]);
 
   const handleCreateGenre = useCallback(() => {
-    // TODO: ジャンル作成画面への遷移
-    console.log("Create genre for category:", category.id);
-  }, [category.id]);
+    // カテゴリ名をURLセーフに変換
+    const urlSafeName = encodeURIComponent(category.name);
+    router.push(`/dashboard/category/${category.id}/${urlSafeName}/genres/new`);
+  }, [router, category.id, category.name]);
 
   return {
     category,

@@ -54,7 +54,7 @@ export const TopMobile: React.FC = () => {
       </div>
 
       {/* 下部: 主要機能3つ（縦並び）(45%) */}
-      <div className="flex-1 flex items-center justify-center px-4 pb-8">
+      <div className="flex-1 flex items-center justify-center px-8 lg:px-4 py-8 lg:pb-8">
         <div className="space-y-4 w-full max-w-sm">
           <GlassBackground variant="default" className="p-4">
             <div className="flex items-start space-x-4">

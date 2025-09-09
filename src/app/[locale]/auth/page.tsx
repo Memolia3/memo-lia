@@ -7,15 +7,19 @@ import { AuthMobile } from "./AuthMobile";
  */
 export default function AuthPage() {
   return (
-    <Container
-      padding="md"
-      maxWidth="7xl"
-      className="h-full w-full overflow-hidden lg:overflow-hidden"
-    >
+    <>
       {/* PC画面 */}
-      <AuthDesktop />
+      <div className="hidden lg:block h-full">
+        <Container padding="md" maxWidth="7xl" className="h-full w-full overflow-hidden">
+          <AuthDesktop />
+        </Container>
+      </div>
       {/* スマホ画面 */}
-      <AuthMobile />
-    </Container>
+      <div className="block lg:hidden h-full">
+        <Container maxWidth="7xl" className="h-full w-full overflow-hidden">
+          <AuthMobile />
+        </Container>
+      </div>
+    </>
   );
 }

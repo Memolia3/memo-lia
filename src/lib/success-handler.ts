@@ -1,5 +1,6 @@
 import { getNotificationMessage, NOTIFICATION_MESSAGES } from "@/constants/notification";
 import { SuccessNotificationConfig } from "@/types/notification";
+import { getDynamicAuthMessage } from "@/utils/page-title";
 
 /**
  * 成功通知のカテゴリ型
@@ -118,10 +119,7 @@ export const createSuccessNotificationConfig = (
       return {
         ...baseConfig,
         message: getNotificationMessage(NOTIFICATION_MESSAGES.SUCCESS.LOGGED_IN, currentLocale),
-        description: getNotificationMessage(
-          NOTIFICATION_MESSAGES.SUCCESS.AUTO_LOGIN_DESCRIPTION,
-          currentLocale
-        ),
+        description: getNotificationMessage(getDynamicAuthMessage(currentLocale), currentLocale),
         duration: 3000,
         severity: "low",
       };

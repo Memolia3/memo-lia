@@ -10,12 +10,18 @@ export default function Top() {
   return (
     <>
       <AuthRedirectHandler />
-      <Container padding="md" maxWidth="7xl" className="h-full overflow-hidden lg:overflow-hidden">
-        {/* PC画面 */}
-        <TopDesktop />
-        {/* スマホ画面 */}
-        <TopMobile />
-      </Container>
+      {/* PC画面 */}
+      <div className="hidden lg:block h-full">
+        <Container padding="md" maxWidth="7xl" className="h-full overflow-hidden">
+          <TopDesktop />
+        </Container>
+      </div>
+      {/* スマホ画面 */}
+      <div className="block lg:hidden h-full">
+        <Container maxWidth="7xl" className="h-full overflow-hidden">
+          <TopMobile />
+        </Container>
+      </div>
     </>
   );
 }

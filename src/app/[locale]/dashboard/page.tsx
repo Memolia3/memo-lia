@@ -9,16 +9,18 @@ import { DashboardMobile } from "./DashboardMobile";
 export default function Dashboard() {
   return (
     <AuthGuard>
-      <Container padding="md" maxWidth="7xl" className="h-full overflow-hidden lg:overflow-hidden">
-        {/* PC画面 */}
-        <div className="hidden lg:block h-full">
+      {/* PC画面 */}
+      <div className="hidden lg:block h-full">
+        <Container padding="md" maxWidth="7xl" className="h-full overflow-hidden">
           <DashboardDesktop />
-        </div>
-        {/* スマホ画面 */}
-        <div className="block lg:hidden h-full">
+        </Container>
+      </div>
+      {/* スマホ画面 */}
+      <div className="block lg:hidden h-full">
+        <Container maxWidth="7xl" className="h-full overflow-hidden">
           <DashboardMobile />
-        </div>
-      </Container>
+        </Container>
+      </div>
     </AuthGuard>
   );
 }

@@ -10,10 +10,10 @@ import { BackgroundProps } from "./Background.types";
 export const Background: React.FC<BackgroundProps> = ({ className, children, padding = "md" }) => {
   const paddingStyles = {
     none: "",
-    sm: "p-4",
-    md: "p-6",
-    lg: "p-8",
-    xl: "p-10",
+    sm: "lg:p-4",
+    md: "lg:p-6",
+    lg: "lg:p-8",
+    xl: "lg:p-10",
   };
 
   return (

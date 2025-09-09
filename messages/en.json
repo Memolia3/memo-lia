@@ -82,7 +82,7 @@
     }
   },
     "categoryForm": {
-      "title": "Add Category",
+      "title": "Create Category",
     "fields": {
       "name": "Category Name",
       "description": "Description",
@@ -124,11 +124,130 @@
       "comingSoon": "Genre functionality will be implemented in the future",
       "placeholder": "Coming Soon",
       "empty": "No Genres",
-      "emptyDescription": "No genres have been created for this category yet."
+      "emptyDescription": "No genres have been created for this category yet.",
+      "loading": "Loading...",
+      "loadError": "Failed to load genres",
+      "fetchError": "Failed to fetch genres",
+      "errors": {
+        "nameAlreadyExists": "This genre name is already in use",
+        "invalidCategory": "Invalid category",
+        "nameRequired": "Genre name is required",
+        "nameTooLong": "Genre name is too long (50 characters max)",
+        "descriptionTooLong": "Description is too long (200 characters max)",
+        "userIdRequired": "User ID is required",
+        "invalidUserId": "Invalid user ID",
+        "categoryNotFound": "Category not found",
+        "invalidGenre": "Invalid genre",
+        "createFailed": "Failed to create genre"
+      }
     },
     "buttons": {
       "backToDashboard": "Back to Dashboard",
       "createGenre": "Create"
+    }
+  },
+  "genreForm": {
+    "title": "Create Genre",
+    "fields": {
+      "name": "Genre Name",
+      "description": "Description",
+      "color": "Color"
+    },
+    "placeholders": {
+      "name": "Enter genre name",
+      "description": "Enter genre description (optional)"
+    },
+    "errors": {
+      "nameRequired": "Genre name is required",
+      "nameTooLong": "Genre name must be 50 characters or less",
+      "descriptionTooLong": "Description must be 200 characters or less"
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "create": "Create",
+      "creating": "Creating..."
+    }
+  },
+  "genreDetail": {
+    "title": "Genre Details",
+    "loading": "Loading...",
+    "notFound": {
+      "title": "Genre Not Found",
+      "description": "The specified genre does not exist or you don't have access permission."
+    },
+    "categoryNotFound": {
+      "title": "Category Not Found",
+      "description": "The specified category does not exist or you don't have access permission."
+    },
+    "authRequired": {
+      "title": "Login Required",
+      "description": "Please log in to use this feature."
+    },
+    "info": {
+      "categoryName": "Category",
+      "createdAt": "Created",
+      "updatedAt": "Updated"
+    },
+    "urls": {
+      "title": "URL List",
+      "count": "URL Count",
+      "description": "List of URLs saved in this genre.",
+      "empty": "No URLs have been saved in this genre yet.",
+      "emptyDescription": "Add URLs to organize your favorite sites.",
+      "placeholder": "URL information will be displayed here (to be implemented)"
+    },
+    "actions": {
+      "backToCategory": "Back to Category"
+    },
+    "buttons": {
+      "createUrl": "Create"
+    }
+  },
+  "urlForm": {
+    "title": "Create URL",
+    "fields": {
+      "url": "URL",
+      "title": "Title",
+      "description": "Description"
+    },
+    "placeholders": {
+      "url": "https://example.com",
+      "title": "Enter site title",
+      "description": "Enter a description for this URL (optional)"
+    },
+    "errors": {
+      "urlRequired": "URL is required",
+      "urlInvalid": "Please enter a valid URL",
+      "titleRequired": "Title is required",
+      "urlAlreadyExists": "This URL is already registered",
+      "titleTooLong": "Title must be 200 characters or less",
+      "descriptionTooLong": "Description must be 500 characters or less",
+      "invalidGenre": "Invalid genre",
+      "userIdRequired": "User ID is required",
+      "invalidUserId": "Invalid user ID",
+      "createFailed": "Failed to create URL"
+    },
+    "buttons": {
+      "save": "Save",
+      "saving": "Saving...",
+      "cancel": "Cancel"
+    },
+    "messages": {
+      "fetchingMetadata": "Fetching URL information..."
+    }
+  },
+  "metadata": {
+    "genreAdd": {
+      "title": "Create Genre | Memolia",
+      "description": "Create a new genre to classify your URLs more specifically"
+    },
+    "genreDetail": {
+      "title": "Genre Details | Memolia",
+      "description": "View and manage URLs saved in this genre"
+    },
+    "urlAdd": {
+      "title": "Create URL | Memolia",
+      "description": "Add new URLs to organize your bookmarks"
     }
   }
 }

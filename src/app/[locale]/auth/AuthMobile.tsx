@@ -33,7 +33,7 @@ export const AuthMobile: React.FC = () => {
       </div>
 
       {/* 中央: 認証フォーム (65%) */}
-      <div className="flex-1 flex items-center justify-center px-4 pb-8">
+      <div className="flex-1 flex items-center justify-center px-8 py-4 lg:px-4 lg:pb-8">
         <AuthForm />
       </div>
     </div>

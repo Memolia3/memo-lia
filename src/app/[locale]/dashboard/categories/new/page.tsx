@@ -10,16 +10,18 @@ import { CategoryAddMobile } from "./CategoryAddMobile";
 export default function NewCategoryPage() {
   return (
     <AuthGuard>
-      <Container padding="md" maxWidth="7xl" className="h-full overflow-hidden lg:overflow-hidden">
-        {/* PC画面 */}
-        <div className="hidden lg:block h-full">
+      {/* PC画面 */}
+      <div className="hidden lg:block h-full">
+        <Container padding="md" maxWidth="7xl" className="h-full overflow-hidden">
           <CategoryAddDesktop />
-        </div>
-        {/* スマホ画面 */}
-        <div className="block lg:hidden h-full">
+        </Container>
+      </div>
+      {/* スマホ画面 */}
+      <div className="block lg:hidden h-full">
+        <Container maxWidth="7xl" className="h-full overflow-hidden">
           <CategoryAddMobile />
-        </div>
-      </Container>
+        </Container>
+      </div>
     </AuthGuard>
   );
 }

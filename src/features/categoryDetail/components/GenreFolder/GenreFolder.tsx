@@ -1,8 +1,13 @@
 "use client";
 
+import { deleteGenre } from "@/actions/categories";
+import { useNotification } from "@/components/notification/NotificationProvider";
 import { Icon, Typography } from "@/components/ui";
+import { getNotificationMessage, NOTIFICATION_MESSAGES } from "@/constants/notification";
 import { cn, truncateText } from "@/utils";
 import { Folder, MoreVertical } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { GenreFolderProps } from "../GenreFolder.types";
 
@@ -12,9 +17,22 @@ export const GenreFolder: React.FC<GenreFolderProps> = ({
   className,
   onDelete,
 }) => {
+  const router = useRouter();
+  const { data: session } = useSession();
+  const { addNotification } = useNotification();
   const [showMenu, setShowMenu] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  // ブラウザの言語設定から言語を取得
+  const getCurrentLocale = () => {
+    if (typeof window !== "undefined") {
+      const pathname = window.location.pathname;
+      const localeMatch = pathname.match(/^\/([a-z]{2})\//);
+      return localeMatch ? localeMatch[1] : "ja";
+    }
+    return "ja";
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -33,7 +51,19 @@ export const GenreFolder: React.FC<GenreFolderProps> = ({
   }, [showMenu]);
 
   const handleClick = () => {
-    onClick(genre);
+    // ジャンル詳細ページに遷移
+    const currentLocale = getCurrentLocale();
+    const currentPath = window.location.pathname;
+    const categoryMatch = currentPath.match(/\/dashboard\/category\/([^\/]+)\/([^\/]+)/);
+
+    if (categoryMatch) {
+      const [, categoryId, categoryName] = categoryMatch;
+      const genreDetailUrl = `/${currentLocale}/dashboard/category/${categoryId}/${categoryName}/genre/${genre.id}/${encodeURIComponent(genre.name)}`;
+      router.push(genreDetailUrl);
+    } else {
+      // フォールバック: 既存のonClick処理
+      onClick(genre);
+    }
   };
 
   const handleMenuClick = (e: React.MouseEvent) => {
@@ -45,18 +75,49 @@ export const GenreFolder: React.FC<GenreFolderProps> = ({
     e.stopPropagation();
     setShowMenu(false);
 
-    if (isDeleting) return;
+    if (isDeleting || !session?.user?.id) return;
 
     try {
       setIsDeleting(true);
 
-      // TODO: ジャンル削除の実装
-      console.log("Delete genre:", genre.id);
+      // ジャンルを削除
+      await deleteGenre(genre.id, session.user.id);
 
+      // 成功通知
+      const currentLocale = getCurrentLocale();
+      addNotification({
+        type: "success",
+        message: getNotificationMessage(NOTIFICATION_MESSAGES.SUCCESS.GENRE_DELETED, currentLocale),
+        description: getNotificationMessage(
+          NOTIFICATION_MESSAGES.SUCCESS.GENRE_DELETE_DESCRIPTION,
+          currentLocale
+        ),
+        duration: 3000,
+        severity: "medium",
+      });
+
+      // 親コンポーネントに削除完了を通知
       if (onDelete) {
         onDelete(genre.id);
       }
     } catch (error) {
+      // エラー通知
+      const currentLocale = getCurrentLocale();
+      addNotification({
+        type: "error",
+        message: getNotificationMessage(
+          NOTIFICATION_MESSAGES.SUCCESS.GENRE_DELETE_ERROR,
+          currentLocale
+        ),
+        description: getNotificationMessage(
+          NOTIFICATION_MESSAGES.SUCCESS.GENRE_DELETE_ERROR_DESCRIPTION,
+          currentLocale
+        ),
+        duration: 5000,
+        severity: "high",
+      });
+
+      // eslint-disable-next-line no-console
       console.error("Error deleting genre:", error);
     } finally {
       setIsDeleting(false);

@@ -18,10 +18,10 @@ export const Container: React.FC<ContainerProps> = ({
 }) => {
   const paddingStyles = {
     none: "",
-    sm: "px-2 py-4",
-    md: "px-4 py-8",
-    lg: "px-6 py-12",
-    xl: "px-8 py-16",
+    sm: "lg:px-2 lg:py-4",
+    md: "lg:px-4 lg:py-8",
+    lg: "lg:px-6 lg:py-12",
+    xl: "lg:px-8 lg:py-16",
   };
 
   const maxWidthStyles = {

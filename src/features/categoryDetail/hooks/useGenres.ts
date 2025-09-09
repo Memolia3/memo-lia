@@ -1,9 +1,12 @@
 "use client";
 
+import { getGenresByCategory } from "@/actions/categories";
+import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import { GenreData } from "../types";
 
 export const useGenres = (categoryId: string, userId: string) => {
+  const t = useTranslations("categoryDetail");
   const [genres, setGenres] = useState<GenreData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -13,18 +16,18 @@ export const useGenres = (categoryId: string, userId: string) => {
       setIsLoading(true);
       setError(null);
 
-      // TODO: 実際のAPI呼び出しに置き換え
-      // const genresData = await getGenresByCategory(categoryId, userId);
-
-      // モックデータ
-      const mockGenres: GenreData[] = [];
-      setGenres(mockGenres);
+      // 実際のAPI呼び出し
+      const genresData = await getGenresByCategory(categoryId, userId);
+      setGenres(genresData);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error("ジャンルの取得に失敗しました"));
+      // eslint-disable-next-line no-console
+      console.error("Error fetching genres:", err);
+      setError(err instanceof Error ? err : new Error(t("genres.fetchError")));
+      setGenres([]); // エラー時は空配列
     } finally {
       setIsLoading(false);
     }
-  }, [categoryId, userId]);
+  }, [categoryId, userId, t]);
 
   const handleGenreDelete = useCallback((genreId: string) => {
     setGenres(prev => prev.filter(genre => genre.id !== genreId));
@@ -36,11 +39,17 @@ export const useGenres = (categoryId: string, userId: string) => {
     }
   }, [fetchGenres, categoryId, userId]);
 
+  // ジャンル追加後のリフレッシュ用
+  const addGenre = useCallback((newGenre: GenreData) => {
+    setGenres(prev => [...prev, newGenre]);
+  }, []);
+
   return {
     genres,
     isLoading,
     error,
     handleGenreDelete,
+    addGenre,
     refetch: fetchGenres,
   };
 };

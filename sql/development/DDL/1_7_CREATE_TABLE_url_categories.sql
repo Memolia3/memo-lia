@@ -5,6 +5,7 @@ CREATE TABLE url_categories (
   url_id        UUID NOT NULL REFERENCES urls(id) ON DELETE CASCADE,
   category_id   UUID NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
   genre_id      UUID REFERENCES genres(id) ON DELETE CASCADE, -- ジャンルも一緒に管理
+  user_id       UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE, -- セキュリティ向上のため追加
   created_at    TIMESTAMPTZ DEFAULT now(),
   UNIQUE (url_id, category_id, genre_id)
 );

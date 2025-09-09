@@ -2,8 +2,9 @@ import { getCategoryById } from "@/actions/categories";
 import { auth } from "@/auth";
 import { Container } from "@/components/ui";
 import { AuthGuard } from "@/components/ui/AuthGuard";
-import { CategoryDetailDesktop, CategoryDetailMobile } from "@/features/categoryDetail";
 import { getTranslations } from "next-intl/server";
+import { CategoryDetailDesktop } from "./CategoryDetailDesktop";
+import { CategoryDetailMobile } from "./CategoryDetailMobile";
 
 interface CategoryDetailPageProps {
   params: Promise<{

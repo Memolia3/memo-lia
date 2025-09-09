@@ -1,6 +1,8 @@
 -- ==============================================
 -- URL保管アプリ データベース構築スクリプト（NeonDB用）
 -- このファイルをNeonDBコンソールでコピペして実行してください
+--
+-- 最新の更新: url_categoriesテーブルにuser_id追加（セキュリティ強化）
 -- ==============================================
 
 -- 1. テーブル作成
@@ -104,6 +106,7 @@ CREATE TABLE url_categories (
   url_id        UUID NOT NULL REFERENCES urls(id) ON DELETE CASCADE,
   category_id   UUID NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
   genre_id      UUID REFERENCES genres(id) ON DELETE CASCADE,
+  user_id       UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE, -- セキュリティ向上のため追加
   created_at    TIMESTAMPTZ DEFAULT now(),
   UNIQUE (url_id, category_id, genre_id)
 );
@@ -170,6 +173,12 @@ CREATE INDEX idx_tags_name_multi ON tags USING gin(to_tsvector('simple', name));
 CREATE INDEX idx_url_categories_url_id ON url_categories(url_id);
 CREATE INDEX idx_url_categories_category_id ON url_categories(category_id);
 CREATE INDEX idx_url_categories_genre_id ON url_categories(genre_id) WHERE genre_id IS NOT NULL;
+CREATE INDEX idx_url_categories_user_id ON url_categories(user_id);
+
+-- ユーザー別アクセス用の複合インデックス
+CREATE INDEX idx_url_categories_user_genre ON url_categories(user_id, genre_id) WHERE genre_id IS NOT NULL;
+CREATE INDEX idx_url_categories_user_category ON url_categories(user_id, category_id);
+
 CREATE INDEX idx_url_tags_url_id ON url_tags(url_id);
 CREATE INDEX idx_url_tags_tag_id ON url_tags(tag_id);
 
@@ -400,7 +409,7 @@ BEGIN
     RAISE NOTICE '- categories (カテゴリ・フォルダ)';
     RAISE NOTICE '- genres (ジャンル)';
     RAISE NOTICE '- tags (タグ)';
-    RAISE NOTICE '- url_categories (URL-カテゴリ関連)';
+    RAISE NOTICE '- url_categories (URL-カテゴリ関連) ';
     RAISE NOTICE '- url_tags (URL-タグ関連)';
     RAISE NOTICE '';
     RAISE NOTICE 'データベースの準備が完了しました！';

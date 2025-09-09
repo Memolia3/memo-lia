@@ -30,6 +30,15 @@ export type { ImageProps } from "./Image";
 export { Divider } from "./Divider";
 export type { DividerProps } from "./Divider";
 
+// ScrollArea
+export { ScrollArea } from "./ScrollArea";
+export type {
+  ScrollAreaOrientation,
+  ScrollAreaProps,
+  ScrollAreaSize,
+  ScrollAreaVariant,
+} from "./ScrollArea";
+
 // UserInfo
 export { UserInfo } from "./UserInfo";
 export type { UserInfoProps } from "./UserInfo";

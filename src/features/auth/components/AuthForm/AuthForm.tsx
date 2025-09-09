@@ -19,7 +19,7 @@ export const AuthForm: React.FC = () => {
     <GlassBackground variant="default" className="p-10 w-full max-w-md mx-auto" enableScale={false}>
       {/* ヘッダー */}
       <div className="text-center mb-8">
-        <div className="flex items-center justify-center space-x-3 mb-4">
+        <div className="flex items-center justify-center space-x-3">
           <Typography as="h1" variant="h2" weight="bold" color="primary" padding="md">
             {t("auth.title")}
           </Typography>
@@ -38,7 +38,7 @@ export const AuthForm: React.FC = () => {
       </div>
 
       {/* 認証プロバイダーボタン */}
-      <div className="space-y-4">
+      <div className="space-y-4 mx-4">
         {AUTH_PROVIDERS.map(({ key, value, provider }) => (
           <ProviderButton
             key={key}

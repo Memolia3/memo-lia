@@ -117,7 +117,7 @@ BEGIN
     RAISE NOTICE '- categories (カテゴリ・フォルダ)';
     RAISE NOTICE '- genres (ジャンル)';
     RAISE NOTICE '- tags (タグ)';
-    RAISE NOTICE '- url_categories (URL-カテゴリ関連)';
+    RAISE NOTICE '- url_categories (URL-カテゴリ関連) ';
     RAISE NOTICE '- url_tags (URL-タグ関連)';
     RAISE NOTICE '';
     RAISE NOTICE '作成されたビュー:';
@@ -137,5 +137,8 @@ BEGIN
     RAISE NOTICE '- search_tags_multilingual (タグ検索)';
     RAISE NOTICE '';
     RAISE NOTICE 'データベースの準備が完了しました！';
+    RAISE NOTICE '';
+    RAISE NOTICE '📋 既存データベースの場合:';
+    RAISE NOTICE 'psql -f sql/development/EXECUTE_MIGRATION_001.sql';
     RAISE NOTICE '==============================================';
 END $$;
