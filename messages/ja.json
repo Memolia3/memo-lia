@@ -194,6 +194,17 @@
       "description": "このジャンルに保存されているURLの一覧です。",
       "empty": "このジャンルにはまだURLが保存されていません。",
       "emptyDescription": "URLを追加して、お気に入りのサイトを整理しましょう。",
+      "actions": {
+        "open": "開く",
+        "delete": "削除",
+        "deleting": "削除中..."
+      },
+      "notifications": {
+        "deleteSuccess": "URL削除完了",
+        "deleteSuccessMessage": "URLが正常に削除されました。",
+        "deleteError": "URL削除エラー",
+        "deleteErrorMessage": "URLの削除に失敗しました。"
+      },
       "placeholder": "URL情報がここに表示されます（実装予定）"
     },
     "actions": {

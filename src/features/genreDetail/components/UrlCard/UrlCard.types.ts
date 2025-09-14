@@ -11,6 +11,6 @@ export interface UrlData {
 export interface UrlCardProps {
   url: UrlData;
   onClick: (url: UrlData) => void;
-  onDelete?: (urlId: string) => void;
+  onDelete?: (urlId: string) => Promise<void>;
   className?: string;
 }

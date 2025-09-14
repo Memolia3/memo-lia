@@ -186,8 +186,8 @@ export const deleteUrl = async (urlId: string, userId: string): Promise<void> =>
       WHERE id = ${urlId} AND user_id = ${userId}
     `;
 
-    if (result.length === 0) {
-      throw new Error("削除するURLが見つかりません");
+    if (result.count === 0) {
+      throw new Error("URL_NOT_FOUND");
     }
   } catch (error) {
     throw error;

@@ -1,9 +1,11 @@
 "use client";
 
 import { getGenreById } from "@/actions/categories";
-import { getUrlsByGenreAction } from "@/actions/urls";
+import { deleteUrlAction, getUrlsByGenreAction } from "@/actions/urls";
 import { UrlData } from "@/features/genreDetail";
+import { useNotificationHelpers } from "@/hooks/useNotificationHelpers";
 import { Genre } from "@/types/database";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -14,7 +16,7 @@ interface UseGenreDetailReturn {
   error: Error | null;
   handleBackToCategory: () => void;
   handleUrlClick: (url: UrlData) => void;
-  handleUrlDelete: (urlId: string) => void;
+  handleUrlDelete: (urlId: string) => Promise<void>;
   handleCreateUrl: () => void;
 }
 
@@ -24,6 +26,8 @@ export const useGenreDetail = (
   userId: string
 ): UseGenreDetailReturn => {
   const router = useRouter();
+  const { showSuccess, showError } = useNotificationHelpers();
+  const t = useTranslations("genreDetail.urls");
   const [genre, setGenre] = useState<Genre | null>(null);
   const [urls, setUrls] = useState<UrlData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -77,13 +81,34 @@ export const useGenreDetail = (
   };
 
   const handleUrlClick = (url: UrlData) => {
-    // URLをクリックした時の処理（今後URL詳細ページに遷移予定）
+    // URLを新しいタブで開く
     window.open(url.url, "_blank", "noopener,noreferrer");
   };
 
-  const handleUrlDelete = (urlId: string) => {
-    // URL削除の処理（今後実装予定）
-    setUrls(prevUrls => prevUrls.filter(url => url.id !== urlId));
+  const handleUrlDelete = async (urlId: string) => {
+    try {
+      // Server ActionでURLを削除
+      await deleteUrlAction(urlId);
+
+      // ローカル状態からも削除
+      setUrls(prevUrls => prevUrls.filter(url => url.id !== urlId));
+
+      // 成功通知
+      showSuccess({
+        type: "success",
+        category: "delete",
+        title: t("notifications.deleteSuccess"),
+        message: t("notifications.deleteSuccessMessage"),
+      });
+    } catch (error) {
+      // エラー通知
+      showError({
+        type: "error",
+        category: "server",
+        title: t("notifications.deleteError"),
+        message: error instanceof Error ? error.message : t("notifications.deleteErrorMessage"),
+      });
+    }
   };
 
   const handleCreateUrl = () => {

@@ -33,6 +33,7 @@ export const URL_ERROR_MESSAGES = {
   INVALID_USER_ID: "無効なユーザーIDです",
   INVALID_GENRE: "無効なジャンルIDです",
   CREATE_FAILED: "URLの作成に失敗しました",
+  URL_NOT_FOUND: "削除するURLが見つかりません",
 } as const;
 
 /**
@@ -62,6 +63,7 @@ export const ERROR_MESSAGE_TO_I18N_KEY_MAP: Record<string, string> = {
   [URL_ERROR_MESSAGES.INVALID_USER_ID]: "urlForm.errors.invalidUserId",
   [URL_ERROR_MESSAGES.INVALID_GENRE]: "urlForm.errors.invalidGenre",
   [URL_ERROR_MESSAGES.CREATE_FAILED]: "urlForm.errors.createFailed",
+  [URL_ERROR_MESSAGES.URL_NOT_FOUND]: "genreDetail.urls.notifications.deleteError",
 } as const;
 
 /**

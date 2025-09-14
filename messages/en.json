@@ -194,6 +194,17 @@
       "description": "List of URLs saved in this genre.",
       "empty": "No URLs have been saved in this genre yet.",
       "emptyDescription": "Add URLs to organize your favorite sites.",
+      "actions": {
+        "open": "Open",
+        "delete": "Delete",
+        "deleting": "Deleting..."
+      },
+      "notifications": {
+        "deleteSuccess": "URL Deleted",
+        "deleteSuccessMessage": "URL has been successfully deleted.",
+        "deleteError": "URL Delete Error",
+        "deleteErrorMessage": "Failed to delete URL."
+      },
       "placeholder": "URL information will be displayed here (to be implemented)"
     },
     "actions": {
