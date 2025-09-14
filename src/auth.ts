@@ -8,8 +8,8 @@ import { getUserForSession, syncUserOnAuth } from "@/actions/user";
 import type { Session } from "next-auth";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
-  // 信頼できるホストを設定（本番環境では特定のドメインのみ）
-  trustHost: process.env.NODE_ENV === "development" ? true : false,
+  // 信頼できるホストを設定
+  trustHost: true,
   // セッション設定
   session: {
     strategy: "jwt",
