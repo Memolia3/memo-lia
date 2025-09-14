@@ -176,17 +176,17 @@ export const getUrlsByGenre = async (genreId: string, userId: string): Promise<U
     `;
 
     return result.map((row: Record<string, unknown>) => ({
-      id: row.id,
-      userId: row.user_id,
-      title: row.title,
-      url: row.url,
-      description: row.description,
-      faviconUrl: row.favicon_url,
-      isPublic: row.is_public,
-      viewCount: row.view_count,
-      createdAt: row.created_at,
-      updatedAt: row.updated_at,
-      lastAccessedAt: row.last_accessed_at,
+      id: row.id as string,
+      userId: row.user_id as string,
+      title: row.title as string,
+      url: row.url as string,
+      description: row.description as string | undefined,
+      faviconUrl: row.favicon_url as string | undefined,
+      isPublic: row.is_public as boolean,
+      viewCount: row.view_count as number,
+      createdAt: row.created_at as string,
+      updatedAt: row.updated_at as string,
+      lastAccessedAt: row.last_accessed_at as string | undefined,
     }));
   } catch {
     throw new Error("URLの取得に失敗しました");
@@ -213,7 +213,7 @@ export const deleteUrl = async (urlId: string, userId: string): Promise<void> =>
       WHERE id = ${urlId} AND user_id = ${userId}
     `;
 
-    if (result.count === 0) {
+    if (result.length === 0) {
       throw new Error("URL_NOT_FOUND");
     }
 

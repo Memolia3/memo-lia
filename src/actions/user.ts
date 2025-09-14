@@ -12,6 +12,7 @@ import {
   type UserProviderData,
 } from "@/lib/db";
 import { Account } from "next-auth";
+import { getTranslations } from "next-intl/server";
 
 // 型定義はデータベースアクセス層から再エクスポート
 export type { UserData, UserProviderData } from "@/lib/db";
@@ -97,7 +98,8 @@ export async function syncUserOnAuth(
 
     return { user, provider };
   } catch {
-    throw new Error("認証処理に失敗しました");
+    const t = await getTranslations("errors");
+    throw new Error(t("authFailed"));
   }
 }
 

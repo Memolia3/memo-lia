@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: pageInfo?.title?.[locale as "ja" | "en"] || t("title"),
-    description: pageInfo?.description?.[locale as "ja" | "en"] || t("description"),
+    description: t("description"),
   };
 }
 

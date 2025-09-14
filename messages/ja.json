@@ -79,7 +79,15 @@
     "emptyState": {
       "title": "カテゴリが0件です",
       "description": "新しいカテゴリフォルダを作成して、URLを整理しましょう"
-    }
+    },
+    "navigationFailed": "ページの遷移に失敗しました",
+    "retryLater": "しばらく時間をおいてから再度お試しください",
+    "navigationError": "ナビゲーションエラー",
+    "categoryFetchFailed": "カテゴリの取得に失敗しました",
+    "categoryLoadFailed": "カテゴリの読み込みに失敗しました",
+    "openMenu": "メニューを開く",
+    "deleting": "削除中...",
+    "delete": "削除"
   },
     "categoryForm": {
       "title": "カテゴリ作成",
@@ -224,7 +232,9 @@
     "placeholders": {
       "url": "https://example.com",
       "title": "サイトのタイトルを入力",
-      "description": "このURLについての説明を入力（任意）"
+      "description": "このURLについての説明を入力（任意）",
+      "noTitle": "タイトルなし",
+      "noDescription": "説明なし"
     },
     "errors": {
       "urlRequired": "URLは必須です",
@@ -236,7 +246,8 @@
       "invalidGenre": "無効なジャンルです",
       "userIdRequired": "ユーザーIDが必要です",
       "invalidUserId": "無効なユーザーIDです",
-      "createFailed": "URLの作成に失敗しました"
+      "createFailed": "URLの作成に失敗しました",
+      "metadataFailed": "URL情報の取得に失敗しました"
     },
     "buttons": {
       "save": "保存",
@@ -245,7 +256,42 @@
     },
     "messages": {
       "fetchingMetadata": "URLの情報を取得中..."
+    },
+    "success": {
+      "message": "URL作成完了",
+      "title": "URL作成完了",
+      "description": "URLが正常に作成されました。"
+    },
+    "error": {
+      "message": "URL作成エラー",
+      "title": "URL作成エラー",
+      "description": "URLの作成に失敗しました。"
     }
+  },
+  "errors": {
+    "authRequired": "認証が必要です",
+    "genreIdRequired": "ジャンルIDが必要です",
+    "urlIdRequired": "URLIDが必要です",
+    "categoryIdRequired": "カテゴリIDは必須です",
+    "userIdNotSpecified": "ユーザーIDが指定されていません",
+    "invalidUserId": "無効なユーザーIDです",
+    "invalidGenreId": "無効なジャンルIDです",
+    "authFailed": "認証処理に失敗しました"
+  },
+  "notifications": {
+    "unknownError": "不明なエラーが発生しました",
+    "saved": "保存しました",
+    "savedItem": "{item}を保存しました",
+    "deleted": "削除しました",
+    "deletedItem": "{item}を削除しました",
+    "updated": "更新しました",
+    "updatedItem": "{item}を更新しました",
+    "created": "作成しました",
+    "createdItem": "{item}を作成しました",
+    "loggedIn": "ログインしました",
+    "loggedInWithProvider": "{provider}でログインしました",
+    "loggedOut": "ログアウトしました",
+    "processing": "処理中..."
   },
   "metadata": {
     "genreAdd": {

@@ -11,14 +11,14 @@ import {
 import { useNotificationHelpers } from "@/hooks/useNotificationHelpers";
 import { useLocale } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
-import { AuthProvider } from "./useAuth.types";
+import { AuthProviderType } from "./useAuth.types";
 
 /**
  * 認証処理用のカスタムフック
  * ハイドレーションエラーを防ぐためにクライアントサイドでのみ状態を管理
  */
 export const useAuth = () => {
-  const [isLoading, setIsLoading] = useState<AuthProvider | null>(null);
+  const [isLoading, setIsLoading] = useState<AuthProviderType | null>(null);
   const [isClient, setIsClient] = useState(false);
   const { showSuccess, showError } = useNotificationHelpers();
   const locale = useLocale();
@@ -29,7 +29,7 @@ export const useAuth = () => {
   }, []);
 
   const handleProviderSignIn = useCallback(
-    async (provider: AuthProvider) => {
+    async (provider: AuthProviderType) => {
       if (!isClient) return;
 
       setIsLoading(provider);

@@ -12,7 +12,7 @@ import {
   NotificationConfig,
   SuccessNotificationConfig,
 } from "@/types/notification";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useCallback } from "react";
 
 /**
@@ -20,6 +20,7 @@ import { useCallback } from "react";
  */
 export const useNotificationHelpers = () => {
   const addNotification = useNotificationStore(state => state.addNotification);
+  const t = useTranslations("notifications");
   const locale = useLocale();
 
   // 成功通知を表示
@@ -43,7 +44,7 @@ export const useNotificationHelpers = () => {
           ? config.error.message
           : typeof config.error === "string"
             ? config.error
-            : "不明なエラーが発生しました";
+            : t("unknownError");
 
       const description =
         config.showStackTrace && config.error instanceof Error
@@ -60,7 +61,7 @@ export const useNotificationHelpers = () => {
         description,
       });
     },
-    [addNotification]
+    [addNotification, t]
   );
 
   // 警告通知を表示
@@ -154,11 +155,11 @@ export const useNotificationHelpers = () => {
       return showSuccess({
         type: "success",
         category: "save",
-        message: item ? `${item}を保存しました` : "保存しました",
+        message: item ? t("savedItem", { item }) : t("saved"),
         duration: 3000,
       });
     },
-    [showSuccess]
+    [showSuccess, t]
   );
 
   // 削除成功通知を表示
@@ -167,11 +168,11 @@ export const useNotificationHelpers = () => {
       return showSuccess({
         type: "success",
         category: "delete",
-        message: item ? `${item}を削除しました` : "削除しました",
+        message: item ? t("deletedItem", { item }) : t("deleted"),
         duration: 3000,
       });
     },
-    [showSuccess]
+    [showSuccess, t]
   );
 
   // 更新成功通知を表示
@@ -180,11 +181,11 @@ export const useNotificationHelpers = () => {
       return showSuccess({
         type: "success",
         category: "update",
-        message: item ? `${item}を更新しました` : "更新しました",
+        message: item ? t("updatedItem", { item }) : t("updated"),
         duration: 3000,
       });
     },
-    [showSuccess]
+    [showSuccess, t]
   );
 
   // 作成成功通知を表示
@@ -193,11 +194,11 @@ export const useNotificationHelpers = () => {
       return showSuccess({
         type: "success",
         category: "create",
-        message: item ? `${item}を作成しました` : "作成しました",
+        message: item ? t("createdItem", { item }) : t("created"),
         duration: 3000,
       });
     },
-    [showSuccess]
+    [showSuccess, t]
   );
 
   // ログイン成功通知を表示
@@ -206,11 +207,11 @@ export const useNotificationHelpers = () => {
       return showSuccess({
         type: "success",
         category: "login",
-        message: provider ? `${provider}でログインしました` : "ログインしました",
+        message: provider ? t("loggedInWithProvider", { provider }) : t("loggedIn"),
         duration: 3000,
       });
     },
-    [showSuccess]
+    [showSuccess, t]
   );
 
   // ログアウト成功通知を表示
@@ -218,10 +219,10 @@ export const useNotificationHelpers = () => {
     return showSuccess({
       type: "success",
       category: "logout",
-      message: "ログアウトしました",
+      message: t("loggedOut"),
       duration: 3000,
     });
-  }, [showSuccess]);
+  }, [showSuccess, t]);
 
   return {
     showSuccess,

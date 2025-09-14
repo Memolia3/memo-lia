@@ -75,11 +75,11 @@ export const UrlForm: React.FC<UrlFormProps> = ({
             description: prev.description || fetchedMetadata.description || "",
           }));
         } else {
-          setPreviewError("URL情報の取得に失敗しました");
+          setPreviewError(t("errors.metadataFailed"));
           setMetadata(null);
         }
       } catch {
-        setPreviewError("URL情報の取得に失敗しました");
+        setPreviewError(t("errors.metadataFailed"));
         setMetadata(null);
       } finally {
         setIsValidating(false);
@@ -135,7 +135,7 @@ export const UrlForm: React.FC<UrlFormProps> = ({
             disabled={isLoading}
           />
           {errors.url && (
-            <Typography variant="caption" color="error" className="mt-1">
+            <Typography variant="caption" color="primary" className="mt-1 text-red-500">
               {errors.url}
             </Typography>
           )}
@@ -170,7 +170,7 @@ export const UrlForm: React.FC<UrlFormProps> = ({
             disabled={isLoading}
           />
           {errors.title && (
-            <Typography variant="caption" color="error" className="mt-1">
+            <Typography variant="caption" color="primary" className="mt-1 text-red-500">
               {errors.title}
             </Typography>
           )}
@@ -225,7 +225,7 @@ export const UrlForm: React.FC<UrlFormProps> = ({
 
           {previewError ? (
             <div className="p-4 border border-red-200 rounded-lg bg-red-50 dark:bg-red-900/20 dark:border-red-800">
-              <Typography variant="body2" color="error">
+              <Typography variant="body" color="primary" className="text-red-500">
                 {previewError}
               </Typography>
             </div>
@@ -265,11 +265,13 @@ export const UrlForm: React.FC<UrlFormProps> = ({
 
                 {/* コンテンツ */}
                 <div className="flex-1 min-w-0">
-                  <Typography variant="body1" weight="medium" className="line-clamp-2 mb-1">
-                    {metadata.title || formData.title || "タイトルなし"}
+                  <Typography variant="body" weight="medium" className="line-clamp-2 mb-1">
+                    {metadata.title || formData.title || t("placeholders.noTitle")}
                   </Typography>
-                  <Typography variant="body2" color="muted" className="line-clamp-3 mb-2">
-                    {metadata.description || formData.description || "説明なし"}
+                  <Typography variant="body" color="muted" className="line-clamp-3 mb-2">
+                    {metadata.description ||
+                      formData.description ||
+                      t("placeholders.noDescription")}
                   </Typography>
                   <Typography variant="caption" color="muted" className="break-all">
                     {formData.url}

@@ -11,6 +11,7 @@ import {
   type CategoryDeletionStats,
   type CreateCategoryData,
 } from "@/lib/db";
+import { getTranslations } from "next-intl/server";
 
 import {
   createGenre as dbCreateGenre,
@@ -63,15 +64,16 @@ export async function createCategory(
   categoryData: CreateCategoryData
 ): Promise<CategoryData> {
   try {
+    const t = await getTranslations("errors");
     // セッション検証（必要に応じて）
     if (!userId) {
-      throw new Error("ユーザーIDが指定されていません");
+      throw new Error(t("userIdNotSpecified"));
     }
 
     // UUID形式の検証
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(userId)) {
-      throw new Error("無効なユーザーIDです");
+      throw new Error(t("invalidUserId"));
     }
 
     // データベース層の関数を呼び出し
@@ -98,14 +100,16 @@ export async function getCategoryDeletionStats(
     const session = await auth();
 
     if (!session?.user?.id) {
-      throw new Error("認証が必要です");
+      const t = await getTranslations("errors");
+      throw new Error(t("authRequired"));
     }
 
     const userId = session.user.id;
 
     // バリデーション
     if (!categoryId) {
-      throw new Error("カテゴリIDは必須です");
+      const t = await getTranslations("errors");
+      throw new Error(t("categoryIdRequired"));
     }
 
     // データベース層の関数を呼び出し
@@ -130,14 +134,16 @@ export async function deleteCategory(categoryId: string): Promise<string> {
     const session = await auth();
 
     if (!session?.user?.id) {
-      throw new Error("認証が必要です");
+      const t = await getTranslations("errors");
+      throw new Error(t("authRequired"));
     }
 
     const userId = session.user.id;
 
     // バリデーション
     if (!categoryId) {
-      throw new Error("カテゴリIDは必須です");
+      const t = await getTranslations("errors");
+      throw new Error(t("categoryIdRequired"));
     }
 
     // データベース層の関数を呼び出し
@@ -192,14 +198,16 @@ export async function getGenreDeletionStats(genreId: string): Promise<GenreDelet
     const session = await auth();
 
     if (!session?.user?.id) {
-      throw new Error("認証が必要です");
+      const t = await getTranslations("errors");
+      throw new Error(t("authRequired"));
     }
 
     const userId = session.user.id;
 
     // バリデーション
     if (!genreId) {
-      throw new Error("ジャンルIDは必須です");
+      const t = await getTranslations("errors");
+      throw new Error(t("genreIdRequired"));
     }
 
     // データベース層の関数を呼び出し
@@ -229,7 +237,8 @@ export async function deleteGenre(genreId: string, userId: string): Promise<stri
     }
 
     if (!uuidRegex.test(genreId)) {
-      throw new Error("無効なジャンルIDです");
+      const t = await getTranslations("errors");
+      throw new Error(t("invalidGenreId"));
     }
 
     // データベース層の関数を呼び出し

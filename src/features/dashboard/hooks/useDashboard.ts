@@ -4,6 +4,7 @@ import type { CategoryData } from "@/actions/categories";
 import { useSession } from "@/features/auth/hooks";
 import { useNotificationHelpers } from "@/hooks/useNotificationHelpers";
 import { toUrlSafe } from "@/utils";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { useCategories } from "./useCategories";
@@ -15,6 +16,7 @@ export const useDashboard = () => {
   const { session, isAuthenticated, isLoading } = useSession();
   const router = useRouter();
   const { showError } = useNotificationHelpers();
+  const t = useTranslations("dashboard");
 
   const userId = session?.user?.id;
   const {
@@ -46,15 +48,15 @@ export const useDashboard = () => {
         // ナビゲーションエラーの通知
         showError({
           type: "error",
-          message: "ページの遷移に失敗しました",
-          description: "しばらく時間をおいてから再度お試しください",
-          error: error instanceof Error ? error : new Error("ナビゲーションエラー"),
+          message: t("navigationFailed"),
+          description: t("retryLater"),
+          error: error instanceof Error ? error : new Error(t("navigationError")),
           category: "client",
           showStackTrace: false,
         });
       }
     },
-    [router, showError]
+    [router, showError, t]
   );
 
   return {

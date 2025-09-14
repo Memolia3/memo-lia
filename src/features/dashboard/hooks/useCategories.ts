@@ -3,6 +3,7 @@
 import type { CategoryData } from "@/actions/categories";
 import { getCategories } from "@/actions/categories";
 import { useNotificationHelpers } from "@/hooks/useNotificationHelpers";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 /**
@@ -13,6 +14,7 @@ export const useCategories = (userId: string) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const { showError } = useNotificationHelpers();
+  const t = useTranslations("dashboard");
 
   useEffect(() => {
     if (!userId) return;
@@ -24,14 +26,14 @@ export const useCategories = (userId: string) => {
         const data = await getCategories(userId);
         setCategories(data);
       } catch (err) {
-        const errorObj = err instanceof Error ? err : new Error("カテゴリの取得に失敗しました");
+        const errorObj = err instanceof Error ? err : new Error(t("categoryFetchFailed"));
         setError(errorObj);
 
         // エラー通知を表示
         showError({
           type: "error",
-          message: "カテゴリの読み込みに失敗しました",
-          description: "しばらく時間をおいてから再度お試しください",
+          message: t("categoryLoadFailed"),
+          description: t("retryLater"),
           error: errorObj,
           category: "network",
           showStackTrace: false,
@@ -42,7 +44,7 @@ export const useCategories = (userId: string) => {
     };
 
     fetchCategories();
-  }, [userId, showError]);
+  }, [userId, showError, t]);
 
   return {
     data: categories,
