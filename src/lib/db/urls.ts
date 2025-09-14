@@ -211,9 +211,11 @@ export const deleteUrl = async (urlId: string, userId: string): Promise<void> =>
     const result = await sql`
       DELETE FROM urls
       WHERE id = ${urlId} AND user_id = ${userId}
+      RETURNING id
     `;
 
-    if (result.length === 0) {
+    // 削除された行数をチェック
+    if (!result || result.length === 0) {
       throw new Error("URL_NOT_FOUND");
     }
 
