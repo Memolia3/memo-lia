@@ -20,6 +20,7 @@
     "@auth/nextjs": "^0.0.0-380f8d56",
     "@neondatabase/serverless": "^1.0.1",
     "@tanstack/react-query": "^5.69.0",
+    "@vercel/speed-insights": "^1.2.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.542.0",
     "next": "15.2.3",
