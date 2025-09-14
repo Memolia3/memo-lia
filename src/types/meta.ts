@@ -8,4 +8,5 @@ export interface PageMetaOptions {
   image?: string;
   url?: string;
   type?: "website" | "article";
+  other?: Record<string, string>;
 }

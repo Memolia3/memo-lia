@@ -36,6 +36,9 @@ export async function generateMetadata({
       : ["ブックマーク", "URL管理", "お気に入り", "整理"],
     type: "website",
     url: "/",
+    other: {
+      "google-site-verification": process.env.GOOGLE_SITE_VERIFICATION || "",
+    },
   };
 
   return generateMeta(locale, metaOptions);
