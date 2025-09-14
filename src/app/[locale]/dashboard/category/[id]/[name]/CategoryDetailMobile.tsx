@@ -6,30 +6,19 @@ import { ActionButtons } from "@/features/categoryDetail/components/ActionButton
 import { GenreCreateButton } from "@/features/categoryDetail/components/GenreCreateButton";
 import { GenreGrid } from "@/features/categoryDetail/components/GenreGrid";
 import { useCategoryDetail, useGenres } from "@/features/categoryDetail/hooks";
-import { CategoryDetailMobileProps, GenreData } from "@/features/categoryDetail/types";
+import { CategoryDetailMobileProps } from "@/features/categoryDetail/types";
 import { AdSense } from "@/features/google";
 import { cn } from "@/utils";
 import { Folder } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
 
 export const CategoryDetailMobile: React.FC<CategoryDetailMobileProps> = ({
   category,
-  locale,
   className,
 }) => {
   const t = useTranslations("categoryDetail");
-  const router = useRouter();
   const { handleBackToDashboard, handleCreateGenre } = useCategoryDetail(category);
   const { genres, isLoading, error, handleGenreDelete } = useGenres(category.id, category.userId);
-
-  const handleGenreClick = (genre: GenreData) => {
-    const catName = encodeURIComponent(category.name);
-    const genreName = encodeURIComponent(genre.name);
-    const categoryPath = `/${locale}/dashboard/category/${category.id}/${catName}`;
-    const path = `${categoryPath}/genre/${genre.id}/${genreName}`;
-    router.push(path);
-  };
 
   return (
     <div className={cn("h-full flex flex-col", className)}>
@@ -109,11 +98,7 @@ export const CategoryDetailMobile: React.FC<CategoryDetailMobileProps> = ({
                 </div>
               ) : (
                 <div className="p-1.5">
-                  <GenreGrid
-                    genres={genres}
-                    onGenreClick={handleGenreClick}
-                    onGenreDelete={handleGenreDelete}
-                  />
+                  <GenreGrid genres={genres} onGenreDelete={handleGenreDelete} />
                 </div>
               )}
             </ScrollArea>
