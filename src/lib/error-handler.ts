@@ -81,7 +81,7 @@ export const parseError = (error: unknown): ErrorDetails => {
 
     // HTTPステータスコードによる判定
     if (errorObj.status || errorObj.statusCode) {
-      const status = errorObj.status || errorObj.statusCode;
+      const status = Number(errorObj.status || errorObj.statusCode);
 
       if (status >= 400 && status < 500) {
         if (status === 401) {
@@ -113,7 +113,7 @@ export const parseError = (error: unknown): ErrorDetails => {
 
         return {
           type: "client",
-          message: errorObj.message || "クライアントエラーが発生しました",
+          message: (errorObj.message as string) || "クライアントエラーが発生しました",
           status,
           originalError: error,
         };
@@ -131,7 +131,7 @@ export const parseError = (error: unknown): ErrorDetails => {
 
     return {
       type: "unknown",
-      message: errorObj.message || "不明なエラーが発生しました",
+      message: (errorObj.message as string) || "不明なエラーが発生しました",
       originalError: error,
     };
   }
@@ -154,7 +154,7 @@ export const createErrorNotificationConfig = (
     type: "error",
     message: errorDetails.message,
     error: errorDetails.originalError,
-    category: errorDetails.type,
+    category: errorDetails.type === "timeout" ? "timeout" : errorDetails.type,
     showStackTrace: false,
   };
 
@@ -171,7 +171,7 @@ export const createErrorNotificationConfig = (
     case "timeout":
       return {
         ...baseConfig,
-        description: NOTIFICATION_MESSAGES.AUTH.RETRY_DESCRIPTION,
+        description: NOTIFICATION_MESSAGES.AUTH.RETRY_DESCRIPTION.ja,
         duration: 6000,
         severity: "medium",
       };
@@ -250,12 +250,6 @@ export const globalErrorHandler = (error: unknown, context?: string) => {
   // コンテキスト情報を追加
   if (context) {
     errorDetails.context = { ...errorDetails.context, context };
-  }
-
-  // コンソールにエラーを出力（開発環境のみ）
-  if (process.env.NODE_ENV === "development") {
-    // eslint-disable-next-line no-console
-    console.error("Global Error Handler:", errorDetails);
   }
 
   return createErrorNotificationConfig(errorDetails);

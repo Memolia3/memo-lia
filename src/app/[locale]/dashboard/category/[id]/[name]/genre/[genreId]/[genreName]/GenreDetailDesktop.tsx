@@ -111,7 +111,7 @@ export const GenreDetailDesktop: React.FC<GenreDetailDesktopProps> = ({
               <div className="flex flex-col xs:flex-row xs:items-center">
                 <span className="text-gray-500 dark:text-gray-400">{t("info.createdAt")}:</span>
                 <span className="xs:ml-2 text-gray-900 dark:text-gray-100 break-words">
-                  {new Date(genre.createdAt).toLocaleDateString(
+                  {new Date(genre.created_at).toLocaleDateString(
                     locale === "ja" ? "ja-JP" : "en-US"
                   )}
                 </span>
@@ -119,7 +119,7 @@ export const GenreDetailDesktop: React.FC<GenreDetailDesktopProps> = ({
               <div className="flex flex-col xs:flex-row xs:items-center">
                 <span className="text-gray-500 dark:text-gray-400">{t("info.updatedAt")}:</span>
                 <span className="xs:ml-2 text-gray-900 dark:text-gray-100 break-words">
-                  {new Date(genre.updatedAt).toLocaleDateString(
+                  {new Date(genre.updated_at).toLocaleDateString(
                     locale === "ja" ? "ja-JP" : "en-US"
                   )}
                 </span>

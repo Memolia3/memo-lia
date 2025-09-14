@@ -6,7 +6,7 @@ import { ActionButtons } from "@/features/categoryDetail/components/ActionButton
 import { GenreCreateButton } from "@/features/categoryDetail/components/GenreCreateButton";
 import { GenreGrid } from "@/features/categoryDetail/components/GenreGrid";
 import { useCategoryDetail, useGenres } from "@/features/categoryDetail/hooks";
-import { CategoryDetailDesktopProps, GenreData } from "@/features/categoryDetail/types";
+import { CategoryDetailDesktopProps } from "@/features/categoryDetail/types";
 import { AdSense } from "@/features/google";
 import { cn } from "@/utils";
 import { Folder } from "lucide-react";
@@ -20,12 +20,6 @@ export const CategoryDetailDesktop: React.FC<CategoryDetailDesktopProps> = ({
   const t = useTranslations("categoryDetail");
   const { handleBackToDashboard, handleCreateGenre } = useCategoryDetail(category);
   const { genres, isLoading, error, handleGenreDelete } = useGenres(category.id, category.userId);
-
-  const handleGenreClick = (genre: GenreData) => {
-    // TODO: ジャンル詳細画面への遷移
-    // eslint-disable-next-line no-console
-    console.log("Genre clicked:", genre);
-  };
 
   return (
     <div className={cn("h-full flex flex-col zoom-safe", className)}>
@@ -149,11 +143,7 @@ export const CategoryDetailDesktop: React.FC<CategoryDetailDesktopProps> = ({
                 </div>
               ) : (
                 <div className="p-1.5 zoom-container">
-                  <GenreGrid
-                    genres={genres}
-                    onGenreClick={handleGenreClick}
-                    onGenreDelete={handleGenreDelete}
-                  />
+                  <GenreGrid genres={genres} onGenreDelete={handleGenreDelete} />
                 </div>
               )}
             </ScrollArea>

@@ -70,17 +70,17 @@ export async function getGenresByCategory(
     `;
 
     return result.map((row: Record<string, unknown>) => ({
-      id: row.id,
-      userId: row.user_id,
-      categoryId: row.category_id,
-      name: row.name,
-      description: row.description,
-      color: row.color,
-      icon: row.icon,
-      sortOrder: row.sort_order,
-      isActive: row.is_active,
-      createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      id: row.id as string,
+      userId: row.user_id as string,
+      categoryId: row.category_id as string,
+      name: row.name as string,
+      description: row.description as string | undefined,
+      color: row.color as string | undefined,
+      icon: row.icon as string | undefined,
+      sortOrder: row.sort_order as number,
+      isActive: row.is_active as boolean,
+      createdAt: row.created_at as string,
+      updatedAt: row.updated_at as string,
     }));
   } catch {
     throw new Error("ジャンルの取得に失敗しました");
@@ -115,19 +115,19 @@ export const getGenreById = async (genreId: string, userId: string): Promise<Gen
       return null;
     }
 
-    const row = result[0];
+    const row = result[0] as Record<string, unknown>;
     return {
-      id: row.id,
-      userId: row.user_id,
-      categoryId: row.category_id,
-      name: row.name,
-      description: row.description,
-      color: row.color,
-      icon: row.icon,
-      sortOrder: row.sort_order,
-      isActive: row.is_active,
-      createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      id: row.id as string,
+      user_id: row.user_id as string,
+      category_id: row.category_id as string,
+      name: row.name as string,
+      description: row.description as string | undefined,
+      color: row.color as string | undefined,
+      icon: row.icon as string | undefined,
+      sort_order: row.sort_order as number,
+      is_active: row.is_active as boolean,
+      created_at: row.created_at as Date,
+      updated_at: row.updated_at as Date,
     };
   } catch {
     throw new Error("Failed to fetch genre");
@@ -264,10 +264,7 @@ export async function createGenre(userId: string, genreData: CreateGenreData): P
       createdAt: result.created_at as string,
       updatedAt: result.updated_at as string,
     };
-  } catch (error) {
-    if (error instanceof Error) {
-      throw error;
-    }
+  } catch {
     throw new Error(GENRE_ERROR_MESSAGES.CREATE_FAILED);
   }
 }
@@ -306,9 +303,7 @@ export async function getGenreDeletionStats(
       urlCount,
       urlTitles,
     };
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error("Error getting genre deletion stats:", error);
+  } catch {
     throw new Error("削除影響の取得に失敗しました");
   }
 }
@@ -355,10 +350,7 @@ export async function deleteGenre(genreId: string, userId: string): Promise<stri
     }
 
     return genreId;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw error;
-    }
+  } catch {
     throw new Error("ジャンルの削除に失敗しました");
   }
 }

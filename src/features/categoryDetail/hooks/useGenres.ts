@@ -20,8 +20,6 @@ export const useGenres = (categoryId: string, userId: string) => {
       const genresData = await getGenresByCategory(categoryId, userId);
       setGenres(genresData);
     } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error("Error fetching genres:", err);
       setError(err instanceof Error ? err : new Error(t("genres.fetchError")));
       setGenres([]); // エラー時は空配列
     } finally {

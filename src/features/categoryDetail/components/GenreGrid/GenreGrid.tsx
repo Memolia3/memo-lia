@@ -5,12 +5,7 @@ import { useTranslations } from "next-intl";
 import { GenreFolder } from "../GenreFolder";
 import { GenreGridProps } from "./GenreGrid.types";
 
-export const GenreGrid: React.FC<GenreGridProps> = ({
-  genres,
-  onGenreClick,
-  onGenreDelete,
-  className,
-}) => {
+export const GenreGrid: React.FC<GenreGridProps> = ({ genres, onGenreDelete, className }) => {
   const t = useTranslations("categoryDetail");
 
   if (genres.length === 0) {
@@ -48,7 +43,7 @@ export const GenreGrid: React.FC<GenreGridProps> = ({
       }}
     >
       {genres.map(genre => (
-        <GenreFolder key={genre.id} genre={genre} onClick={onGenreClick} onDelete={onGenreDelete} />
+        <GenreFolder key={genre.id} genre={genre} onDelete={onGenreDelete} />
       ))}
     </div>
   );

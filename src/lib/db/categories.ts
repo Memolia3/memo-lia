@@ -69,9 +69,7 @@ export async function getCategories(userId: string): Promise<CategoryData[]> {
       createdAt: row.created_at as string,
       updatedAt: row.updated_at as string,
     }));
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error("Error fetching categories:", error);
+  } catch {
     throw new Error("カテゴリの取得に失敗しました");
   }
 }
@@ -122,9 +120,7 @@ export async function getCategoryById(
       createdAt: row.created_at as string,
       updatedAt: row.updated_at as string,
     };
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error("Error fetching category:", error);
+  } catch {
     throw new Error("カテゴリの取得に失敗しました");
   }
 }
@@ -183,9 +179,7 @@ async function checkCategoryNameExists(
         AND is_active = true
     `;
     return result.length > 0;
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error("Error checking category name:", error);
+  } catch {
     throw new Error("カテゴリ名の重複チェックに失敗しました");
   }
 }
@@ -203,9 +197,7 @@ async function getNextSortOrder(userId: string, parentId: string | null = null):
         AND is_folder = true
     `;
     return (result[0] as { max_order: number }).max_order + 1;
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error("Error getting next sort order:", error);
+  } catch {
     throw new Error("ソート順の取得に失敗しました");
   }
 }
@@ -284,15 +276,7 @@ export async function createCategory(
       createdAt: row.created_at as string,
       updatedAt: row.updated_at as string,
     };
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error("Error creating category:", error);
-
-    // より具体的なエラーメッセージを提供
-    if (error instanceof Error) {
-      throw error;
-    }
-
+  } catch {
     throw new Error("カテゴリの作成に失敗しました");
   }
 }
@@ -360,9 +344,7 @@ export async function getCategoryDeletionStats(
       genreNames,
       urlTitles,
     };
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error("Error getting category deletion stats:", error);
+  } catch {
     throw new Error("削除影響の取得に失敗しました");
   }
 }
@@ -416,15 +398,7 @@ export async function deleteCategory(data: DeleteCategoryData): Promise<string> 
     `;
 
     return categoryId;
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error("Error deleting category:", error);
-
-    // より具体的なエラーメッセージを提供
-    if (error instanceof Error) {
-      throw error;
-    }
-
+  } catch {
     throw new Error("カテゴリの削除に失敗しました");
   }
 }

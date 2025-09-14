@@ -51,10 +51,6 @@ export async function refreshUserToken(
         : undefined,
     };
   } catch (error) {
-    if (process.env.NODE_ENV === "development") {
-      // eslint-disable-next-line no-console
-      console.error("Token refresh failed:", error);
-    }
     return {
       success: false,
       error: error instanceof Error ? error.message : "Token refresh failed",
@@ -104,11 +100,7 @@ export async function checkTokenValidity(
       default:
         return false;
     }
-  } catch (error) {
-    if (process.env.NODE_ENV === "development") {
-      // eslint-disable-next-line no-console
-      console.error("Token validation failed:", error);
-    }
+  } catch {
     return false;
   }
 }

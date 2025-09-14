@@ -26,18 +26,6 @@ export const useAutoLoginNotification = () => {
   };
 
   useEffect(() => {
-    // デバッグ用ログ
-    if (process.env.NODE_ENV === "development") {
-      // eslint-disable-next-line no-console
-      console.log("useAutoLoginNotification - Status:", status);
-      // eslint-disable-next-line no-console
-      console.log("useAutoLoginNotification - Session:", session);
-      // eslint-disable-next-line no-console
-      console.log("useAutoLoginNotification - autoLoginSuccess:", session?.autoLoginSuccess);
-      // eslint-disable-next-line no-console
-      console.log("useAutoLoginNotification - hasShownNotification:", hasShownNotification.current);
-    }
-
     // セッションが読み込まれ、認証済みの場合
     if (status === "authenticated" && !hasShownNotification.current) {
       // 通知設定を取得（言語設定を渡す）
@@ -49,11 +37,6 @@ export const useAutoLoginNotification = () => {
 
       // フラグを立てて重複表示を防ぐ
       hasShownNotification.current = true;
-
-      if (process.env.NODE_ENV === "development") {
-        // eslint-disable-next-line no-console
-        console.log("Auto-login notification displayed:", notificationConfig);
-      }
     }
   }, [session, status, addNotification]);
 

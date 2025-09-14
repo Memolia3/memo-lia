@@ -8,6 +8,8 @@ import { generateMetadata as generateMeta, isLocaleEnglish } from "@/utils/meta"
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
+import { headers } from "next/headers";
+import Script from "next/script";
 import "../globals.css";
 
 /**
@@ -51,8 +53,10 @@ export default async function LocaleLayout({
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 }) {
+  const headersList = await headers();
   const { locale } = await params;
   const messages = await getMessages();
+  const nonce = headersList.get("x-content-security-policy-nonce");
 
   return (
     <html lang={locale} className="dark:bg-gray-900 h-full">
@@ -70,6 +74,7 @@ export default async function LocaleLayout({
             </Background>
           </NotificationProvider>
         </GlobalErrorBoundary>
+        {nonce && <Script nonce={nonce} />}
       </body>
     </html>
   );

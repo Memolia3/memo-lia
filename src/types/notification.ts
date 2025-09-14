@@ -131,6 +131,7 @@ export interface ErrorNotificationConfig extends Omit<NotificationConfig, "type"
     | "authorization"
     | "server"
     | "client"
+    | "timeout"
     | "unknown";
 }
 

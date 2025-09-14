@@ -96,6 +96,20 @@ export const createUrl = async (data: CreateUrlData): Promise<UrlData> => {
       VALUES (${newUrl.id}, ${genreResult[0].category_id}, ${data.genreId}, ${data.userId})
     `;
 
+    // ジャンルの更新日を更新
+    await sql`
+      UPDATE genres
+      SET updated_at = now()
+      WHERE id = ${data.genreId} AND user_id = ${data.userId}
+    `;
+
+    // カテゴリの更新日を更新
+    await sql`
+      UPDATE categories
+      SET updated_at = now()
+      WHERE id = ${genreResult[0].category_id} AND user_id = ${data.userId}
+    `;
+
     const result = newUrl;
 
     return {
@@ -181,6 +195,19 @@ export const getUrlsByGenre = async (genreId: string, userId: string): Promise<U
 
 export const deleteUrl = async (urlId: string, userId: string): Promise<void> => {
   try {
+    // 削除前にジャンルとカテゴリIDを取得
+    const urlCategoryResult = await sql`
+      SELECT genre_id, category_id FROM url_categories
+      WHERE url_id = ${urlId} AND user_id = ${userId}
+    `;
+
+    if (urlCategoryResult.length === 0) {
+      throw new Error("URL_NOT_FOUND");
+    }
+
+    const { genre_id, category_id } = urlCategoryResult[0] as Record<string, unknown>;
+
+    // URLを削除（CASCADE設定によりurl_categoriesも自動削除される）
     const result = await sql`
       DELETE FROM urls
       WHERE id = ${urlId} AND user_id = ${userId}
@@ -189,6 +216,20 @@ export const deleteUrl = async (urlId: string, userId: string): Promise<void> =>
     if (result.count === 0) {
       throw new Error("URL_NOT_FOUND");
     }
+
+    // ジャンルの更新日を更新
+    await sql`
+      UPDATE genres
+      SET updated_at = now()
+      WHERE id = ${genre_id} AND user_id = ${userId}
+    `;
+
+    // カテゴリの更新日を更新
+    await sql`
+      UPDATE categories
+      SET updated_at = now()
+      WHERE id = ${category_id} AND user_id = ${userId}
+    `;
   } catch (error) {
     throw error;
   }

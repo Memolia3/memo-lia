@@ -125,12 +125,7 @@ export const updateUserProviderTokens = async (
     const expiresAt = new Date(Date.now() + expiresIn * 1000);
 
     return await dbUpdateUserProvider(userId, provider, accessToken, refreshToken, expiresAt);
-  } catch (error) {
-    // エラーログは本番環境では適切なログサービスを使用
-    if (process.env.NODE_ENV === "development") {
-      // eslint-disable-next-line no-console
-      console.error("Error updating user provider tokens:", error);
-    }
+  } catch {
     return null;
   }
 };

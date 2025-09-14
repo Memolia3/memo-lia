@@ -9,14 +9,9 @@ import { Folder, MoreVertical } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { GenreFolderProps } from "../GenreFolder.types";
+import { GenreFolderProps } from "./GenreFolder.types";
 
-export const GenreFolder: React.FC<GenreFolderProps> = ({
-  genre,
-  onClick,
-  className,
-  onDelete,
-}) => {
+export const GenreFolder: React.FC<GenreFolderProps> = ({ genre, className, onDelete }) => {
   const router = useRouter();
   const { data: session } = useSession();
   const { addNotification } = useNotification();
@@ -62,9 +57,6 @@ export const GenreFolder: React.FC<GenreFolderProps> = ({
       const basePath = `/${currentLocale}/dashboard/category/${categoryId}/${categoryName}`;
       const genreDetailUrl = `${basePath}/genre/${genre.id}/${encodedGenreName}`;
       router.push(genreDetailUrl);
-    } else {
-      // フォールバック: 既存のonClick処理
-      onClick(genre);
     }
   };
 
@@ -102,7 +94,7 @@ export const GenreFolder: React.FC<GenreFolderProps> = ({
       if (onDelete) {
         onDelete(genre.id);
       }
-    } catch (error) {
+    } catch {
       // エラー通知
       const currentLocale = getCurrentLocale();
       addNotification({
@@ -118,9 +110,6 @@ export const GenreFolder: React.FC<GenreFolderProps> = ({
         duration: 5000,
         severity: "high",
       });
-
-      // eslint-disable-next-line no-console
-      console.error("Error deleting genre:", error);
     } finally {
       setIsDeleting(false);
     }

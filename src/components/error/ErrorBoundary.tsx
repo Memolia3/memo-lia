@@ -46,12 +46,6 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     if (this.props.onError) {
       this.props.onError(error, errorInfo);
     }
-
-    // 開発環境ではコンソールに詳細を出力
-    if (process.env.NODE_ENV === "development") {
-      // eslint-disable-next-line no-console
-      console.error("ErrorBoundary caught an error:", error, errorInfo);
-    }
   }
 
   handleRetry = () => {

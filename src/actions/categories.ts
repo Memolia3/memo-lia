@@ -237,8 +237,6 @@ export async function deleteGenre(genreId: string, userId: string): Promise<stri
 
     return result;
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error("Error deleting genre:", error);
     throw error;
   }
 }
@@ -258,8 +256,6 @@ export async function getGenreById(genreId: string, userId: string) {
   try {
     return await dbGetGenreById(genreId, userId);
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error("Error fetching genre:", error);
     throw error;
   }
 }

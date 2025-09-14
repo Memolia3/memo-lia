@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import createMiddleware from "next-intl/middleware";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
@@ -14,8 +15,40 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // 最後にi18nミドルウェアを実行 - 言語に合わせてパスを返す
-  return intlMiddleware(request);
+  // セキュリティヘッダーの追加
+  const response = intlMiddleware(request);
+
+  // レスポンスがNextResponseの場合のみヘッダーを追加
+  if (response instanceof NextResponse) {
+    // HSTSヘッダー（本番環境のみ）
+    if (process.env.NODE_ENV === "production") {
+      response.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+
+      // リクエストごとに nonce を生成
+      const nonce = crypto.randomBytes(16).toString("base64");
+
+      // CSP ヘッダーに nonce を埋め込む
+      response.headers.set(
+        "Content-Security-Policy",
+        [
+          "default-src 'self'",
+          `script-src 'self' 'nonce-${nonce}' 'unsafe-eval'`,
+          "style-src 'self' 'unsafe-inline'",
+          "img-src 'self' data: https:",
+          "font-src 'self' data:",
+          "connect-src 'self'",
+          "frame-src 'none'",
+          "object-src 'none'",
+          "base-uri 'self'",
+          "form-action 'self'",
+        ].join("; ")
+      );
+
+      response.headers.set("X-Content-Security-Policy-Nonce", nonce);
+    }
+  }
+
+  return response;
 }
 
 export const config = {

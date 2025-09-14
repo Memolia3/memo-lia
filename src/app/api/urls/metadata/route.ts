@@ -1,3 +1,6 @@
+import { auth } from "@/auth";
+import { checkRateLimit } from "@/lib/rate-limit";
+import { hasDangerousProtocol, isValidUrl, sanitizeHtml } from "@/utils/sanitize";
 import { NextRequest, NextResponse } from "next/server";
 
 interface UrlMetadata {
@@ -9,6 +12,20 @@ interface UrlMetadata {
 
 export async function POST(request: NextRequest) {
   try {
+    // レート制限チェック
+    const clientIp =
+      request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
+    if (checkRateLimit(`metadata:${clientIp}`, 10, 60000)) {
+      // 1分間に10回まで
+      return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
+    }
+
+    // 認証チェック
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { url } = await request.json();
 
     if (!url) {
@@ -16,6 +33,14 @@ export async function POST(request: NextRequest) {
     }
 
     // URLの妥当性チェック
+    if (!isValidUrl(url)) {
+      return NextResponse.json({ error: "Invalid URL format" }, { status: 400 });
+    }
+
+    if (hasDangerousProtocol(url)) {
+      return NextResponse.json({ error: "Dangerous protocol detected" }, { status: 400 });
+    }
+
     let validUrl: URL;
     try {
       validUrl = new URL(url);
@@ -48,7 +73,7 @@ export async function POST(request: NextRequest) {
     // タイトル抽出
     const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
     if (titleMatch) {
-      metadata.title = titleMatch[1].trim();
+      metadata.title = sanitizeHtml(titleMatch[1].trim());
     }
 
     // Open Graphタイトル
@@ -56,7 +81,7 @@ export async function POST(request: NextRequest) {
       /<meta[^>]*property=["']og:title["'][^>]*content=["']([^"']+)["']/i
     );
     if (ogTitleMatch) {
-      metadata.title = ogTitleMatch[1].trim();
+      metadata.title = sanitizeHtml(ogTitleMatch[1].trim());
     }
 
     // 説明抽出
@@ -64,7 +89,7 @@ export async function POST(request: NextRequest) {
       /<meta[^>]*name=["']description["'][^>]*content=["']([^"']+)["']/i
     );
     if (descriptionMatch) {
-      metadata.description = descriptionMatch[1].trim();
+      metadata.description = sanitizeHtml(descriptionMatch[1].trim());
     }
 
     // Open Graph説明
@@ -72,7 +97,7 @@ export async function POST(request: NextRequest) {
       /<meta[^>]*property=["']og:description["'][^>]*content=["']([^"']+)["']/i
     );
     if (ogDescriptionMatch) {
-      metadata.description = ogDescriptionMatch[1].trim();
+      metadata.description = sanitizeHtml(ogDescriptionMatch[1].trim());
     }
 
     // ファビコン取得
