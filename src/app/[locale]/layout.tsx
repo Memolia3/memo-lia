@@ -5,6 +5,7 @@ import { Background } from "@/components/ui";
 import { AuthProvider } from "@/features/auth";
 import type { PageMetaOptions } from "@/types";
 import { generateMetadata as generateMeta, isLocaleEnglish } from "@/utils/meta";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
@@ -75,6 +76,7 @@ export default async function LocaleLayout({
           </NotificationProvider>
         </GlobalErrorBoundary>
         {nonce && <Script nonce={nonce} />}
+        <SpeedInsights />
       </body>
     </html>
   );
