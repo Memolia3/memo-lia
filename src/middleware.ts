@@ -1,4 +1,3 @@
-import crypto from "crypto";
 import createMiddleware from "next-intl/middleware";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
@@ -6,6 +5,13 @@ import { routing } from "./i18n/routing";
 
 // next-intlのミドルウェア
 const intlMiddleware = createMiddleware(routing);
+
+// Web Crypto APIを使用してnonceを生成
+function generateNonce(): string {
+  const array = new Uint8Array(16);
+  crypto.getRandomValues(array);
+  return btoa(String.fromCharCode.apply(null, Array.from(array)));
+}
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
@@ -25,7 +31,7 @@ export async function middleware(request: NextRequest) {
       response.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
 
       // リクエストごとに nonce を生成
-      const nonce = crypto.randomBytes(16).toString("base64");
+      const nonce = generateNonce();
 
       // CSP ヘッダーに nonce を埋め込む
       response.headers.set(
