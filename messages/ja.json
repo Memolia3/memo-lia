@@ -1,0 +1,264 @@
+{
+  "app": {
+    "name": "MemoLia",
+    "description": "URL保管アプリ"
+  },
+  "top": {
+    "title": "MemoLia",
+    "subtitle": "お気に入りのURLを整理して保管しましょう",
+    "tagline": "シンプルで使いやすいURL管理アプリ",
+    "features": {
+      "bookmark": {
+        "title": "お気に入りURL登録",
+        "description": "お気に入りのURLを簡単に登録・管理できます"
+      },
+      "customize": {
+        "title": "カスタマイズ設定",
+        "description": "カテゴリ、ジャンル、タグで自由に分類設定"
+      },
+      "search": {
+        "title": "高速検索",
+        "description": "カテゴリ、ジャンル、タグで素早くURLを発見"
+      }
+    },
+    "cta": {
+      "title": "今すぐ始めましょう",
+      "description": "Google・GitHub・Discordで簡単ログイン！\nパスワード不要で安全にURL管理を始めませんか？",
+      "button": "無料で始める"
+    }
+  },
+  "auth": {
+    "title": "認証",
+    "subtitle": "アカウントにログインして、\nMemoLiaを始めましょう",
+    "description": "以下のいずれかの方法でログインしてください",
+    "providers": {
+      "google": {
+        "name": "Googleでログイン",
+        "description": "Googleアカウントでログイン"
+      },
+      "github": {
+        "name": "GitHubでログイン",
+        "description": "GitHubアカウントでログイン"
+      },
+      "discord": {
+        "name": "Discordでログイン",
+        "description": "Discordアカウントでログイン"
+      }
+    },
+    "terms": "ログインすることで、利用規約とプライバシーポリシーに同意したことになります",
+    "backToTop": "トップに戻る",
+    "loginDescription": "安全で簡単なログイン",
+    "loginSubDescription": "パスワード不要で、お好みのアカウントでログインできます"
+  },
+  "navigation": {
+    "top": "トップ",
+    "dashboard": "ダッシュボード",
+    "bookmarks": "ブックマーク",
+    "settings": "設定"
+  },
+  "common": {
+    "add": "追加",
+    "edit": "編集",
+    "delete": "削除",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "search": "検索",
+    "loading": "読み込み中...",
+    "error": "エラーが発生しました"
+  },
+  "dashboard": {
+    "title": "ダッシュボード",
+    "loading": "読み込み中...",
+    "unauthenticated": "認証が必要です",
+    "error": "データの読み込みに失敗しました",
+    "errorSubMessage": "通知をご確認ください",
+    "userInfo": {
+      "unauthenticated": "未認証",
+      "user": "ユーザー"
+    },
+    "emptyState": {
+      "title": "カテゴリが0件です",
+      "description": "新しいカテゴリフォルダを作成して、URLを整理しましょう"
+    }
+  },
+    "categoryForm": {
+      "title": "カテゴリ作成",
+    "fields": {
+      "name": "カテゴリ名",
+      "description": "説明",
+      "color": "色"
+    },
+    "placeholders": {
+      "name": "カテゴリ名を入力してください",
+      "description": "カテゴリの説明を入力してください（任意）"
+    },
+    "buttons": {
+      "cancel": "キャンセル",
+      "create": "作成",
+      "creating": "作成中..."
+    },
+    "errors": {
+      "nameRequired": "カテゴリ名は必須です",
+      "nameTooLong": "カテゴリ名は50文字以内で入力してください",
+      "descriptionTooLong": "説明は200文字以内で入力してください"
+    }
+  },
+  "categoryDetail": {
+    "title": "カテゴリ詳細",
+    "authRequired": {
+      "title": "認証が必要です",
+      "description": "このページにアクセスするにはログインが必要です。"
+    },
+    "notFound": {
+      "title": "カテゴリが見つかりません",
+      "description": "指定されたカテゴリは存在しないか、削除されています。"
+    },
+    "info": {
+      "createdAt": "作成日",
+      "updatedAt": "更新日"
+    },
+    "genres": {
+      "title": "ジャンル一覧",
+      "count": "ジャンル数",
+      "description": "このカテゴリに属するジャンルを管理できます。ジャンルはURLをより細かく分類するために使用されます。",
+      "comingSoon": "ジャンル機能は今後実装予定です",
+      "placeholder": "今後実装",
+      "empty": "ジャンルがありません",
+      "emptyDescription": "このカテゴリにはまだジャンルが作成されていません。",
+      "loading": "読み込み中...",
+      "loadError": "ジャンルの読み込みに失敗しました",
+      "fetchError": "ジャンルの取得に失敗しました",
+      "errors": {
+        "nameAlreadyExists": "このジャンル名は既に使用されています",
+        "invalidCategory": "無効なカテゴリです",
+        "nameRequired": "ジャンル名は必須です",
+        "nameTooLong": "ジャンル名が長すぎます（50文字以内）",
+        "descriptionTooLong": "説明が長すぎます（200文字以内）",
+        "userIdRequired": "ユーザーIDが必要です",
+        "invalidUserId": "無効なユーザーIDです",
+        "categoryNotFound": "カテゴリが見つかりません",
+        "invalidGenre": "無効なジャンルです",
+        "createFailed": "ジャンルの作成に失敗しました"
+      }
+    },
+    "buttons": {
+      "backToDashboard": "ダッシュボードに戻る",
+      "createGenre": "作成"
+    }
+  },
+  "genreForm": {
+    "title": "ジャンル作成",
+    "fields": {
+      "name": "ジャンル名",
+      "description": "説明",
+      "color": "カラー"
+    },
+    "placeholders": {
+      "name": "ジャンル名を入力してください",
+      "description": "ジャンルの説明を入力してください（任意）"
+    },
+    "errors": {
+      "nameRequired": "ジャンル名は必須です",
+      "nameTooLong": "ジャンル名は50文字以内で入力してください",
+      "descriptionTooLong": "説明は200文字以内で入力してください"
+    },
+    "buttons": {
+      "cancel": "キャンセル",
+      "create": "作成",
+      "creating": "作成中..."
+    }
+  },
+  "genreDetail": {
+    "title": "ジャンル詳細",
+    "loading": "読み込み中...",
+    "notFound": {
+      "title": "ジャンルが見つかりません",
+      "description": "指定されたジャンルは存在しないか、アクセス権限がありません。"
+    },
+    "categoryNotFound": {
+      "title": "カテゴリが見つかりません",
+      "description": "指定されたカテゴリは存在しないか、アクセス権限がありません。"
+    },
+    "authRequired": {
+      "title": "ログインが必要です",
+      "description": "この機能を利用するにはログインしてください。"
+    },
+    "info": {
+      "categoryName": "カテゴリ",
+      "createdAt": "作成日",
+      "updatedAt": "更新日"
+    },
+    "urls": {
+      "title": "URL一覧",
+      "count": "URL数",
+      "description": "このジャンルに保存されているURLの一覧です。",
+      "empty": "このジャンルにはまだURLが保存されていません。",
+      "emptyDescription": "URLを追加して、お気に入りのサイトを整理しましょう。",
+      "actions": {
+        "open": "開く",
+        "delete": "削除",
+        "deleting": "削除中..."
+      },
+      "notifications": {
+        "deleteSuccess": "URL削除完了",
+        "deleteSuccessMessage": "URLが正常に削除されました。",
+        "deleteError": "URL削除エラー",
+        "deleteErrorMessage": "URLの削除に失敗しました。"
+      },
+      "placeholder": "URL情報がここに表示されます（実装予定）"
+    },
+    "actions": {
+      "backToCategory": "カテゴリ詳細に戻る"
+    },
+    "buttons": {
+      "createUrl": "作成"
+    }
+  },
+  "urlForm": {
+    "title": "URL作成",
+    "fields": {
+      "url": "URL",
+      "title": "タイトル",
+      "description": "説明"
+    },
+    "placeholders": {
+      "url": "https://example.com",
+      "title": "サイトのタイトルを入力",
+      "description": "このURLについての説明を入力（任意）"
+    },
+    "errors": {
+      "urlRequired": "URLは必須です",
+      "urlInvalid": "有効なURLを入力してください",
+      "titleRequired": "タイトルは必須です",
+      "urlAlreadyExists": "このURLは既に登録されています",
+      "titleTooLong": "タイトルは200文字以内で入力してください",
+      "descriptionTooLong": "説明は500文字以内で入力してください",
+      "invalidGenre": "無効なジャンルです",
+      "userIdRequired": "ユーザーIDが必要です",
+      "invalidUserId": "無効なユーザーIDです",
+      "createFailed": "URLの作成に失敗しました"
+    },
+    "buttons": {
+      "save": "保存",
+      "saving": "保存中...",
+      "cancel": "キャンセル"
+    },
+    "messages": {
+      "fetchingMetadata": "URLの情報を取得中..."
+    }
+  },
+  "metadata": {
+    "genreAdd": {
+      "title": "ジャンル作成 | Memolia",
+      "description": "新しいジャンルを作成してURLをより細かく分類しましょう"
+    },
+    "genreDetail": {
+      "title": "ジャンル詳細 | Memolia",
+      "description": "ジャンルに保存されたURLを閲覧・管理できます"
+    },
+    "urlAdd": {
+      "title": "URL作成 | Memolia",
+      "description": "新しいURLを追加してブックマークを整理しましょう"
+    }
+  }
+}

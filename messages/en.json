@@ -1,0 +1,264 @@
+{
+  "app": {
+    "name": "MemoLia",
+    "description": "URL Bookmark App"
+  },
+  "top": {
+    "title": "MemoLia",
+    "subtitle": "Organize and store your favorite URLs",
+    "tagline": "Simple and easy-to-use URL management app",
+    "features": {
+      "bookmark": {
+        "title": "Favorite URL Registration",
+        "description": "Easily register and manage your favorite URLs"
+      },
+      "customize": {
+        "title": "Customization Settings",
+        "description": "Freely categorize with categories, genres, and tags"
+      },
+      "search": {
+        "title": "Fast Search",
+        "description": "Quickly discover URLs with categories, genres, and tags"
+      }
+    },
+    "cta": {
+      "title": "Start Now",
+      "description": "Quick login with Google・GitHub・Discord!\nStart secure URL management without passwords?",
+      "button": "Start Free"
+    }
+  },
+  "auth": {
+    "title": "Authentication",
+    "subtitle": "Sign in to your account to start using MemoLia",
+    "description": "Please sign in using one of the following methods",
+    "providers": {
+      "google": {
+        "name": "Sign in with Google",
+        "description": "Sign in with your Google account"
+      },
+      "github": {
+        "name": "Sign in with GitHub",
+        "description": "Sign in with your GitHub account"
+      },
+      "discord": {
+        "name": "Sign in with Discord",
+        "description": "Sign in with your Discord account"
+      }
+    },
+    "terms": "By signing in, you agree to our Terms of Service and Privacy Policy",
+    "backToTop": "Back to Top",
+    "loginDescription": "Safe and Easy Login",
+    "loginSubDescription": "No password required, login with your preferred account"
+  },
+  "navigation": {
+    "top": "Top",
+    "dashboard": "Dashboard",
+    "bookmarks": "Bookmarks",
+    "settings": "Settings"
+  },
+  "common": {
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "search": "Search",
+    "loading": "Loading...",
+    "error": "Error occurred"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "loading": "Loading...",
+    "unauthenticated": "Authentication required",
+    "error": "Failed to load data",
+    "errorSubMessage": "Please check notifications",
+    "userInfo": {
+      "unauthenticated": "Unauthenticated",
+      "user": "User"
+    },
+    "emptyState": {
+      "title": "No categories found",
+      "description": "Create a new category folder to organize your URLs"
+    }
+  },
+    "categoryForm": {
+      "title": "Create Category",
+    "fields": {
+      "name": "Category Name",
+      "description": "Description",
+      "color": "Color"
+    },
+    "placeholders": {
+      "name": "Enter category name",
+      "description": "Enter category description (optional)"
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "create": "Create",
+      "creating": "Creating..."
+    },
+    "errors": {
+      "nameRequired": "Category name is required",
+      "nameTooLong": "Category name must be 50 characters or less",
+      "descriptionTooLong": "Description must be 200 characters or less"
+    }
+  },
+  "categoryDetail": {
+    "title": "Category Detail",
+    "authRequired": {
+      "title": "Authentication Required",
+      "description": "You need to log in to access this page."
+    },
+    "notFound": {
+      "title": "Category Not Found",
+      "description": "The specified category does not exist or has been deleted."
+    },
+    "info": {
+      "createdAt": "Created At",
+      "updatedAt": "Updated At"
+    },
+    "genres": {
+      "title": "Genres",
+      "count": "Genre Count",
+      "description": "You can manage genres belonging to this category. Genres are used to classify URLs more specifically.",
+      "comingSoon": "Genre functionality will be implemented in the future",
+      "placeholder": "Coming Soon",
+      "empty": "No Genres",
+      "emptyDescription": "No genres have been created for this category yet.",
+      "loading": "Loading...",
+      "loadError": "Failed to load genres",
+      "fetchError": "Failed to fetch genres",
+      "errors": {
+        "nameAlreadyExists": "This genre name is already in use",
+        "invalidCategory": "Invalid category",
+        "nameRequired": "Genre name is required",
+        "nameTooLong": "Genre name is too long (50 characters max)",
+        "descriptionTooLong": "Description is too long (200 characters max)",
+        "userIdRequired": "User ID is required",
+        "invalidUserId": "Invalid user ID",
+        "categoryNotFound": "Category not found",
+        "invalidGenre": "Invalid genre",
+        "createFailed": "Failed to create genre"
+      }
+    },
+    "buttons": {
+      "backToDashboard": "Back to Dashboard",
+      "createGenre": "Create"
+    }
+  },
+  "genreForm": {
+    "title": "Create Genre",
+    "fields": {
+      "name": "Genre Name",
+      "description": "Description",
+      "color": "Color"
+    },
+    "placeholders": {
+      "name": "Enter genre name",
+      "description": "Enter genre description (optional)"
+    },
+    "errors": {
+      "nameRequired": "Genre name is required",
+      "nameTooLong": "Genre name must be 50 characters or less",
+      "descriptionTooLong": "Description must be 200 characters or less"
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "create": "Create",
+      "creating": "Creating..."
+    }
+  },
+  "genreDetail": {
+    "title": "Genre Details",
+    "loading": "Loading...",
+    "notFound": {
+      "title": "Genre Not Found",
+      "description": "The specified genre does not exist or you don't have access permission."
+    },
+    "categoryNotFound": {
+      "title": "Category Not Found",
+      "description": "The specified category does not exist or you don't have access permission."
+    },
+    "authRequired": {
+      "title": "Login Required",
+      "description": "Please log in to use this feature."
+    },
+    "info": {
+      "categoryName": "Category",
+      "createdAt": "Created",
+      "updatedAt": "Updated"
+    },
+    "urls": {
+      "title": "URL List",
+      "count": "URL Count",
+      "description": "List of URLs saved in this genre.",
+      "empty": "No URLs have been saved in this genre yet.",
+      "emptyDescription": "Add URLs to organize your favorite sites.",
+      "actions": {
+        "open": "Open",
+        "delete": "Delete",
+        "deleting": "Deleting..."
+      },
+      "notifications": {
+        "deleteSuccess": "URL Deleted",
+        "deleteSuccessMessage": "URL has been successfully deleted.",
+        "deleteError": "URL Delete Error",
+        "deleteErrorMessage": "Failed to delete URL."
+      },
+      "placeholder": "URL information will be displayed here (to be implemented)"
+    },
+    "actions": {
+      "backToCategory": "Back to Category"
+    },
+    "buttons": {
+      "createUrl": "Create"
+    }
+  },
+  "urlForm": {
+    "title": "Create URL",
+    "fields": {
+      "url": "URL",
+      "title": "Title",
+      "description": "Description"
+    },
+    "placeholders": {
+      "url": "https://example.com",
+      "title": "Enter site title",
+      "description": "Enter a description for this URL (optional)"
+    },
+    "errors": {
+      "urlRequired": "URL is required",
+      "urlInvalid": "Please enter a valid URL",
+      "titleRequired": "Title is required",
+      "urlAlreadyExists": "This URL is already registered",
+      "titleTooLong": "Title must be 200 characters or less",
+      "descriptionTooLong": "Description must be 500 characters or less",
+      "invalidGenre": "Invalid genre",
+      "userIdRequired": "User ID is required",
+      "invalidUserId": "Invalid user ID",
+      "createFailed": "Failed to create URL"
+    },
+    "buttons": {
+      "save": "Save",
+      "saving": "Saving...",
+      "cancel": "Cancel"
+    },
+    "messages": {
+      "fetchingMetadata": "Fetching URL information..."
+    }
+  },
+  "metadata": {
+    "genreAdd": {
+      "title": "Create Genre | Memolia",
+      "description": "Create a new genre to classify your URLs more specifically"
+    },
+    "genreDetail": {
+      "title": "Genre Details | Memolia",
+      "description": "View and manage URLs saved in this genre"
+    },
+    "urlAdd": {
+      "title": "Create URL | Memolia",
+      "description": "Add new URLs to organize your bookmarks"
+    }
+  }
+}
