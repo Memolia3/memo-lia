@@ -1,6 +1,7 @@
 "use client";
 
 import { useNotificationStore } from "@/lib/notification/store";
+import { useTranslations } from "next-intl";
 import { useCallback, useState } from "react";
 import { useNotificationHelpers } from "./useNotificationHelpers";
 
@@ -43,6 +44,7 @@ export const useAsyncOperation = <T = unknown>(options: AsyncOperationOptions = 
 
   const { showSuccess, showError, showInfo } = useNotificationHelpers();
   const removeNotification = useNotificationStore(state => state.removeNotification);
+  const t = useTranslations("notifications");
 
   /**
    * 非同期操作を実行
@@ -65,7 +67,7 @@ export const useAsyncOperation = <T = unknown>(options: AsyncOperationOptions = 
       let loadingNotificationId: string | undefined;
       if (opts.showLoadingNotification) {
         loadingNotificationId = showInfo({
-          message: "処理中...",
+          message: t("processing"),
           duration: 0,
           closable: false,
         });
@@ -122,7 +124,7 @@ export const useAsyncOperation = <T = unknown>(options: AsyncOperationOptions = 
         throw error;
       }
     },
-    [options, showSuccess, showError, showInfo, removeNotification]
+    [options, showSuccess, showError, showInfo, removeNotification, t]
   );
 
   /**

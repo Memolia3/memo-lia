@@ -73,8 +73,9 @@ export default function UrlAddMobile({ category, genre, locale, className }: Url
 
       addNotification({
         type: "success",
-        title: "URL作成完了",
-        description: "URLが正常に作成されました。",
+        message: t("success.message"),
+        title: t("success.title"),
+        description: t("success.description"),
       });
 
       const encodedCategoryName = encodeURIComponent(category.name);
@@ -85,8 +86,9 @@ export default function UrlAddMobile({ category, genre, locale, className }: Url
     } catch (error) {
       addNotification({
         type: "error",
-        title: "URL作成エラー",
-        description: error instanceof Error ? error.message : "URLの作成に失敗しました。",
+        message: t("error.message"),
+        title: t("error.title"),
+        description: error instanceof Error ? error.message : t("error.description"),
       });
     } finally {
       setIsLoading(false);

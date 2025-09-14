@@ -79,7 +79,15 @@
     "emptyState": {
       "title": "No categories found",
       "description": "Create a new category folder to organize your URLs"
-    }
+    },
+    "navigationFailed": "Failed to navigate to page",
+    "retryLater": "Please try again after a while",
+    "navigationError": "Navigation error",
+    "categoryFetchFailed": "Failed to fetch categories",
+    "categoryLoadFailed": "Failed to load categories",
+    "openMenu": "Open menu",
+    "deleting": "Deleting...",
+    "delete": "Delete"
   },
     "categoryForm": {
       "title": "Create Category",
@@ -224,7 +232,9 @@
     "placeholders": {
       "url": "https://example.com",
       "title": "Enter site title",
-      "description": "Enter a description for this URL (optional)"
+      "description": "Enter a description for this URL (optional)",
+      "noTitle": "No Title",
+      "noDescription": "No Description"
     },
     "errors": {
       "urlRequired": "URL is required",
@@ -236,7 +246,8 @@
       "invalidGenre": "Invalid genre",
       "userIdRequired": "User ID is required",
       "invalidUserId": "Invalid user ID",
-      "createFailed": "Failed to create URL"
+      "createFailed": "Failed to create URL",
+      "metadataFailed": "Failed to fetch URL information"
     },
     "buttons": {
       "save": "Save",
@@ -245,7 +256,42 @@
     },
     "messages": {
       "fetchingMetadata": "Fetching URL information..."
+    },
+    "success": {
+      "message": "URL Created Successfully",
+      "title": "URL Created Successfully",
+      "description": "The URL has been created successfully."
+    },
+    "error": {
+      "message": "URL Creation Error",
+      "title": "URL Creation Error",
+      "description": "Failed to create the URL."
     }
+  },
+  "errors": {
+    "authRequired": "Authentication required",
+    "genreIdRequired": "Genre ID is required",
+    "urlIdRequired": "URL ID is required",
+    "categoryIdRequired": "Category ID is required",
+    "userIdNotSpecified": "User ID is not specified",
+    "invalidUserId": "Invalid user ID",
+    "invalidGenreId": "Invalid genre ID",
+    "authFailed": "Authentication failed"
+  },
+  "notifications": {
+    "unknownError": "An unknown error occurred",
+    "saved": "Saved",
+    "savedItem": "{item} saved",
+    "deleted": "Deleted",
+    "deletedItem": "{item} deleted",
+    "updated": "Updated",
+    "updatedItem": "{item} updated",
+    "created": "Created",
+    "createdItem": "{item} created",
+    "loggedIn": "Logged in",
+    "loggedInWithProvider": "Logged in with {provider}",
+    "loggedOut": "Logged out",
+    "processing": "Processing..."
   },
   "metadata": {
     "genreAdd": {

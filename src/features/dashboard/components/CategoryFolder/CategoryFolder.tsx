@@ -6,6 +6,7 @@ import { NOTIFICATION_MESSAGES, getNotificationMessage } from "@/constants/notif
 import { useNotificationStore } from "@/lib/notification";
 import { cn, truncateText } from "@/utils";
 import { Folder, MoreVertical } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { CategoryFolderProps } from "./CategoryFolder.types";
 
@@ -23,6 +24,7 @@ export const CategoryFolder: React.FC<CategoryFolderProps> = ({
   const [isDeleting, setIsDeleting] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { addNotification } = useNotificationStore();
+  const t = useTranslations("dashboard");
 
   // ブラウザの言語設定から言語を取得
   const getCurrentLocale = () => {
@@ -161,7 +163,7 @@ export const CategoryFolder: React.FC<CategoryFolderProps> = ({
       <button
         onClick={handleMenuClick}
         className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-700 transition-all duration-200 shadow-sm hover:shadow-md"
-        aria-label="メニューを開く"
+        aria-label={t("openMenu")}
       >
         <MoreVertical className="w-4 h-4 text-gray-600 dark:text-gray-300" />
       </button>
@@ -191,7 +193,7 @@ export const CategoryFolder: React.FC<CategoryFolderProps> = ({
                 d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
               />
             </svg>
-            {isDeleting ? "削除中..." : "削除"}
+            {isDeleting ? t("deleting") : t("delete")}
           </button>
         </div>
       )}
