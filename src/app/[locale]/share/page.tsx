@@ -33,6 +33,7 @@ export default async function SharePage({ params, searchParams }: SharePageProps
           <div className="text-center">
             <h2 className="text-xl font-bold text-red-600 mb-2">Rate Limited</h2>
             <p className="text-gray-600">Too many requests. Please try again later.</p>
+            <p className="text-sm text-gray-500 mt-2">Debug: Rate limit failed for IP: {ip}</p>
           </div>
         </Container>
       </AuthGuard>
@@ -41,12 +42,14 @@ export default async function SharePage({ params, searchParams }: SharePageProps
 
   // リファラーの検証（CSRF対策）
   if (!validateReferer(headers)) {
+    const referer = headers.get("referer");
     return (
       <AuthGuard isSharePage={true}>
         <Container className="flex items-center justify-center min-h-screen">
           <div className="text-center">
             <h2 className="text-xl font-bold text-red-600 mb-2">Access Denied</h2>
             <p className="text-gray-600">Invalid referer or suspicious request.</p>
+            <p className="text-sm text-gray-500 mt-2">Debug: Referer: {referer || "None"}</p>
           </div>
         </Container>
       </AuthGuard>
@@ -62,6 +65,7 @@ export default async function SharePage({ params, searchParams }: SharePageProps
           <div className="text-center">
             <h2 className="text-xl font-bold text-red-600 mb-2">Access Denied</h2>
             <p className="text-gray-600">Invalid user agent.</p>
+            <p className="text-sm text-gray-500 mt-2">Debug: User-Agent: {userAgent || "None"}</p>
           </div>
         </Container>
       </AuthGuard>
@@ -94,6 +98,12 @@ export default async function SharePage({ params, searchParams }: SharePageProps
                   ? "The provided URL is not valid or contains dangerous content."
                   : "URL failed security validation."}
             </p>
+            <div className="text-sm text-gray-500 mt-4 space-y-1">
+              <p>Debug Info:</p>
+              <p>URL: {rawUrl || "None"}</p>
+              <p>Title: {rawTitle || "None"}</p>
+              <p>Error: {validationResult.errorMessage}</p>
+            </div>
           </div>
         </Container>
       </AuthGuard>
