@@ -23,7 +23,7 @@ interface ShareHandlerProps {
 }
 
 export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData }) => {
-  const { session, isAuthenticated } = useSession();
+  const { session } = useSession();
   const { data: categories = [] } = useCategories(session?.user?.id || "");
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
   const [selectedGenreId, setSelectedGenreId] = useState<string>("");
@@ -76,17 +76,6 @@ export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData }
       setIsLoading(false);
     }
   };
-
-  if (!isAuthenticated) {
-    return (
-      <div className="text-center">
-        <Typography variant="h2" className="mb-4">
-          {t("loginRequired")}
-        </Typography>
-        <Button onClick={() => router.push(`/${locale}/auth`)}>{t("login")}</Button>
-      </div>
-    );
-  }
 
   return (
     <div className="w-full space-y-6">
