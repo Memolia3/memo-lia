@@ -76,10 +76,10 @@ export const BookmarkletInstaller: React.FC<BookmarkletInstallerProps> = ({ clas
           variant="outline"
           size="sm"
           onClick={handleBackToDashboard}
-          className="flex items-center gap-2"
+          className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm"
         >
-          <ArrowLeft className="w-4 h-4" />
-          {t("backToDashboard")}
+          <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4" />
+          <span className="sm:inline">{t("backToDashboard")}</span>
         </Button>
       </div>
 

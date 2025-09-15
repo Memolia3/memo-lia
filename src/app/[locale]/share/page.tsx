@@ -104,18 +104,15 @@ export default async function SharePage({ params, searchParams }: SharePageProps
 
   return (
     <AuthGuard isSharePage={true}>
-      {/* PC画面 */}
-      <div className="hidden lg:block h-full">
-        <Container padding="md" maxWidth="7xl" className="h-full overflow-hidden">
-          <ShareDesktop locale={locale} sharedData={sharedData} />
-        </Container>
-      </div>
-      {/* スマホ画面 */}
-      <div className="block lg:hidden h-full">
-        <Container maxWidth="7xl" className="h-full overflow-hidden">
-          <ShareMobile locale={locale} sharedData={sharedData} />
-        </Container>
-      </div>
+      {/* デスクトップ版 */}
+      <Container className="hidden lg:flex" padding="md">
+        <ShareDesktop locale={locale} sharedData={sharedData} className="w-full" />
+      </Container>
+
+      {/* モバイル版 */}
+      <Container className="flex lg:hidden">
+        <ShareMobile locale={locale} sharedData={sharedData} className="w-full" />
+      </Container>
     </AuthGuard>
   );
 }

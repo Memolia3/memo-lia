@@ -228,7 +228,7 @@
     }
   },
   "urlForm": {
-    "title": "Create URL",
+    "title": "Save URL",
     "fields": {
       "url": "URL",
       "title": "Title",
@@ -321,7 +321,7 @@
     "retryLater": "Please try again later"
   },
   "bookmarklet": {
-    "title": "Safari Share Setup",
+    "title": "Safari URL Save Settings",
     "description": "Set up iPhone Safari to send URLs to MemoLia",
     "backToDashboard": "Back to Dashboard",
     "step1": "Step 1",
@@ -329,11 +329,11 @@
     "step2": "Step 2",
     "step2Description": "Open any webpage in Safari and tap the share button (square with arrow)",
     "step3": "Step 3",
-    "step3Description": "Select 'Add to Bookmarks' and change the name to 'Send to MemoLia' and save",
+    "step3Description": "Select 'Add to Bookmarks', save it first, then edit the name to 'Send to MemoLia' and paste the copied bookmarklet to save",
     "copyButton": "Copy Bookmarklet",
     "copied": "Copied!",
     "copySuccess": "Bookmarklet copied to clipboard",
-    "tip": "After setup, you can save URLs from any webpage using Share Menu → Bookmarks → 'Send to MemoLia'"
+    "tip": "After setup, you can save URLs from any webpage using Bookmarks → 'Send to MemoLia'"
   },
   "metadata": {
     "genreAdd": {

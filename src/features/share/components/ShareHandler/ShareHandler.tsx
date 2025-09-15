@@ -6,6 +6,7 @@ import { Typography } from "@/components/ui/Typography";
 import { useSession } from "@/features/auth/hooks";
 import { useCategories } from "@/features/dashboard/hooks/useCategories";
 import { useNotificationHelpers } from "@/hooks/useNotificationHelpers";
+import { cn } from "@/utils";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -20,9 +21,10 @@ interface SharedData {
 interface ShareHandlerProps {
   locale: string;
   sharedData: SharedData;
+  className?: string;
 }
 
-export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData }) => {
+export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData, className }) => {
   const { session } = useSession();
   const { data: categories = [] } = useCategories(session?.user?.id || "");
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
@@ -78,86 +80,88 @@ export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData }
   };
 
   return (
-    <div className="w-full space-y-6">
-      <div className="text-center">
-        <Typography variant="h2" className="mb-2">
-          {t("title")}
-        </Typography>
-        <Typography variant="body" color="muted">
-          {t("description")}
-        </Typography>
-      </div>
-
-      {/* 共有されたデータの表示 */}
-      <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-        <Typography variant="h3" className="mb-2">
-          {sharedData.title || t("noTitle")}
-        </Typography>
-        <Typography variant="body" className="mb-2">
-          {sharedData.url}
-        </Typography>
-        {sharedData.text && (
-          <Typography variant="body" color="muted">
-            {sharedData.text}
+    <div className={cn("max-w-2xl mx-auto w-full", className)}>
+      <div className="space-y-6">
+        <div className="text-center">
+          <Typography variant="h2" className="mb-2">
+            {t("title")}
           </Typography>
-        )}
-      </div>
+          <Typography variant="body" color="muted">
+            {t("description")}
+          </Typography>
+        </div>
 
-      {/* カテゴリ選択 */}
-      <div>
-        <Typography variant="label" className="mb-2">
-          {t("selectCategory")}
-        </Typography>
-        <select
-          value={selectedCategoryId}
-          onChange={e => setSelectedCategoryId(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-        >
-          <option value="">{t("selectCategoryPlaceholder")}</option>
-          {categories.map(category => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
-      </div>
+        {/* 共有されたデータの表示 */}
+        <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+          <Typography variant="h3" className="mb-2">
+            {sharedData.title || t("noTitle")}
+          </Typography>
+          <Typography variant="body" className="mb-2">
+            {sharedData.url}
+          </Typography>
+          {sharedData.text && (
+            <Typography variant="body" color="muted">
+              {sharedData.text}
+            </Typography>
+          )}
+        </div>
 
-      {/* ジャンル選択 */}
-      {selectedCategoryId && (
+        {/* カテゴリ選択 */}
         <div>
           <Typography variant="label" className="mb-2">
-            {t("selectGenre")}
+            {t("selectCategory")}
           </Typography>
           <select
-            value={selectedGenreId}
-            onChange={e => setSelectedGenreId(e.target.value)}
-            disabled={genresLoading}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-700 dark:text-white disabled:opacity-50"
+            value={selectedCategoryId}
+            onChange={e => setSelectedCategoryId(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-700 dark:text-white"
           >
-            <option value="">
-              {genresLoading ? t("loadingGenres") : t("selectGenrePlaceholder")}
-            </option>
-            {genres.map(genre => (
-              <option key={genre.id} value={genre.id}>
-                {genre.name}
+            <option value="">{t("selectCategoryPlaceholder")}</option>
+            {categories.map(category => (
+              <option key={category.id} value={category.id}>
+                {category.name}
               </option>
             ))}
           </select>
         </div>
-      )}
 
-      {/* 保存ボタン */}
-      <div className="flex gap-4">
-        <Button
-          onClick={handleSave}
-          disabled={!selectedGenreId || isLoading || genresLoading}
-          className="flex-1"
-        >
-          {isLoading ? t("saving") : t("save")}
-        </Button>
-        <Button variant="secondary" onClick={() => router.push(`/${locale}/dashboard`)}>
-          {t("cancel")}
-        </Button>
+        {/* ジャンル選択 */}
+        {selectedCategoryId && (
+          <div>
+            <Typography variant="label" className="mb-2">
+              {t("selectGenre")}
+            </Typography>
+            <select
+              value={selectedGenreId}
+              onChange={e => setSelectedGenreId(e.target.value)}
+              disabled={genresLoading}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-700 dark:text-white disabled:opacity-50"
+            >
+              <option value="">
+                {genresLoading ? t("loadingGenres") : t("selectGenrePlaceholder")}
+              </option>
+              {genres.map(genre => (
+                <option key={genre.id} value={genre.id}>
+                  {genre.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* 保存ボタン */}
+        <div className="flex gap-4">
+          <Button
+            onClick={handleSave}
+            disabled={!selectedGenreId || isLoading || genresLoading}
+            className="flex-1"
+          >
+            {isLoading ? t("saving") : t("save")}
+          </Button>
+          <Button variant="secondary" onClick={() => router.push(`/${locale}/dashboard`)}>
+            {t("cancel")}
+          </Button>
+        </div>
       </div>
     </div>
   );

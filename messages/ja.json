@@ -228,7 +228,7 @@
     }
   },
   "urlForm": {
-    "title": "URL作成",
+    "title": "URL保存",
     "fields": {
       "url": "URL",
       "title": "タイトル",
@@ -321,7 +321,7 @@
     "retryLater": "しばらく時間をおいてから再度お試しください"
   },
   "bookmarklet": {
-    "title": "Safari用共有設定",
+    "title": "SafariでURLを保存する設定",
     "description": "iPhone SafariでMemoLiaにURLを送信できるように設定します",
     "backToDashboard": "ダッシュボードに戻る",
     "step1": "ステップ1",
@@ -329,11 +329,11 @@
     "step2": "ステップ2",
     "step2Description": "Safariで任意のWebページを開き、共有ボタン（四角に矢印）をタップします",
     "step3": "ステップ3",
-    "step3Description": "「ブックマークに追加」を選択し、名前を「MemoLiaに送る」などに変更して保存します",
+    "step3Description": "「ブックマークを追加」を選択して一度保存、編集から名前を「MemoLiaに送る」などに変更し、コピーしたブックマークレットを貼り付けて保存します",
     "copyButton": "ブックマークレットをコピー",
     "copied": "コピーしました！",
     "copySuccess": "ブックマークレットがコピーされました",
-    "tip": "設定後は、どのWebページからでも共有メニュー → ブックマーク → 「MemoLiaに送る」でURLを保存できます"
+    "tip": "設定後は、どのWebページからでも ブックマーク → 「MemoLiaに送る」でURLを保存できます"
   },
   "metadata": {
     "genreAdd": {
