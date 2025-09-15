@@ -1,6 +1,7 @@
 import { GlobalErrorBoundary } from "@/components/error";
 import { ZoomDetector } from "@/components/layout";
 import { NotificationProvider } from "@/components/notification";
+import { PWARegister } from "@/components/PWA/PWARegister";
 import { Background } from "@/components/ui";
 import { AuthProvider } from "@/features/auth";
 import type { PageMetaOptions } from "@/types";
@@ -68,6 +69,7 @@ export default async function LocaleLayout({
         className="antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 h-full"
         suppressHydrationWarning={true}
       >
+        <PWARegister />
         <ZoomDetector />
         <GlobalErrorBoundary>
           <NotificationProvider>

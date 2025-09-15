@@ -293,6 +293,28 @@
     "loggedOut": "Logged out",
     "processing": "Processing..."
   },
+  "share": {
+    "title": "Save Shared Link",
+    "description": "Select category and genre to save the URL",
+    "selectCategory": "Select Category",
+    "selectGenre": "Select Genre",
+    "selectCategoryPlaceholder": "Please select a category",
+    "selectGenrePlaceholder": "Please select a genre",
+    "loadingGenres": "Loading genres...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "saved": "URL saved successfully",
+    "saveError": "Failed to save URL",
+    "missingInfo": "Missing required information",
+    "defaultTitle": "Shared Link",
+    "noTitle": "No Title",
+    "loginRequired": "Login required",
+    "login": "Login",
+    "genreFetchFailed": "Failed to fetch genres",
+    "genreLoadFailed": "Failed to load genres",
+    "retryLater": "Please try again later"
+  },
   "metadata": {
     "genreAdd": {
       "title": "Create Genre | Memolia",

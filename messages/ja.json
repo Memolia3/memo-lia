@@ -293,6 +293,28 @@
     "loggedOut": "ログアウトしました",
     "processing": "処理中..."
   },
+  "share": {
+    "title": "共有されたリンクを保存",
+    "description": "カテゴリとジャンルを選択してURLを保存してください",
+    "selectCategory": "カテゴリを選択",
+    "selectGenre": "ジャンルを選択",
+    "selectCategoryPlaceholder": "カテゴリを選択してください",
+    "selectGenrePlaceholder": "ジャンルを選択してください",
+    "loadingGenres": "ジャンルを読み込み中...",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "saving": "保存中...",
+    "saved": "URLを保存しました",
+    "saveError": "URLの保存に失敗しました",
+    "missingInfo": "必要な情報が不足しています",
+    "defaultTitle": "共有されたリンク",
+    "noTitle": "タイトルなし",
+    "loginRequired": "ログインが必要です",
+    "login": "ログイン",
+    "genreFetchFailed": "ジャンルの取得に失敗しました",
+    "genreLoadFailed": "ジャンルの読み込みに失敗しました",
+    "retryLater": "しばらく時間をおいてから再度お試しください"
+  },
   "metadata": {
     "genreAdd": {
       "title": "ジャンル作成 | Memolia",
