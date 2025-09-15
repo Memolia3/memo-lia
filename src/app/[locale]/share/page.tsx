@@ -33,7 +33,11 @@ export default async function SharePage({ params, searchParams }: SharePageProps
           <div className="text-center">
             <h2 className="text-xl font-bold text-red-600 mb-2">Rate Limited</h2>
             <p className="text-gray-600">Too many requests. Please try again later.</p>
-            <p className="text-sm text-gray-500 mt-2">Debug: Rate limit failed for IP: {ip}</p>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `alert("Debug: Rate limit failed for IP: ${ip}");`,
+              }}
+            />
           </div>
         </Container>
       </AuthGuard>
@@ -49,7 +53,11 @@ export default async function SharePage({ params, searchParams }: SharePageProps
           <div className="text-center">
             <h2 className="text-xl font-bold text-red-600 mb-2">Access Denied</h2>
             <p className="text-gray-600">Invalid referer or suspicious request.</p>
-            <p className="text-sm text-gray-500 mt-2">Debug: Referer: {referer || "None"}</p>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `alert("Debug: Referer validation failed. Referer: ${referer || "None"}");`,
+              }}
+            />
           </div>
         </Container>
       </AuthGuard>
@@ -65,7 +73,11 @@ export default async function SharePage({ params, searchParams }: SharePageProps
           <div className="text-center">
             <h2 className="text-xl font-bold text-red-600 mb-2">Access Denied</h2>
             <p className="text-gray-600">Invalid user agent.</p>
-            <p className="text-sm text-gray-500 mt-2">Debug: User-Agent: {userAgent || "None"}</p>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `alert("Debug: User-Agent validation failed. User-Agent: ${userAgent || "None"}");`,
+              }}
+            />
           </div>
         </Container>
       </AuthGuard>
@@ -98,12 +110,11 @@ export default async function SharePage({ params, searchParams }: SharePageProps
                   ? "The provided URL is not valid or contains dangerous content."
                   : "URL failed security validation."}
             </p>
-            <div className="text-sm text-gray-500 mt-4 space-y-1">
-              <p>Debug Info:</p>
-              <p>URL: {rawUrl || "None"}</p>
-              <p>Title: {rawTitle || "None"}</p>
-              <p>Error: {validationResult.errorMessage}</p>
-            </div>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `alert("Debug: Validation failed\\nURL: ${rawUrl || "None"}\\nTitle: ${rawTitle || "None"}\\nError: ${validationResult.errorMessage}");`,
+              }}
+            />
           </div>
         </Container>
       </AuthGuard>
