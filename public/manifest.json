@@ -25,6 +25,12 @@
   "lang": "ja",
   "dir": "ltr",
   "scope": "/",
+  "protocol_handlers": [
+    {
+      "protocol": "web+memo",
+      "url": "/share?url=%s"
+    }
+  ],
   "share_target": {
     "action": "/share",
     "method": "GET",

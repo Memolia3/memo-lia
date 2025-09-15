@@ -14,11 +14,11 @@
       },
       "customize": {
         "title": "カスタマイズ設定",
-        "description": "カテゴリ、ジャンル、タグで自由に分類設定"
+        "description": "カテゴリ、ジャンルで自由に分類設定"
       },
       "search": {
         "title": "高速検索",
-        "description": "カテゴリ、ジャンル、タグで素早くURLを発見"
+        "description": "カテゴリ、ジャンルで素早くURLを発見"
       }
     },
     "cta": {

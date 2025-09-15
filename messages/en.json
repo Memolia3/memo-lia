@@ -14,11 +14,11 @@
       },
       "customize": {
         "title": "Customization Settings",
-        "description": "Freely categorize with categories, genres, and tags"
+        "description": "Freely categorize with categories and genres"
       },
       "search": {
         "title": "Fast Search",
-        "description": "Quickly discover URLs with categories, genres, and tags"
+        "description": "Quickly discover URLs with categories and genres"
       }
     },
     "cta": {
