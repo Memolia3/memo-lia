@@ -22,20 +22,26 @@ export const BookmarkletInstaller: React.FC<BookmarkletInstallerProps> = ({ clas
     router.push(`/${locale}/dashboard`);
   };
 
+  /**
+   * ブックマークレットのJavaScriptコード
+   *
+   * 処理内容:
+   * 1. 現在のページのタイトルとURLを取得
+   * 2. 基本的なURL検証
+   * 3. ブラウザの言語設定からロケールを自動判定（ja/en）
+   * 4. ロケール付きの共有ページURLにリダイレクト
+   *
+   * セキュリティ検証はサーバーサイドで実施
+   *
+   * @type {string}
+   */
   const bookmarklet = `javascript:(function(){
-  const title = encodeURIComponent(document.title);
-  const url = encodeURIComponent(location.href);
-  const baseUrl = "${process.env.NEXT_PUBLIC_APP_URL || ""}";
-  const currentHost = window.location.hostname;
-
-  // 現在のドメインがMemoLiaのドメインの場合、同じドメインを使用
-  let targetUrl = baseUrl;
-  if (currentHost.includes('memo-lia') || currentHost.includes('localhost')) {
-    targetUrl = window.location.protocol + '//' + currentHost;
-  }
-
-  window.location.href = targetUrl + "/share?title="+title+"&url="+url;
-})();`;
+    const t=document.title||'',u=location.href||'';
+    if(!u.startsWith('http')){alert('Invalid URL');return;}
+    const l=navigator.language.startsWith('ja')?'ja':'en';
+    location.href=location.origin+'/'+l+'/share?title='+
+      encodeURIComponent(t)+'&url='+encodeURIComponent(u);
+  })();`;
 
   const handleCopy = async () => {
     try {
