@@ -3,7 +3,9 @@
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { Typography } from "@/components/ui/Typography";
-import { useTranslations } from "next-intl";
+import { ArrowLeft } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface BookmarkletInstallerProps {
@@ -13,6 +15,12 @@ interface BookmarkletInstallerProps {
 export const BookmarkletInstaller: React.FC<BookmarkletInstallerProps> = ({ className }) => {
   const [copied, setCopied] = useState(false);
   const t = useTranslations("bookmarklet");
+  const locale = useLocale();
+  const router = useRouter();
+
+  const handleBackToDashboard = () => {
+    router.push(`/${locale}/dashboard`);
+  };
 
   const bookmarklet = `javascript:(function(){
   const title = encodeURIComponent(document.title);
@@ -37,14 +45,29 @@ export const BookmarkletInstaller: React.FC<BookmarkletInstallerProps> = ({ clas
         border border-white/20 dark:border-gray-700/20
         max-h-screen overflow-y-auto ${className}`}
     >
-      <div className="text-center mb-4 sm:mb-6">
-        <Typography
-          variant="h2"
-          className="mb-2 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3"
+      {/* ヘッダーセクション */}
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
+        {/* Safari用 */}
+        <div className="flex items-center gap-2">
+          <Icon name="star" size="sm" color="accent" className="drop-shadow-sm" />
+          <Typography variant="body" className="text-sm sm:text-base text-accent font-medium">
+            {t("title")}
+          </Typography>
+        </div>
+
+        {/* ダッシュボードに戻るボタン */}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleBackToDashboard}
+          className="flex items-center gap-2"
         >
-          <Icon name="star" size="lg" color="accent" className="drop-shadow-sm" />
-          <span className="text-xl sm:text-2xl lg:text-3xl">{t("title")}</span>
-        </Typography>
+          <ArrowLeft className="w-4 h-4" />
+          {t("backToDashboard")}
+        </Button>
+      </div>
+
+      <div className="text-center mb-4 sm:mb-6">
         <Typography variant="body" color="muted" className="mb-4 text-sm sm:text-base text-center">
           {t("description")}
         </Typography>

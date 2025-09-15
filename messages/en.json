@@ -319,6 +319,7 @@
   "bookmarklet": {
     "title": "Safari Share Setup",
     "description": "Set up iPhone Safari to send URLs to MemoLia",
+    "backToDashboard": "Back to Dashboard",
     "step1": "Step 1",
     "step1Description": "Press the button below to copy the bookmarklet",
     "step2": "Step 2",

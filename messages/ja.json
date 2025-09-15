@@ -319,6 +319,7 @@
   "bookmarklet": {
     "title": "Safari用共有設定",
     "description": "iPhone SafariでMemoLiaにURLを送信できるように設定します",
+    "backToDashboard": "ダッシュボードに戻る",
     "step1": "ステップ1",
     "step1Description": "下のボタンを押してブックマークレットをコピーします",
     "step2": "ステップ2",
