@@ -1,7 +1,7 @@
 {
-  "name": "MemoLia - URL保管アプリ",
+  "name": "MemoLia",
   "short_name": "MemoLia",
-  "description": "お気に入りのURLを整理して保管するアプリ",
+  "description": "URL保管アプリ",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -27,8 +27,8 @@
   "scope": "/",
   "share_target": {
     "action": "/share",
-    "method": "POST",
-    "enctype": "multipart/form-data",
+    "method": "GET",
+    "enctype": "application/x-www-form-urlencoded",
     "params": {
       "title": "title",
       "text": "text",
