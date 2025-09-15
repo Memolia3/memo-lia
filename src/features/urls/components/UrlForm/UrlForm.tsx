@@ -185,6 +185,7 @@ export const UrlForm: React.FC<UrlFormProps> = ({
               variant="secondary"
               onClick={() => window.history.back()}
               disabled={isLoading}
+              className="min-w-[100px]"
             >
               {t("buttons.cancel")}
             </Button>

@@ -235,6 +235,7 @@ export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData, 
               variant="secondary"
               onClick={() => router.push(`/${locale}/dashboard`)}
               disabled={isLoading}
+              className="min-w-[100px]"
             >
               {t("cancel")}
             </Button>
