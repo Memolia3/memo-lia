@@ -64,7 +64,8 @@
     "cancel": "Cancel",
     "search": "Search",
     "loading": "Loading...",
-    "error": "Error occurred"
+    "error": "Error occurred",
+    "dashboard": "Dashboard"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -314,6 +315,20 @@
     "genreFetchFailed": "Failed to fetch genres",
     "genreLoadFailed": "Failed to load genres",
     "retryLater": "Please try again later"
+  },
+  "bookmarklet": {
+    "title": "Safari Share Setup",
+    "description": "Set up iPhone Safari to send URLs to MemoLia",
+    "step1": "Step 1",
+    "step1Description": "Press the button below to copy the bookmarklet",
+    "step2": "Step 2",
+    "step2Description": "Open any webpage in Safari and tap the share button (square with arrow)",
+    "step3": "Step 3",
+    "step3Description": "Select 'Add to Bookmarks' and change the name to 'Send to MemoLia' and save",
+    "copyButton": "Copy Bookmarklet",
+    "copied": "Copied!",
+    "copySuccess": "Bookmarklet copied to clipboard",
+    "tip": "After setup, you can save URLs from any webpage using Share Menu → Bookmarks → 'Send to MemoLia'"
   },
   "metadata": {
     "genreAdd": {

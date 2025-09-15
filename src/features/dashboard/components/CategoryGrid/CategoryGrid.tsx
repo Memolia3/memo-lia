@@ -1,10 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/Button";
 import { cn } from "@/utils";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
 import { CategoryFolder } from "../CategoryFolder";
+import { DashboardActions } from "../DashboardActions";
 import { CategoryGridProps } from "./CategoryGrid.types";
 
 /**
@@ -18,19 +17,11 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({
   className,
 }) => {
   const t = useTranslations("dashboard.emptyState");
-  const tForm = useTranslations("categoryForm");
 
   if (categories.length === 0) {
     return (
       <div className="space-y-6">
-        {/* カテゴリ追加ボタン */}
-        <div className="flex mb-6" style={{ justifyContent: "flex-end" }}>
-          <Link href="/dashboard/categories/new">
-            <Button variant="primary" size="sm">
-              + {tForm("buttons.create")}
-            </Button>
-          </Link>
-        </div>
+        <DashboardActions />
 
         {/* 空の状態 */}
         <div className={cn("text-center py-12", className)}>
@@ -67,14 +58,7 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* カテゴリ追加ボタン */}
-      <div className="flex mb-6" style={{ justifyContent: "flex-end" }}>
-        <Link href="/dashboard/categories/new">
-          <Button variant="primary" size="sm">
-            + {tForm("buttons.create")}
-          </Button>
-        </Link>
-      </div>
+      <DashboardActions />
 
       {/* カテゴリグリッド */}
       <div
