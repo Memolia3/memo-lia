@@ -31,6 +31,11 @@
     "title": "Authentication",
     "subtitle": "Sign in to your account to start using MemoLia",
     "description": "Please sign in using one of the following methods",
+    "authRequired": "Authentication required",
+    "authenticating": "Authenticating...",
+    "safariBookmarkletMessage": "To use the bookmarklet in Safari, please log in to MemoLia first. Private mode is not supported.",
+    "loginButton": "Login",
+    "backToTop": "Back to Top",
     "providers": {
       "google": {
         "name": "Sign in with Google",
@@ -46,7 +51,6 @@
       }
     },
     "terms": "By signing in, you agree to our Terms of Service and Privacy Policy",
-    "backToTop": "Back to Top",
     "loginDescription": "Safe and Easy Login",
     "loginSubDescription": "No password required, login with your preferred account"
   },

@@ -31,6 +31,11 @@
     "title": "認証",
     "subtitle": "アカウントにログインして、\nMemoLiaを始めましょう",
     "description": "以下のいずれかの方法でログインしてください",
+    "authRequired": "認証が必要です",
+    "authenticating": "認証中...",
+    "safariBookmarkletMessage": "Safariでブックマークレットを使用するには、先にMemoLiaにログインしてください。プライベートモードでは使用できません。",
+    "loginButton": "ログインする",
+    "backToTop": "トップページに戻る",
     "providers": {
       "google": {
         "name": "Googleでログイン",
@@ -46,7 +51,6 @@
       }
     },
     "terms": "ログインすることで、利用規約とプライバシーポリシーに同意したことになります",
-    "backToTop": "トップに戻る",
     "loginDescription": "安全で簡単なログイン",
     "loginSubDescription": "パスワード不要で、お好みのアカウントでログインできます"
   },

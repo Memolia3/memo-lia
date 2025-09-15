@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { Typography } from "@/components/ui/Typography";
 import { useSession } from "@/features/auth/hooks";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import type { AuthGuardProps } from "./AuthGuard.types";
@@ -21,10 +21,14 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
   const { isAuthenticated, isLoading } = useSession();
   const router = useRouter();
   const locale = useLocale();
+  const t = useTranslations("auth");
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated && !isSharePage) {
-      router.push("/auth");
+      // 現在のパスが/authでない場合のみリダイレクト
+      if (typeof window !== "undefined" && !window.location.pathname.includes("/auth")) {
+        router.push("/auth");
+      }
     }
   }, [isAuthenticated, isLoading, router, isSharePage]);
 
@@ -33,7 +37,9 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
       <Container className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-muted">認証中...</p>
+          <Typography variant="body" color="muted">
+            {t("authenticating")}
+          </Typography>
         </div>
       </Container>
     );
@@ -49,23 +55,23 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
         <Container className="flex items-center justify-center min-h-screen p-4">
           <div className="text-center max-w-md mx-auto">
             <Typography variant="h2" className="mb-4">
-              認証が必要です
+              {t("authRequired")}
             </Typography>
             <Typography variant="body" color="muted" className="mb-6">
-              Safariでブックマークレットを使用するには、先にMemoLiaにログインしてください。
+              {t("safariBookmarkletMessage")}
             </Typography>
 
             <div className="space-y-3">
               <Button onClick={() => router.push(`/${locale}/auth`)} className="w-full">
-                ログインする
+                {t("loginButton")}
               </Button>
 
               <Button
                 variant="outline"
-                onClick={() => router.push(`/${locale}/dashboard`)}
+                onClick={() => router.push(`/${locale}`)}
                 className="w-full"
               >
-                ダッシュボードに戻る
+                {t("backToTop")}
               </Button>
             </div>
           </div>
@@ -77,7 +83,7 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
       <Container className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <Typography variant="body" color="muted">
-            認証が必要です
+            {t("authRequired")}
           </Typography>
         </div>
       </Container>
