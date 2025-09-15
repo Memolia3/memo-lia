@@ -19,7 +19,7 @@ export default async function SharePage({ params, searchParams }: SharePageProps
   };
 
   return (
-    <AuthGuard>
+    <AuthGuard isSharePage={true}>
       {/* PC画面 */}
       <div className="hidden lg:block h-full">
         <Container padding="md" maxWidth="7xl" className="h-full overflow-hidden">

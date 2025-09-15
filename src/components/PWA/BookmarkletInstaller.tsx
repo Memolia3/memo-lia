@@ -25,7 +25,16 @@ export const BookmarkletInstaller: React.FC<BookmarkletInstallerProps> = ({ clas
   const bookmarklet = `javascript:(function(){
   const title = encodeURIComponent(document.title);
   const url = encodeURIComponent(location.href);
-  window.location.href = "${process.env.NEXT_PUBLIC_APP_URL || ""}/share?title="+title+"&url="+url;
+  const baseUrl = "${process.env.NEXT_PUBLIC_APP_URL || ""}";
+  const currentHost = window.location.hostname;
+
+  // 現在のドメインがMemoLiaのドメインの場合、同じドメインを使用
+  let targetUrl = baseUrl;
+  if (currentHost.includes('memo-lia') || currentHost.includes('localhost')) {
+    targetUrl = window.location.protocol + '//' + currentHost;
+  }
+
+  window.location.href = targetUrl + "/share?title="+title+"&url="+url;
 })();`;
 
   const handleCopy = async () => {
