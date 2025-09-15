@@ -1,18 +1,12 @@
 "use client";
 
 import { Button, Typography } from "@/components/ui";
+import { UrlPreview } from "@/components/url";
+import { useUrlMetadata } from "@/hooks";
 import { cn } from "@/utils";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { UrlFormData, UrlFormProps } from "./UrlForm.types";
-
-// URLメタデータの型定義
-interface UrlMetadata {
-  title?: string;
-  description?: string;
-  faviconUrl?: string;
-}
 
 export const UrlForm: React.FC<UrlFormProps> = ({
   initialData,
@@ -26,10 +20,17 @@ export const UrlForm: React.FC<UrlFormProps> = ({
     title: initialData?.title || "",
     description: initialData?.description || "",
   });
-  const [isValidating, setIsValidating] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<keyof UrlFormData, string>>>({});
-  const [metadata, setMetadata] = useState<UrlMetadata | null>(null);
-  const [previewError, setPreviewError] = useState<string | null>(null);
+
+  // URLメタデータ取得フック
+  const {
+    metadata,
+    isLoading: isValidating,
+    error: previewError,
+  } = useUrlMetadata(
+    formData.url,
+    { autoFetch: true, debounceMs: 800 } // 自動取得を有効にして、デバウンスを長めに設定
+  );
 
   useEffect(() => {
     if (initialData) {
@@ -41,6 +42,17 @@ export const UrlForm: React.FC<UrlFormProps> = ({
     }
   }, [initialData]);
 
+  // メタデータが取得されたときに自動入力（タイトルと説明が空の場合のみ）
+  useEffect(() => {
+    if (metadata && formData.url && !formData.title && !formData.description) {
+      setFormData(prev => ({
+        ...prev,
+        title: metadata.title || "",
+        description: metadata.description || "",
+      }));
+    }
+  }, [metadata, formData.url, formData.title, formData.description]);
+
   const validateUrl = (url: string): boolean => {
     try {
       new URL(url);
@@ -50,43 +62,10 @@ export const UrlForm: React.FC<UrlFormProps> = ({
     }
   };
 
-  const handleUrlChange = async (url: string) => {
+  const handleUrlChange = (url: string) => {
     setFormData(prev => ({ ...prev, url }));
     setErrors(prev => ({ ...prev, url: undefined }));
-    setPreviewError(null);
-
-    if (url && validateUrl(url)) {
-      setIsValidating(true);
-      try {
-        const response = await fetch("/api/urls/metadata", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ url }),
-        });
-
-        if (response.ok) {
-          const fetchedMetadata = await response.json();
-          setMetadata(fetchedMetadata);
-
-          // タイトルと説明が空の場合のみ自動入力
-          setFormData(prev => ({
-            ...prev,
-            title: prev.title || fetchedMetadata.title || "",
-            description: prev.description || fetchedMetadata.description || "",
-          }));
-        } else {
-          setPreviewError(t("errors.metadataFailed"));
-          setMetadata(null);
-        }
-      } catch {
-        setPreviewError(t("errors.metadataFailed"));
-        setMetadata(null);
-      } finally {
-        setIsValidating(false);
-      }
-    } else {
-      setMetadata(null);
-    }
+    // メタデータの取得はuseUrlMetadataフックが自動で行う
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -217,71 +196,7 @@ export const UrlForm: React.FC<UrlFormProps> = ({
       </form>
 
       {/* URLプレビュー */}
-      {(metadata || previewError) && (
-        <div className="mt-8">
-          <Typography variant="label" className="text-sm font-medium mb-4 block">
-            プレビュー
-          </Typography>
-
-          {previewError ? (
-            <div className="p-4 border border-red-200 rounded-lg bg-red-50 dark:bg-red-900/20 dark:border-red-800">
-              <Typography variant="body" color="primary" className="text-red-500">
-                {previewError}
-              </Typography>
-            </div>
-          ) : metadata ? (
-            <div className="p-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-              <div className="flex items-start gap-4">
-                {/* Favicon */}
-                <div className="flex-shrink-0">
-                  {metadata.faviconUrl ? (
-                    <Image
-                      src={metadata.faviconUrl}
-                      alt="Favicon"
-                      width={32}
-                      height={32}
-                      className="w-8 h-8 rounded"
-                      onError={e => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = "none";
-                      }}
-                    />
-                  ) : (
-                    <div className="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded flex items-center justify-center">
-                      <svg
-                        className="w-4 h-4 text-gray-500"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M4.083 9h1.946c.089-1.546.383-2.97.837-4.118A6.004 6.004 0 004.083 9zM10 2a8 8 0 100 16 8 8 0 000-16zm0 2c-.076 0-.232.032-.465.262-.238.234-.497.623-.737 1.182-.389.907-.673 2.142-.766 3.556h3.936c-.093-1.414-.377-2.649-.766-3.556-.24-.56-.5-.948-.737-1.182C10.232 4.032 10.076 4 10 4zm3.971 5c-.089-1.546-.383-2.97-.837-4.118A6.004 6.004 0 0115.917 9h-1.946zm-2.003 2H8.032c.093 1.414.377 2.649.766 3.556.24.56.5.948.737 1.182.233.23.389.262.465.262.076 0 .232-.032.465-.262.238-.234.498-.623.737-1.182.389-.907.673-2.142.766-3.556zm1.166 4.118c.454-1.147.748-2.572.837-4.118h1.946a6.004 6.004 0 01-2.783 4.118zm-6.268 0C6.412 13.97 6.118 12.546 6.03 11H4.083a6.004 6.004 0 002.783 4.118z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                  )}
-                </div>
-
-                {/* コンテンツ */}
-                <div className="flex-1 min-w-0">
-                  <Typography variant="body" weight="medium" className="line-clamp-2 mb-1">
-                    {metadata.title || formData.title || t("placeholders.noTitle")}
-                  </Typography>
-                  <Typography variant="body" color="muted" className="line-clamp-3 mb-2">
-                    {metadata.description ||
-                      formData.description ||
-                      t("placeholders.noDescription")}
-                  </Typography>
-                  <Typography variant="caption" color="muted" className="break-all">
-                    {formData.url}
-                  </Typography>
-                </div>
-              </div>
-            </div>
-          ) : null}
-        </div>
-      )}
+      <UrlPreview metadata={metadata} error={previewError} isLoading={isValidating} />
     </div>
   );
 };

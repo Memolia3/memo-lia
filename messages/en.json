@@ -229,6 +229,7 @@
   },
   "urlForm": {
     "title": "Save URL",
+    "preview": "Preview",
     "fields": {
       "url": "URL",
       "title": "Title",

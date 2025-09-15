@@ -3,9 +3,10 @@
 import { createUrlAction } from "@/actions/urls";
 import { Button } from "@/components/ui/Button";
 import { Typography } from "@/components/ui/Typography";
+import { UrlPreview } from "@/components/url";
 import { useSession } from "@/features/auth/hooks";
 import { useCategories } from "@/features/dashboard/hooks/useCategories";
-import { useNotificationHelpers } from "@/hooks/useNotificationHelpers";
+import { useNotificationHelpers, useUrlMetadata } from "@/hooks";
 import { cn } from "@/utils";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -33,7 +34,15 @@ export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData, 
   const { showSuccess, showError } = useNotificationHelpers();
   const router = useRouter();
   const t = useTranslations("share");
+  const tForm = useTranslations("urlForm");
   const [isLoading, setIsLoading] = useState(false);
+
+  // URLメタデータ取得フック
+  const {
+    metadata,
+    isLoading: isValidating,
+    error: previewError,
+  } = useUrlMetadata(sharedData.url || "", { autoFetch: !!sharedData.url && !!session?.user?.id });
 
   // カテゴリが変更されたときにジャンルを取得
   useEffect(() => {
@@ -56,11 +65,27 @@ export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData, 
 
     setIsLoading(true);
     try {
+      // メタデータから取得した情報を使用
+      let urlMetadata = {
+        title: sharedData.title || "",
+        description: sharedData.text || "",
+        faviconUrl: undefined as string | undefined,
+      };
+
+      if (metadata) {
+        urlMetadata = {
+          title: sharedData.title || metadata.title || t("defaultTitle"),
+          description: sharedData.text || metadata.description || "",
+          faviconUrl: metadata.faviconUrl,
+        };
+      }
+
       await createUrlAction({
         genreId: selectedGenreId,
-        title: sharedData.title || t("defaultTitle"),
+        title: urlMetadata.title,
         url: sharedData.url,
-        description: sharedData.text,
+        description: urlMetadata.description,
+        faviconUrl: urlMetadata.faviconUrl,
       });
 
       showSuccess({
@@ -91,7 +116,7 @@ export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData, 
         {/* URL入力フィールド */}
         <div className="space-y-2">
           <Typography variant="label" className="text-sm font-medium">
-            URL <span className="text-red-500">*</span>
+            {tForm("fields.url")} <span className="text-red-500">*</span>
           </Typography>
           <div className="relative">
             <input
@@ -103,36 +128,41 @@ export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData, 
                 text-white dark:text-white placeholder-gray-400
                 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent
                 transition-all duration-200"
-              placeholder="https://example.com"
+              placeholder={tForm("placeholders.url")}
             />
+            {isValidating && (
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+              </div>
+            )}
           </div>
         </div>
 
         {/* タイトル入力フィールド */}
         <div className="space-y-2">
           <Typography variant="label" className="text-sm font-medium">
-            タイトル
+            {tForm("fields.title")}
           </Typography>
           <input
             type="text"
-            value={sharedData.title || ""}
+            value={metadata?.title || sharedData.title || ""}
             readOnly
             className="w-full px-4 py-3 border border-white/20 rounded-lg
               bg-white/10 dark:bg-gray-800/10 backdrop-blur-sm
               text-white dark:text-white placeholder-gray-400
               focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent
               transition-all duration-200"
-            placeholder="サイトのタイトル"
+            placeholder={tForm("placeholders.title")}
           />
         </div>
 
         {/* 説明入力フィールド */}
         <div className="space-y-2">
           <Typography variant="label" className="text-sm font-medium">
-            説明
+            {tForm("fields.description")}
           </Typography>
           <textarea
-            value={sharedData.text || ""}
+            value={metadata?.description || sharedData.text || ""}
             readOnly
             rows={3}
             className="w-full px-4 py-3 border border-white/20 rounded-lg
@@ -140,7 +170,7 @@ export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData, 
               text-white dark:text-white placeholder-gray-400
               focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent
               transition-all duration-200 resize-none"
-            placeholder="このURLについての説明（任意）"
+            placeholder={tForm("placeholders.description")}
           />
         </div>
 
@@ -198,28 +228,29 @@ export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData, 
         )}
 
         {/* ボタン */}
-        <div className="flex gap-4 pt-4">
-          <Button
-            type="submit"
-            disabled={!selectedGenreId || isLoading || genresLoading}
-            className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white
-              rounded-lg font-medium transition-colors duration-200
-              disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isLoading ? t("saving") : t("save")}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => router.push(`/${locale}/dashboard`)}
-            className="px-6 py-3 border border-white/20 text-white
-              hover:bg-white/10 rounded-lg font-medium
-              transition-colors duration-200"
-          >
-            {t("cancel")}
-          </Button>
+        <div className="w-full">
+          <div className="flex space-x-3" style={{ justifyContent: "flex-end" }}>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => router.push(`/${locale}/dashboard`)}
+              disabled={isLoading}
+            >
+              {t("cancel")}
+            </Button>
+            <Button
+              type="submit"
+              disabled={!selectedGenreId || isLoading || genresLoading || isValidating}
+              className="min-w-[120px]"
+            >
+              {isLoading ? t("saving") : t("save")}
+            </Button>
+          </div>
         </div>
       </form>
+
+      {/* URLプレビュー */}
+      <UrlPreview metadata={metadata} error={previewError} isLoading={isValidating} />
     </div>
   );
 };

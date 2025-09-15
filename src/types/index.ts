@@ -3,6 +3,7 @@ export * from "./auth";
 export * from "./common";
 export * from "./database";
 export * from "./ui";
+export * from "./url-metadata";
 
 // 既存の型定義
 export * from "./meta";

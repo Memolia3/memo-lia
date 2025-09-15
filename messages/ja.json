@@ -229,6 +229,7 @@
   },
   "urlForm": {
     "title": "URL保存",
+    "preview": "プレビュー",
     "fields": {
       "url": "URL",
       "title": "タイトル",
