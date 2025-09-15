@@ -39,7 +39,8 @@ export const BookmarkletInstaller: React.FC<BookmarkletInstallerProps> = ({ clas
     const t=document.title||'',u=location.href||'';
     if(!u.startsWith('http')){alert('Invalid URL');return;}
     const l=navigator.language.startsWith('ja')?'ja':'en';
-    location.href=location.origin+'/'+l+'/share?title='+
+    const appUrl='${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}';
+    location.href=appUrl+'/'+l+'/share?title='+
       encodeURIComponent(t)+'&url='+encodeURIComponent(u);
   })();`;
 
