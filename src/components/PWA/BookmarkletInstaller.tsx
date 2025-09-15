@@ -62,9 +62,9 @@ export const BookmarkletInstaller: React.FC<BookmarkletInstallerProps> = ({ clas
         max-h-screen overflow-y-auto ${className}`}
     >
       {/* ヘッダーセクション */}
-      <div className="flex items-center justify-between mb-4 sm:mb-6">
-        {/* Safari用 */}
-        <div className="flex items-center gap-2">
+      <div className="mb-4 sm:mb-6">
+        {/* Safari用タイトル */}
+        <div className="flex items-center gap-2 mb-3">
           <Icon name="star" size="sm" color="accent" className="drop-shadow-sm" />
           <Typography variant="body" className="text-sm sm:text-base text-accent font-medium">
             {t("title")}
@@ -72,15 +72,17 @@ export const BookmarkletInstaller: React.FC<BookmarkletInstallerProps> = ({ clas
         </div>
 
         {/* ダッシュボードに戻るボタン */}
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleBackToDashboard}
-          className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm"
-        >
-          <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4" />
-          <span className="sm:inline">{t("backToDashboard")}</span>
-        </Button>
+        <div className="flex justify-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleBackToDashboard}
+            className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm"
+          >
+            <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4" />
+            <span className="sm:inline">{t("backToDashboard")}</span>
+          </Button>
+        </div>
       </div>
 
       <div className="text-center mb-4 sm:mb-6">
