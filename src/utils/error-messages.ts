@@ -2,14 +2,13 @@
  * エラーメッセージマッピングユーティリティ
  */
 
-import { getI18nKeyFromErrorMessage } from "@/constants/error-messages";
+import { ERROR_MESSAGE_TO_I18N_KEY_MAP } from "@/constants/error-messages";
 
 /**
  * サーバーエラーメッセージを国際化キーにマッピング
- * @deprecated 新しい getI18nKeyFromErrorMessage を使用してください
  */
 export const mapServerErrorToI18nKey = (errorMessage: string): string => {
-  return getI18nKeyFromErrorMessage(errorMessage);
+  return ERROR_MESSAGE_TO_I18N_KEY_MAP[errorMessage] || "common.errors.databaseError";
 };
 
 /**
@@ -17,13 +16,13 @@ export const mapServerErrorToI18nKey = (errorMessage: string): string => {
  */
 export const getErrorI18nKey = (error: unknown): string => {
   if (error instanceof Error) {
-    return getI18nKeyFromErrorMessage(error.message);
+    return ERROR_MESSAGE_TO_I18N_KEY_MAP[error.message] || "common.errors.databaseError";
   }
 
   if (typeof error === "string") {
-    return getI18nKeyFromErrorMessage(error);
+    return ERROR_MESSAGE_TO_I18N_KEY_MAP[error] || "common.errors.databaseError";
   }
 
   // その他の場合はデフォルトエラー
-  return "categoryDetail.genres.errors.createFailed";
+  return "common.errors.databaseError";
 };

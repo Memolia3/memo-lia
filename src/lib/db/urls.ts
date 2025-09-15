@@ -1,4 +1,9 @@
-import { GENRE_ERROR_MESSAGES, URL_ERROR_MESSAGES } from "@/constants/error-messages";
+import {
+  COMMON_ERROR_MESSAGES,
+  GENRE_ERROR_MESSAGES,
+  URL_ERROR_MESSAGES,
+} from "@/constants/error-messages";
+import { executeTransactionWithErrorHandling } from "@/lib/db/transaction";
 import { neon } from "@neondatabase/serverless";
 
 const sql = neon(process.env.DATABASE_URL!);
@@ -30,7 +35,7 @@ export interface UrlData {
 
 export const validateUrlData = (data: CreateUrlData): void => {
   if (!data.userId?.trim()) {
-    throw new Error(URL_ERROR_MESSAGES.USER_ID_NOT_PROVIDED);
+    throw new Error(COMMON_ERROR_MESSAGES.USER_ID_NOT_PROVIDED);
   }
 
   if (!data.genreId?.trim()) {
@@ -56,102 +61,89 @@ export const validateUrlData = (data: CreateUrlData): void => {
   }
 
   if (data.description && data.description.length > 500) {
-    throw new Error(URL_ERROR_MESSAGES.DESCRIPTION_TOO_LONG);
+    throw new Error(COMMON_ERROR_MESSAGES.DESCRIPTION_TOO_LONG);
   }
 };
 
 export const createUrl = async (data: CreateUrlData): Promise<UrlData> => {
-  try {
-    validateUrlData(data);
+  validateUrlData(data);
 
-    // URL作成
-    const urlResult = await sql`
-      INSERT INTO urls (
-        user_id, title, url, description, favicon_url
-      ) VALUES (
-        ${data.userId}, ${data.title.trim()}, ${data.url.trim()},
-        ${data.description?.trim() || null}, ${data.faviconUrl || null}
-      ) RETURNING *
-    `;
+  // 既知のエラーメッセージ
+  const knownErrors = [
+    ...Object.values(GENRE_ERROR_MESSAGES),
+    ...Object.values(URL_ERROR_MESSAGES),
+  ];
 
-    if (!urlResult[0]) {
-      throw new Error("URLの作成に失敗しました");
-    }
+  // トランザクション実行
+  const result = await executeTransactionWithErrorHandling(
+    async sql => {
+      // ジャンルからカテゴリIDを取得
+      const genreResult = await sql`
+        SELECT category_id FROM genres
+        WHERE id = ${data.genreId} AND user_id = ${data.userId}
+      `;
 
-    const newUrl = urlResult[0] as Record<string, unknown>;
-
-    // ジャンルからカテゴリIDを取得
-    const genreResult = await sql`
-      SELECT category_id FROM genres
-      WHERE id = ${data.genreId} AND user_id = ${data.userId}
-    `;
-
-    if (!genreResult[0]) {
-      throw new Error(GENRE_ERROR_MESSAGES.INVALID_GENRE);
-    }
-
-    // URL-ジャンル関係作成
-    await sql`
-      INSERT INTO url_categories (url_id, category_id, genre_id, user_id)
-      VALUES (${newUrl.id}, ${genreResult[0].category_id}, ${data.genreId}, ${data.userId})
-    `;
-
-    // ジャンルの更新日を更新
-    await sql`
-      UPDATE genres
-      SET updated_at = now()
-      WHERE id = ${data.genreId} AND user_id = ${data.userId}
-    `;
-
-    // カテゴリの更新日を更新
-    await sql`
-      UPDATE categories
-      SET updated_at = now()
-      WHERE id = ${genreResult[0].category_id} AND user_id = ${data.userId}
-    `;
-
-    const result = newUrl;
-
-    return {
-      id: result.id as string,
-      userId: result.user_id as string,
-      title: result.title as string,
-      url: result.url as string,
-      description: result.description as string | undefined,
-      faviconUrl: result.favicon_url as string | undefined,
-      isPublic: result.is_public as boolean,
-      viewCount: result.view_count as number,
-      createdAt: result.created_at as string,
-      updatedAt: result.updated_at as string,
-      lastAccessedAt: result.last_accessed_at as string | undefined,
-    };
-  } catch (error: unknown) {
-    // PostgreSQL unique constraint violation
-    if (
-      error &&
-      typeof error === "object" &&
-      "code" in error &&
-      "constraint" in error &&
-      error.code === "23505" &&
-      error.constraint === "idx_urls_user_url"
-    ) {
-      throw new Error(URL_ERROR_MESSAGES.URL_ALREADY_EXISTS);
-    }
-
-    // その他のエラーの場合、エラーメッセージをチェック
-    if (error instanceof Error) {
-      // 既知のエラーメッセージの場合はそのまま投げ直し
-      if (
-        (Object.values(GENRE_ERROR_MESSAGES) as string[]).includes(error.message) ||
-        (Object.values(URL_ERROR_MESSAGES) as string[]).includes(error.message)
-      ) {
-        throw error;
+      if (!genreResult[0]) {
+        throw new Error(GENRE_ERROR_MESSAGES.INVALID_GENRE);
       }
-    }
 
-    // 予期しないエラーの場合は汎用エラー
-    throw new Error(URL_ERROR_MESSAGES.CREATE_FAILED);
-  }
+      const categoryId = genreResult[0].category_id as string;
+
+      // URL作成
+      const urlResult = await sql`
+        INSERT INTO urls (
+          user_id, title, url, description, favicon_url
+        ) VALUES (
+          ${data.userId}, ${data.title.trim()}, ${data.url.trim()},
+          ${data.description?.trim() || null}, ${data.faviconUrl || null}
+        ) RETURNING *
+      `;
+
+      if (!urlResult[0]) {
+        throw new Error(COMMON_ERROR_MESSAGES.CREATE_FAILED);
+      }
+
+      const newUrl = urlResult[0] as Record<string, unknown>;
+
+      // URL-ジャンル関係作成
+      await sql`
+        INSERT INTO url_categories (url_id, category_id, genre_id, user_id)
+        VALUES (${newUrl.id}, ${categoryId}, ${data.genreId}, ${data.userId})
+      `;
+
+      // ジャンルの更新日を更新
+      await sql`
+        UPDATE genres
+        SET updated_at = now()
+        WHERE id = ${data.genreId} AND user_id = ${data.userId}
+      `;
+
+      // カテゴリの更新日を更新
+      await sql`
+        UPDATE categories
+        SET updated_at = now()
+        WHERE id = ${categoryId} AND user_id = ${data.userId}
+      `;
+
+      return newUrl;
+    },
+    COMMON_ERROR_MESSAGES.CREATE_FAILED,
+    knownErrors
+  );
+
+  return {
+    id: result.id as string,
+    userId: result.user_id as string,
+    title: result.title as string,
+    url: result.url as string,
+    description: result.description as string | undefined,
+    faviconUrl: result.favicon_url as string | undefined,
+    isPublic: result.is_public as boolean,
+    viewCount: result.view_count as number,
+    createdAt: result.created_at as string,
+    updatedAt: result.updated_at as string,
+    lastAccessedAt: result.last_accessed_at as string | undefined,
+  };
 };
 
 export const getUrlsByGenre = async (genreId: string, userId: string): Promise<UrlData[]> => {

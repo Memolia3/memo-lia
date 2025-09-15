@@ -60,6 +60,23 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     window.location.reload();
   };
 
+  getErrorMessage = (key: string) => {
+    // 簡易的な国際化対応（ブラウザの言語設定に基づく）
+    const isJapanese = navigator.language.startsWith("ja");
+    const messages = {
+      title: isJapanese ? "エラーが発生しました" : "An error occurred",
+      message: isJapanese
+        ? "申し訳ございません。予期しないエラーが発生しました。"
+        : "Sorry, an unexpected error has occurred.",
+      retryButton: isJapanese ? "再試行" : "Retry",
+      reloadButton: isJapanese ? "ページを再読み込み" : "Reload page",
+      helpText: isJapanese
+        ? "問題が解決しない場合は、ページを再読み込みしてください。"
+        : "If the problem persists, please reload the page.",
+    };
+    return messages[key as keyof typeof messages] || key;
+  };
+
   render() {
     if (this.state.hasError) {
       // カスタムフォールバックが指定されている場合
@@ -79,12 +96,12 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
               {/* エラータイトル */}
               <Typography as="h1" variant="h3" weight="bold" color="primary" className="mb-2">
-                エラーが発生しました
+                {this.getErrorMessage("title")}
               </Typography>
 
               {/* エラーメッセージ */}
               <Typography variant="body" color="secondary" className="mb-6">
-                申し訳ございません。予期しないエラーが発生しました。
+                {this.getErrorMessage("message")}
               </Typography>
 
               {/* エラー詳細（開発環境のみ） */}
@@ -121,16 +138,16 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button onClick={this.handleRetry} variant="primary" className="flex-1">
                   <RefreshCw className="w-4 h-4 mr-2" />
-                  再試行
+                  {this.getErrorMessage("retryButton")}
                 </Button>
                 <Button onClick={this.handleReload} variant="outline" className="flex-1">
-                  ページを再読み込み
+                  {this.getErrorMessage("reloadButton")}
                 </Button>
               </div>
 
               {/* ヘルプテキスト */}
               <Typography variant="caption" color="muted" className="mt-4 block">
-                問題が解決しない場合は、ページを再読み込みしてください。
+                {this.getErrorMessage("helpText")}
               </Typography>
             </div>
           </div>

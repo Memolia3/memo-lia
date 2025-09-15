@@ -1,3 +1,4 @@
+import { COMMON_ERROR_MESSAGES, USER_ERROR_MESSAGES } from "@/constants/error-messages";
 import { sql } from "@/lib/neon";
 
 /**
@@ -24,7 +25,7 @@ export async function checkUserExists(email: string): Promise<UserData | null> {
     `;
     return result.length > 0 ? (result[0] as UserData) : null;
   } catch {
-    throw new Error("ユーザー存在チェックに失敗しました");
+    throw new Error(USER_ERROR_MESSAGES.EXISTENCE_CHECK_FAILED);
   }
 }
 
@@ -44,7 +45,7 @@ export async function createUser(
     `;
     return result[0] as UserData;
   } catch {
-    throw new Error("ユーザー作成に失敗しました");
+    throw new Error(COMMON_ERROR_MESSAGES.CREATE_FAILED);
   }
 }
 
@@ -68,7 +69,7 @@ export async function updateUser(
     `;
     return result[0] as UserData;
   } catch {
-    throw new Error("ユーザー更新に失敗しました");
+    throw new Error(COMMON_ERROR_MESSAGES.UPDATE_FAILED);
   }
 }
 
@@ -84,7 +85,7 @@ export async function getUserById(userId: string): Promise<UserData | null> {
     `;
     return result.length > 0 ? (result[0] as UserData) : null;
   } catch {
-    throw new Error("ユーザー情報の取得に失敗しました");
+    throw new Error(COMMON_ERROR_MESSAGES.FETCH_FAILED);
   }
 }
 
@@ -100,7 +101,7 @@ export async function getUserByEmail(email: string): Promise<UserData | null> {
     `;
     return result.length > 0 ? (result[0] as UserData) : null;
   } catch {
-    throw new Error("ユーザー情報の取得に失敗しました");
+    throw new Error(COMMON_ERROR_MESSAGES.FETCH_FAILED);
   }
 }
 
@@ -115,6 +116,6 @@ export async function deleteUser(userId: string): Promise<boolean> {
     `;
     return result.length > 0;
   } catch {
-    throw new Error("ユーザー削除に失敗しました");
+    throw new Error(COMMON_ERROR_MESSAGES.DELETE_FAILED);
   }
 }

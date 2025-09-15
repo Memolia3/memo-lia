@@ -1,4 +1,5 @@
-import { GENRE_ERROR_MESSAGES } from "@/constants/error-messages";
+import { COMMON_ERROR_MESSAGES, GENRE_ERROR_MESSAGES } from "@/constants/error-messages";
+import { executeTransactionWithErrorHandling } from "@/lib/db/transaction";
 import { Genre } from "@/types/database";
 import { neon } from "@neondatabase/serverless";
 
@@ -83,7 +84,7 @@ export async function getGenresByCategory(
       updatedAt: row.updated_at as string,
     }));
   } catch {
-    throw new Error("ジャンルの取得に失敗しました");
+    throw new Error(COMMON_ERROR_MESSAGES.FETCH_FAILED);
   }
 }
 
@@ -130,7 +131,7 @@ export const getGenreById = async (genreId: string, userId: string): Promise<Gen
       updated_at: row.updated_at as Date,
     };
   } catch {
-    throw new Error("Failed to fetch genre");
+    throw new Error(COMMON_ERROR_MESSAGES.FETCH_FAILED);
   }
 };
 
@@ -146,7 +147,7 @@ async function getNextGenreSortOrder(userId: string, categoryId: string): Promis
     `;
     return result[0]?.next_sort_order || 1;
   } catch {
-    throw new Error("ソート順の取得に失敗しました");
+    throw new Error(COMMON_ERROR_MESSAGES.SORT_ORDER_FAILED);
   }
 }
 
@@ -169,7 +170,7 @@ async function checkGenreNameExists(
     `;
     return (result[0]?.count || 0) > 0;
   } catch {
-    throw new Error("ジャンル名の重複チェックに失敗しました");
+    throw new Error(COMMON_ERROR_MESSAGES.DUPLICATE_CHECK_FAILED);
   }
 }
 
@@ -178,19 +179,19 @@ async function checkGenreNameExists(
  */
 function validateGenreData(data: CreateGenreData): void {
   if (!data.name || data.name.trim().length === 0) {
-    throw new Error(GENRE_ERROR_MESSAGES.NAME_REQUIRED);
+    throw new Error(COMMON_ERROR_MESSAGES.NAME_REQUIRED);
   }
 
   if (data.name.length > 50) {
-    throw new Error(GENRE_ERROR_MESSAGES.NAME_TOO_LONG);
+    throw new Error(COMMON_ERROR_MESSAGES.NAME_TOO_LONG);
   }
 
   if (data.description && data.description.length > 200) {
-    throw new Error(GENRE_ERROR_MESSAGES.DESCRIPTION_TOO_LONG);
+    throw new Error(COMMON_ERROR_MESSAGES.DESCRIPTION_TOO_LONG);
   }
 
   if (data.color && !/^#[0-9A-Fa-f]{6}$/.test(data.color)) {
-    throw new Error("カラーコードの形式が正しくありません");
+    throw new Error(COMMON_ERROR_MESSAGES.INVALID_COLOR_CODE);
   }
 }
 
@@ -207,66 +208,69 @@ export async function createGenre(userId: string, genreData: CreateGenreData): P
     throw new Error(GENRE_ERROR_MESSAGES.NAME_ALREADY_EXISTS);
   }
 
-  // 3. ジャンルを作成とカテゴリの更新日を更新
-  try {
-    const genreId = crypto.randomUUID();
-    const sortOrder = await getNextGenreSortOrder(userId, genreData.categoryId);
+  // 3. トランザクション内でジャンルを作成とカテゴリの更新日を更新
+  const genreId = crypto.randomUUID();
+  const sortOrder = await getNextGenreSortOrder(userId, genreData.categoryId);
 
-    // ジャンルを作成
-    const genreResult = await sql`
-      INSERT INTO genres (
-        id,
-        user_id,
-        category_id,
-        name,
-        description,
-        color,
-        icon,
-        sort_order,
-        is_active
-      ) VALUES (
-        ${genreId},
-        ${userId},
-        ${genreData.categoryId},
-        ${genreData.name.trim()},
-        ${genreData.description?.trim() || null},
-        ${genreData.color || null},
-        ${genreData.icon || null},
-        ${sortOrder},
-        ${true}
-      )
-      RETURNING *
-    `;
+  // トランザクション実行
+  const result = await executeTransactionWithErrorHandling(
+    async sql => {
+      // ジャンルを作成
+      const genreResult = await sql`
+        INSERT INTO genres (
+          id,
+          user_id,
+          category_id,
+          name,
+          description,
+          color,
+          icon,
+          sort_order,
+          is_active
+        ) VALUES (
+          ${genreId},
+          ${userId},
+          ${genreData.categoryId},
+          ${genreData.name.trim()},
+          ${genreData.description?.trim() || null},
+          ${genreData.color || null},
+          ${genreData.icon || null},
+          ${sortOrder},
+          ${true}
+        )
+        RETURNING *
+      `;
 
-    if (genreResult.length === 0) {
-      throw new Error(GENRE_ERROR_MESSAGES.CREATE_FAILED);
-    }
+      if (genreResult.length === 0) {
+        throw new Error(COMMON_ERROR_MESSAGES.CREATE_FAILED);
+      }
 
-    // カテゴリの更新日を更新
-    await sql`
-      UPDATE categories
-      SET updated_at = now()
-      WHERE id = ${genreData.categoryId} AND user_id = ${userId}
-    `;
+      // カテゴリの更新日を更新
+      await sql`
+        UPDATE categories
+        SET updated_at = now()
+        WHERE id = ${genreData.categoryId} AND user_id = ${userId}
+      `;
 
-    const result = genreResult[0] as Record<string, unknown>;
+      return genreResult[0] as Record<string, unknown>;
+    },
+    COMMON_ERROR_MESSAGES.CREATE_FAILED,
+    Object.values(GENRE_ERROR_MESSAGES)
+  );
 
-    return {
-      id: result.id as string,
-      userId: result.user_id as string,
-      categoryId: result.category_id as string,
-      name: result.name as string,
-      description: result.description as string | undefined,
-      color: result.color as string | undefined,
-      icon: result.icon as string | undefined,
-      sortOrder: result.sort_order as number,
-      isActive: result.is_active as boolean,
-      createdAt: result.created_at as string,
-      updatedAt: result.updated_at as string,
-    };
-  } catch {
-    throw new Error(GENRE_ERROR_MESSAGES.CREATE_FAILED);
-  }
+  return {
+    id: result.id as string,
+    userId: result.user_id as string,
+    categoryId: result.category_id as string,
+    name: result.name as string,
+    description: result.description as string | undefined,
+    color: result.color as string | undefined,
+    icon: result.icon as string | undefined,
+    sortOrder: result.sort_order as number,
+    isActive: result.is_active as boolean,
+    createdAt: result.created_at as string,
+    updatedAt: result.updated_at as string,
+  };
 }
 
 /**
@@ -304,7 +308,7 @@ export async function getGenreDeletionStats(
       urlTitles,
     };
   } catch {
-    throw new Error("削除影響の取得に失敗しました");
+    throw new Error(COMMON_ERROR_MESSAGES.DELETION_STATS_FAILED);
   }
 }
 
@@ -315,17 +319,17 @@ export async function deleteGenre(genreId: string, userId: string): Promise<stri
   try {
     // バリデーション
     if (!genreId || !userId) {
-      throw new Error("ジャンルIDとユーザーIDは必須です");
+      throw new Error(COMMON_ERROR_MESSAGES.ID_REQUIRED);
     }
 
     // UUID形式の検証
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(genreId)) {
-      throw new Error("無効なジャンルID形式です");
+      throw new Error(GENRE_ERROR_MESSAGES.INVALID_GENRE_ID_FORMAT);
     }
 
     if (!uuidRegex.test(userId)) {
-      throw new Error("無効なユーザーID形式です");
+      throw new Error(COMMON_ERROR_MESSAGES.INVALID_USER_ID_FORMAT);
     }
 
     // 関連するURLを削除（ジャンルに紐づくURLレコード自体を削除）
@@ -346,11 +350,11 @@ export async function deleteGenre(genreId: string, userId: string): Promise<stri
     `;
 
     if (result.length === 0) {
-      throw new Error("ジャンルが見つかりません");
+      throw new Error(GENRE_ERROR_MESSAGES.GENRE_NOT_FOUND);
     }
 
     return genreId;
   } catch {
-    throw new Error("ジャンルの削除に失敗しました");
+    throw new Error(COMMON_ERROR_MESSAGES.DELETE_FAILED);
   }
 }

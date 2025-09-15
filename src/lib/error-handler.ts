@@ -1,4 +1,3 @@
-import { NOTIFICATION_MESSAGES } from "@/constants";
 import { ErrorNotificationConfig } from "@/types/notification";
 
 /**
@@ -148,7 +147,8 @@ export const parseError = (error: unknown): ErrorDetails => {
  * エラー詳細から通知設定を生成
  */
 export const createErrorNotificationConfig = (
-  errorDetails: ErrorDetails
+  errorDetails: ErrorDetails,
+  t?: (key: string) => string
 ): ErrorNotificationConfig => {
   const baseConfig: ErrorNotificationConfig = {
     type: "error",
@@ -159,11 +159,12 @@ export const createErrorNotificationConfig = (
   };
 
   // エラーの種類に応じて詳細設定
+  const getTranslation = (key: string) => t?.(key) || key;
   switch (errorDetails.type) {
     case "network":
       return {
         ...baseConfig,
-        description: "インターネット接続を確認してください",
+        description: getTranslation("common.errors.networkError"),
         duration: 8000,
         severity: "high",
       };
@@ -171,7 +172,7 @@ export const createErrorNotificationConfig = (
     case "timeout":
       return {
         ...baseConfig,
-        description: NOTIFICATION_MESSAGES.AUTH.RETRY_DESCRIPTION.ja,
+        description: getTranslation("common.errors.timeoutError"),
         duration: 6000,
         severity: "medium",
       };
@@ -179,12 +180,12 @@ export const createErrorNotificationConfig = (
     case "authentication":
       return {
         ...baseConfig,
-        description: "ログイン情報を確認してください",
+        description: getTranslation("common.errors.authenticationError"),
         duration: 6000,
         severity: "high",
         actions: [
           {
-            label: "ログイン",
+            label: getTranslation("common.errors.loginButton"),
             action: () => {
               // ログインページにリダイレクト
               window.location.href = "/auth";
@@ -197,7 +198,7 @@ export const createErrorNotificationConfig = (
     case "authorization":
       return {
         ...baseConfig,
-        description: "この操作を実行する権限がありません",
+        description: getTranslation("common.errors.authorizationError"),
         duration: 6000,
         severity: "high",
       };
@@ -205,7 +206,7 @@ export const createErrorNotificationConfig = (
     case "validation":
       return {
         ...baseConfig,
-        description: "入力内容を確認してください",
+        description: getTranslation("common.errors.validationError"),
         duration: 6000,
         severity: "medium",
       };
@@ -213,7 +214,7 @@ export const createErrorNotificationConfig = (
     case "server":
       return {
         ...baseConfig,
-        description: "サーバーに問題が発生しています。しばらく時間をおいてから再度お試しください",
+        description: getTranslation("common.errors.serverError"),
         duration: 8000,
         severity: "high",
       };
@@ -221,7 +222,7 @@ export const createErrorNotificationConfig = (
     case "client":
       return {
         ...baseConfig,
-        description: "リクエストに問題があります",
+        description: getTranslation("common.errors.validationError"),
         duration: 6000,
         severity: "medium",
       };
@@ -229,7 +230,7 @@ export const createErrorNotificationConfig = (
     default:
       return {
         ...baseConfig,
-        description: "予期しないエラーが発生しました",
+        description: getTranslation("common.errors.unexpectedError"),
         duration: 6000,
         severity: "medium",
       };

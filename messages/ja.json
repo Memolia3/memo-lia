@@ -67,6 +67,22 @@
     "save": "保存",
     "cancel": "キャンセル",
     "search": "検索",
+    "errors": {
+      "duplicateDataDetected": "データの重複が検出されました",
+      "referenceIntegrityError": "参照整合性エラーが発生しました",
+      "requiredFieldMissing": "必須項目が入力されていません",
+      "dataConstraintViolation": "データの制約に違反しています",
+      "databaseError": "データベースエラーが発生しました",
+      "networkError": "インターネット接続を確認してください",
+      "authenticationError": "ログイン情報を確認してください",
+      "authorizationError": "この操作を実行する権限がありません",
+      "validationError": "入力内容を確認してください",
+      "serverError": "サーバーに問題が発生しています。しばらく時間をおいてから再度お試しください",
+      "timeoutError": "タイムアウトしました。しばらく時間をおいてから再度お試しください",
+      "loginButton": "ログイン",
+      "errorOccurred": "エラーが発生しました",
+      "unexpectedError": "申し訳ございません。予期しないエラーが発生しました。"
+    },
     "loading": "読み込み中...",
     "error": "エラーが発生しました",
     "dashboard": "ダッシュボード"
@@ -112,8 +128,21 @@
     },
     "errors": {
       "nameRequired": "カテゴリ名は必須です",
-      "nameTooLong": "カテゴリ名は50文字以内で入力してください",
-      "descriptionTooLong": "説明は200文字以内で入力してください"
+      "nameTooLong": "カテゴリ名は100文字以内で入力してください",
+      "descriptionTooLong": "説明は500文字以内で入力してください",
+      "nameAlreadyExists": "このカテゴリ名は既に使用されています",
+      "createFailed": "カテゴリの作成に失敗しました",
+      "fetchFailed": "カテゴリの取得に失敗しました",
+      "deleteFailed": "カテゴリの削除に失敗しました",
+      "duplicateCheckFailed": "カテゴリ名の重複チェックに失敗しました",
+      "sortOrderFailed": "ソート順の取得に失敗しました",
+      "deletionStatsFailed": "削除影響の取得に失敗しました",
+      "idRequired": "カテゴリIDとユーザーIDは必須です",
+      "invalidCategoryIdFormat": "無効なカテゴリID形式です",
+      "invalidUserIdFormat": "無効なユーザーID形式です",
+      "categoryNotFound": "カテゴリが見つかりません",
+      "invalidColorCode": "色は有効なHEXカラーコード（#RRGGBB）で入力してください",
+      "iconTooLong": "アイコン名は50文字以内で入力してください"
     }
   },
   "categoryDetail": {
@@ -151,7 +180,17 @@
         "invalidUserId": "無効なユーザーIDです",
         "categoryNotFound": "カテゴリが見つかりません",
         "invalidGenre": "無効なジャンルです",
-        "createFailed": "ジャンルの作成に失敗しました"
+        "createFailed": "ジャンルの作成に失敗しました",
+        "fetchFailed": "ジャンルの取得に失敗しました",
+        "sortOrderFailed": "ソート順の取得に失敗しました",
+        "duplicateCheckFailed": "ジャンル名の重複チェックに失敗しました",
+        "invalidColorCode": "カラーコードの形式が正しくありません",
+        "deletionStatsFailed": "削除影響の取得に失敗しました",
+        "idRequired": "ジャンルIDとユーザーIDは必須です",
+        "invalidGenreIdFormat": "無効なジャンルID形式です",
+        "invalidUserIdFormat": "無効なユーザーID形式です",
+        "genreNotFound": "ジャンルが見つかりません",
+        "deleteFailed": "ジャンルの削除に失敗しました"
       }
     },
     "buttons": {
@@ -272,6 +311,24 @@
       "message": "URL作成エラー",
       "title": "URL作成エラー",
       "description": "URLの作成に失敗しました。"
+    }
+  },
+  "users": {
+    "errors": {
+      "existenceCheckFailed": "ユーザー存在チェックに失敗しました",
+      "createFailed": "ユーザー作成に失敗しました",
+      "updateFailed": "ユーザー更新に失敗しました",
+      "fetchFailed": "ユーザー情報の取得に失敗しました",
+      "deleteFailed": "ユーザー削除に失敗しました"
+    }
+  },
+  "userProviders": {
+    "errors": {
+      "fetchFailed": "ユーザープロバイダー情報の取得に失敗しました",
+      "updateFailed": "ユーザープロバイダー情報の更新に失敗しました",
+      "userFetchFailed": "ユーザー情報の取得に失敗しました",
+      "providerUpdateFailed": "プロバイダー情報の更新に失敗しました",
+      "providerDeleteFailed": "プロバイダー情報の削除に失敗しました"
     }
   },
   "errors": {

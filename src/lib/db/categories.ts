@@ -1,3 +1,4 @@
+import { CATEGORY_ERROR_MESSAGES, COMMON_ERROR_MESSAGES } from "@/constants/error-messages";
 import { neon } from "@neondatabase/serverless";
 
 // Note: ジャンル関連機能は src/lib/db/genres.ts に移動しました
@@ -70,7 +71,7 @@ export async function getCategories(userId: string): Promise<CategoryData[]> {
       updatedAt: row.updated_at as string,
     }));
   } catch {
-    throw new Error("カテゴリの取得に失敗しました");
+    throw new Error(COMMON_ERROR_MESSAGES.FETCH_FAILED);
   }
 }
 
@@ -121,7 +122,7 @@ export async function getCategoryById(
       updatedAt: row.updated_at as string,
     };
   } catch {
-    throw new Error("カテゴリの取得に失敗しました");
+    throw new Error(COMMON_ERROR_MESSAGES.FETCH_FAILED);
   }
 }
 
@@ -142,23 +143,23 @@ export interface CreateCategoryData {
  */
 function validateCategoryData(data: CreateCategoryData): void {
   if (!data.name || data.name.trim().length === 0) {
-    throw new Error("カテゴリ名は必須です");
+    throw new Error(COMMON_ERROR_MESSAGES.NAME_REQUIRED);
   }
 
   if (data.name.length > 100) {
-    throw new Error("カテゴリ名は100文字以内で入力してください");
+    throw new Error(COMMON_ERROR_MESSAGES.NAME_TOO_LONG);
   }
 
   if (data.description && data.description.length > 500) {
-    throw new Error("説明は500文字以内で入力してください");
+    throw new Error(COMMON_ERROR_MESSAGES.DESCRIPTION_TOO_LONG);
   }
 
   if (data.color && !/^#[0-9A-Fa-f]{6}$/.test(data.color)) {
-    throw new Error("色は有効なHEXカラーコード（#RRGGBB）で入力してください");
+    throw new Error(COMMON_ERROR_MESSAGES.INVALID_COLOR_CODE);
   }
 
   if (data.icon && data.icon.length > 50) {
-    throw new Error("アイコン名は50文字以内で入力してください");
+    throw new Error(CATEGORY_ERROR_MESSAGES.ICON_TOO_LONG);
   }
 }
 
@@ -180,7 +181,7 @@ async function checkCategoryNameExists(
     `;
     return result.length > 0;
   } catch {
-    throw new Error("カテゴリ名の重複チェックに失敗しました");
+    throw new Error(COMMON_ERROR_MESSAGES.DUPLICATE_CHECK_FAILED);
   }
 }
 
@@ -198,7 +199,7 @@ async function getNextSortOrder(userId: string, parentId: string | null = null):
     `;
     return (result[0] as { max_order: number }).max_order + 1;
   } catch {
-    throw new Error("ソート順の取得に失敗しました");
+    throw new Error(COMMON_ERROR_MESSAGES.SORT_ORDER_FAILED);
   }
 }
 
@@ -215,10 +216,10 @@ export async function createCategory(
   // 2. カテゴリ名の重複チェック
   const nameExists = await checkCategoryNameExists(userId, categoryData.name);
   if (nameExists) {
-    throw new Error("このカテゴリ名は既に使用されています");
+    throw new Error(CATEGORY_ERROR_MESSAGES.NAME_ALREADY_EXISTS);
   }
 
-  // 3. トランザクション内でカテゴリを作成
+  // 3. カテゴリを作成
   try {
     const categoryId = crypto.randomUUID();
     const parentId = null; // トップレベルカテゴリ
@@ -256,7 +257,7 @@ export async function createCategory(
     `;
 
     if (result.length === 0) {
-      throw new Error("カテゴリの作成に失敗しました");
+      throw new Error(COMMON_ERROR_MESSAGES.CREATE_FAILED);
     }
 
     const row = result[0] as Record<string, unknown>;
@@ -276,8 +277,14 @@ export async function createCategory(
       createdAt: row.created_at as string,
       updatedAt: row.updated_at as string,
     };
-  } catch {
-    throw new Error("カテゴリの作成に失敗しました");
+  } catch (error: unknown) {
+    // PostgreSQL unique constraint violation
+    if (error && typeof error === "object" && "code" in error && error.code === "23505") {
+      throw new Error(CATEGORY_ERROR_MESSAGES.NAME_ALREADY_EXISTS);
+    }
+
+    // その他のエラーの場合は汎用エラー
+    throw new Error(COMMON_ERROR_MESSAGES.CREATE_FAILED);
   }
 }
 
@@ -345,11 +352,9 @@ export async function getCategoryDeletionStats(
       urlTitles,
     };
   } catch {
-    throw new Error("削除影響の取得に失敗しました");
+    throw new Error(COMMON_ERROR_MESSAGES.DELETION_STATS_FAILED);
   }
 }
-
-// Note: CreateGenreData は src/lib/db/genres.ts に移動しました
 
 /**
  * カテゴリを削除する
@@ -362,23 +367,23 @@ export async function deleteCategory(data: DeleteCategoryData): Promise<string> 
 
     // バリデーション
     if (!categoryId || !userId) {
-      throw new Error("カテゴリIDとユーザーIDは必須です");
+      throw new Error(COMMON_ERROR_MESSAGES.ID_REQUIRED);
     }
 
     // UUID形式の検証
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(categoryId)) {
-      throw new Error("無効なカテゴリID形式です");
+      throw new Error(CATEGORY_ERROR_MESSAGES.INVALID_CATEGORY_ID_FORMAT);
     }
 
     if (!uuidRegex.test(userId)) {
-      throw new Error("無効なユーザーID形式です");
+      throw new Error(COMMON_ERROR_MESSAGES.INVALID_USER_ID_FORMAT);
     }
 
     // カテゴリの存在確認
     const existingCategory = await getCategoryById(categoryId, userId);
     if (!existingCategory) {
-      throw new Error("カテゴリが見つかりません");
+      throw new Error(CATEGORY_ERROR_MESSAGES.CATEGORY_NOT_FOUND);
     }
 
     // 関連するURLを削除（カテゴリに紐づくURLレコード自体を削除）
@@ -399,6 +404,6 @@ export async function deleteCategory(data: DeleteCategoryData): Promise<string> 
 
     return categoryId;
   } catch {
-    throw new Error("カテゴリの削除に失敗しました");
+    throw new Error(COMMON_ERROR_MESSAGES.DELETE_FAILED);
   }
 }

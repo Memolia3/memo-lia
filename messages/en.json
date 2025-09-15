@@ -67,6 +67,22 @@
     "save": "Save",
     "cancel": "Cancel",
     "search": "Search",
+    "errors": {
+      "duplicateDataDetected": "Duplicate data detected",
+      "referenceIntegrityError": "Reference integrity error occurred",
+      "requiredFieldMissing": "Required field is missing",
+      "dataConstraintViolation": "Data constraint violation",
+      "databaseError": "Database error occurred",
+      "networkError": "Please check your internet connection",
+      "authenticationError": "Please check your login information",
+      "authorizationError": "You don't have permission to perform this operation",
+      "validationError": "Please check your input",
+      "serverError": "A server problem has occurred. Please try again after a while",
+      "timeoutError": "Request timed out. Please try again after a while",
+      "loginButton": "Login",
+      "errorOccurred": "An error occurred",
+      "unexpectedError": "Sorry, an unexpected error has occurred."
+    },
     "loading": "Loading...",
     "error": "Error occurred",
     "dashboard": "Dashboard"
@@ -112,8 +128,21 @@
     },
     "errors": {
       "nameRequired": "Category name is required",
-      "nameTooLong": "Category name must be 50 characters or less",
-      "descriptionTooLong": "Description must be 200 characters or less"
+      "nameTooLong": "Category name must be 100 characters or less",
+      "descriptionTooLong": "Description must be 500 characters or less",
+      "nameAlreadyExists": "This category name is already in use",
+      "createFailed": "Failed to create category",
+      "fetchFailed": "Failed to fetch category",
+      "deleteFailed": "Failed to delete category",
+      "duplicateCheckFailed": "Failed to check category name duplication",
+      "sortOrderFailed": "Failed to get sort order",
+      "deletionStatsFailed": "Failed to get deletion impact",
+      "idRequired": "Category ID and User ID are required",
+      "invalidCategoryIdFormat": "Invalid category ID format",
+      "invalidUserIdFormat": "Invalid user ID format",
+      "categoryNotFound": "Category not found",
+      "invalidColorCode": "Please enter a valid HEX color code (#RRGGBB)",
+      "iconTooLong": "Icon name must be 50 characters or less"
     }
   },
   "categoryDetail": {
@@ -151,7 +180,17 @@
         "invalidUserId": "Invalid user ID",
         "categoryNotFound": "Category not found",
         "invalidGenre": "Invalid genre",
-        "createFailed": "Failed to create genre"
+        "createFailed": "Failed to create genre",
+        "fetchFailed": "Failed to fetch genre",
+        "sortOrderFailed": "Failed to get sort order",
+        "duplicateCheckFailed": "Failed to check genre name duplication",
+        "invalidColorCode": "Invalid color code format",
+        "deletionStatsFailed": "Failed to get deletion impact",
+        "idRequired": "Genre ID and User ID are required",
+        "invalidGenreIdFormat": "Invalid genre ID format",
+        "invalidUserIdFormat": "Invalid user ID format",
+        "genreNotFound": "Genre not found",
+        "deleteFailed": "Failed to delete genre"
       }
     },
     "buttons": {
@@ -272,6 +311,24 @@
       "message": "URL Creation Error",
       "title": "URL Creation Error",
       "description": "Failed to create the URL."
+    }
+  },
+  "users": {
+    "errors": {
+      "existenceCheckFailed": "Failed to check user existence",
+      "createFailed": "Failed to create user",
+      "updateFailed": "Failed to update user",
+      "fetchFailed": "Failed to fetch user information",
+      "deleteFailed": "Failed to delete user"
+    }
+  },
+  "userProviders": {
+    "errors": {
+      "fetchFailed": "Failed to fetch user provider information",
+      "updateFailed": "Failed to update user provider information",
+      "userFetchFailed": "Failed to fetch user information",
+      "providerUpdateFailed": "Failed to update provider information",
+      "providerDeleteFailed": "Failed to delete provider information"
     }
   },
   "errors": {

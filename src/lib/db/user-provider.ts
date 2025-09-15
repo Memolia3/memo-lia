@@ -1,3 +1,4 @@
+import { COMMON_ERROR_MESSAGES, USER_PROVIDER_ERROR_MESSAGES } from "@/constants/error-messages";
 import { sql } from "@/lib/neon";
 import { Account } from "next-auth";
 
@@ -47,7 +48,7 @@ export async function getUserProvider(
     `;
     return result.length > 0 ? (result[0] as UserProviderData) : null;
   } catch {
-    throw new Error("ユーザープロバイダー情報の取得に失敗しました");
+    throw new Error(COMMON_ERROR_MESSAGES.FETCH_FAILED);
   }
 }
 
@@ -83,7 +84,7 @@ export async function upsertUserProvider(
     `;
     return result[0] as UserProviderData;
   } catch {
-    throw new Error("ユーザープロバイダー情報の更新に失敗しました");
+    throw new Error(COMMON_ERROR_MESSAGES.UPDATE_FAILED);
   }
 }
 
@@ -135,7 +136,7 @@ export async function getUserWithProvider(
 
     return { user, provider: providerData };
   } catch {
-    throw new Error("ユーザー情報の取得に失敗しました");
+    throw new Error(USER_PROVIDER_ERROR_MESSAGES.USER_FETCH_FAILED);
   }
 }
 
@@ -163,7 +164,7 @@ export async function updateUserProvider(
     `;
     return result.length > 0 ? (result[0] as UserProviderData) : null;
   } catch {
-    throw new Error("プロバイダー情報の更新に失敗しました");
+    throw new Error(USER_PROVIDER_ERROR_MESSAGES.PROVIDER_UPDATE_FAILED);
   }
 }
 
@@ -178,6 +179,6 @@ export async function deleteUserProvider(userId: string, provider: string): Prom
     `;
     return result.length > 0;
   } catch {
-    throw new Error("プロバイダー情報の削除に失敗しました");
+    throw new Error(USER_PROVIDER_ERROR_MESSAGES.PROVIDER_DELETE_FAILED);
   }
 }

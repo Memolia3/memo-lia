@@ -1,6 +1,6 @@
 "use server";
 
-import { GENRE_ERROR_MESSAGES } from "@/constants/error-messages";
+import { COMMON_ERROR_MESSAGES, GENRE_ERROR_MESSAGES } from "@/constants/error-messages";
 import {
   createCategory as dbCreateCategory,
   deleteCategory as dbDeleteCategory,
@@ -163,13 +163,13 @@ export async function createGenre(userId: string, genreData: CreateGenreData): P
   try {
     // セッション検証（必要に応じて）
     if (!userId) {
-      throw new Error(GENRE_ERROR_MESSAGES.USER_ID_NOT_PROVIDED);
+      throw new Error(COMMON_ERROR_MESSAGES.USER_ID_NOT_PROVIDED);
     }
 
     // UUID形式の検証
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(userId)) {
-      throw new Error(GENRE_ERROR_MESSAGES.INVALID_USER_ID);
+      throw new Error(COMMON_ERROR_MESSAGES.INVALID_USER_ID);
     }
 
     if (!uuidRegex.test(genreData.categoryId)) {
@@ -227,18 +227,17 @@ export async function deleteGenre(genreId: string, userId: string): Promise<stri
   try {
     // セッション検証（必要に応じて）
     if (!userId) {
-      throw new Error("ユーザーIDが指定されていません");
+      throw new Error(COMMON_ERROR_MESSAGES.USER_ID_NOT_PROVIDED);
     }
 
     // UUID形式の検証
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(userId)) {
-      throw new Error("無効なユーザーIDです");
+      throw new Error(COMMON_ERROR_MESSAGES.INVALID_USER_ID);
     }
 
     if (!uuidRegex.test(genreId)) {
-      const t = await getTranslations("errors");
-      throw new Error(t("invalidGenreId"));
+      throw new Error(GENRE_ERROR_MESSAGES.INVALID_GENRE_ID_FORMAT);
     }
 
     // データベース層の関数を呼び出し
@@ -255,11 +254,11 @@ export async function deleteGenre(genreId: string, userId: string): Promise<stri
  */
 export async function getGenreById(genreId: string, userId: string) {
   if (!userId) {
-    throw new Error(GENRE_ERROR_MESSAGES.USER_ID_NOT_PROVIDED);
+    throw new Error(COMMON_ERROR_MESSAGES.USER_ID_NOT_PROVIDED);
   }
 
   if (!genreId) {
-    throw new Error(GENRE_ERROR_MESSAGES.INVALID_CATEGORY);
+    throw new Error(GENRE_ERROR_MESSAGES.INVALID_GENRE);
   }
 
   try {
