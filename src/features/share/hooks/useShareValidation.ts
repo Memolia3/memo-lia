@@ -18,7 +18,7 @@ const DANGEROUS_PATTERNS = [
   /expression\(/i,
 ];
 
-// URL検証関数（強化版）
+// URL検証関数
 export function validateUrl(url: string): boolean {
   try {
     // 基本的な長さ制限
@@ -93,11 +93,15 @@ export function validateReferer(headers: Headers): boolean {
       return true;
     }
 
-    // 外部ドメインの場合、危険なプロトコルでないことを確認
+    // 外部ドメインの場合、基本的な検証のみ
     if (refererUrl.protocol === "https:" || refererUrl.protocol === "http:") {
-      // 危険なパターンがないことを確認
+      // 危険なパターンのみチェック（緩和）
       const refererString = refererUrl.toString();
-      for (const pattern of DANGEROUS_PATTERNS) {
+
+      // 明らかに危険なパターンのみチェック
+      const criticalPatterns = [/javascript:/i, /data:/i, /vbscript:/i];
+
+      for (const pattern of criticalPatterns) {
         if (pattern.test(refererString)) return false;
       }
       return true;
@@ -105,11 +109,12 @@ export function validateReferer(headers: Headers): boolean {
 
     return false;
   } catch {
-    return false;
+    // URL解析に失敗した場合は許可（外部サイトからのアクセスの場合）
+    return true;
   }
 }
 
-// 入力データのサニタイズ（強化版）
+// 入力データのサニタイズ
 export function sanitizeInput(input: string | string[] | undefined): string {
   if (!input) return "";
   const str = Array.isArray(input) ? input[0] : String(input);
