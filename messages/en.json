@@ -321,7 +321,7 @@
     "retryLater": "Please try again later"
   },
   "bookmarklet": {
-    "title": "Safari URL Save Settings",
+    "title": "Save Shared URL",
     "description": "Set up iPhone Safari to send URLs to MemoLia",
     "backToDashboard": "Back to Dashboard",
     "step1": "Step 1",

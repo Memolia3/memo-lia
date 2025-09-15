@@ -81,44 +81,88 @@ export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData, 
 
   return (
     <div className={cn("max-w-2xl mx-auto w-full", className)}>
-      <div className="space-y-6">
-        <div className="text-center">
-          <Typography variant="h2" className="mb-2">
-            {t("title")}
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          handleSave();
+        }}
+        className="space-y-6"
+      >
+        {/* URL入力フィールド */}
+        <div className="space-y-2">
+          <Typography variant="label" className="text-sm font-medium">
+            URL <span className="text-red-500">*</span>
           </Typography>
-          <Typography variant="body" color="muted">
-            {t("description")}
-          </Typography>
+          <div className="relative">
+            <input
+              type="url"
+              value={sharedData.url || ""}
+              readOnly
+              className="w-full px-4 py-3 border border-white/20 rounded-lg
+                bg-white/10 dark:bg-gray-800/10 backdrop-blur-sm
+                text-white dark:text-white placeholder-gray-400
+                focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent
+                transition-all duration-200"
+              placeholder="https://example.com"
+            />
+          </div>
         </div>
 
-        {/* 共有されたデータの表示 */}
-        <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-          <Typography variant="h3" className="mb-2">
-            {sharedData.title || t("noTitle")}
+        {/* タイトル入力フィールド */}
+        <div className="space-y-2">
+          <Typography variant="label" className="text-sm font-medium">
+            タイトル
           </Typography>
-          <Typography variant="body" className="mb-2">
-            {sharedData.url}
+          <input
+            type="text"
+            value={sharedData.title || ""}
+            readOnly
+            className="w-full px-4 py-3 border border-white/20 rounded-lg
+              bg-white/10 dark:bg-gray-800/10 backdrop-blur-sm
+              text-white dark:text-white placeholder-gray-400
+              focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent
+              transition-all duration-200"
+            placeholder="サイトのタイトル"
+          />
+        </div>
+
+        {/* 説明入力フィールド */}
+        <div className="space-y-2">
+          <Typography variant="label" className="text-sm font-medium">
+            説明
           </Typography>
-          {sharedData.text && (
-            <Typography variant="body" color="muted">
-              {sharedData.text}
-            </Typography>
-          )}
+          <textarea
+            value={sharedData.text || ""}
+            readOnly
+            rows={3}
+            className="w-full px-4 py-3 border border-white/20 rounded-lg
+              bg-white/10 dark:bg-gray-800/10 backdrop-blur-sm
+              text-white dark:text-white placeholder-gray-400
+              focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent
+              transition-all duration-200 resize-none"
+            placeholder="このURLについての説明（任意）"
+          />
         </div>
 
         {/* カテゴリ選択 */}
-        <div>
-          <Typography variant="label" className="mb-2">
-            {t("selectCategory")}
+        <div className="space-y-2">
+          <Typography variant="label" className="text-sm font-medium">
+            {t("selectCategory")} <span className="text-red-500">*</span>
           </Typography>
           <select
             value={selectedCategoryId}
             onChange={e => setSelectedCategoryId(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            className="w-full px-4 py-3 border border-white/20 rounded-lg
+              bg-white/10 dark:bg-gray-800/10 backdrop-blur-sm
+              text-white dark:text-white
+              focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent
+              transition-all duration-200"
           >
-            <option value="">{t("selectCategoryPlaceholder")}</option>
+            <option value="" className="bg-gray-800 text-white">
+              {t("selectCategoryPlaceholder")}
+            </option>
             {categories.map(category => (
-              <option key={category.id} value={category.id}>
+              <option key={category.id} value={category.id} className="bg-gray-800 text-white">
                 {category.name}
               </option>
             ))}
@@ -127,21 +171,25 @@ export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData, 
 
         {/* ジャンル選択 */}
         {selectedCategoryId && (
-          <div>
-            <Typography variant="label" className="mb-2">
-              {t("selectGenre")}
+          <div className="space-y-2">
+            <Typography variant="label" className="text-sm font-medium">
+              {t("selectGenre")} <span className="text-red-500">*</span>
             </Typography>
             <select
               value={selectedGenreId}
               onChange={e => setSelectedGenreId(e.target.value)}
               disabled={genresLoading}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-700 dark:text-white disabled:opacity-50"
+              className="w-full px-4 py-3 border border-white/20 rounded-lg
+                bg-white/10 dark:bg-gray-800/10 backdrop-blur-sm
+                text-white dark:text-white disabled:opacity-50
+                focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent
+                transition-all duration-200"
             >
-              <option value="">
+              <option value="" className="bg-gray-800 text-white">
                 {genresLoading ? t("loadingGenres") : t("selectGenrePlaceholder")}
               </option>
               {genres.map(genre => (
-                <option key={genre.id} value={genre.id}>
+                <option key={genre.id} value={genre.id} className="bg-gray-800 text-white">
                   {genre.name}
                 </option>
               ))}
@@ -149,20 +197,29 @@ export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData, 
           </div>
         )}
 
-        {/* 保存ボタン */}
-        <div className="flex gap-4">
+        {/* ボタン */}
+        <div className="flex gap-4 pt-4">
           <Button
-            onClick={handleSave}
+            type="submit"
             disabled={!selectedGenreId || isLoading || genresLoading}
-            className="flex-1"
+            className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white
+              rounded-lg font-medium transition-colors duration-200
+              disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? t("saving") : t("save")}
           </Button>
-          <Button variant="secondary" onClick={() => router.push(`/${locale}/dashboard`)}>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => router.push(`/${locale}/dashboard`)}
+            className="px-6 py-3 border border-white/20 text-white
+              hover:bg-white/10 rounded-lg font-medium
+              transition-colors duration-200"
+          >
             {t("cancel")}
           </Button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

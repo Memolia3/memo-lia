@@ -86,7 +86,7 @@ export const BookmarkletInstaller: React.FC<BookmarkletInstallerProps> = ({ clas
       </div>
 
       <div className="text-center mb-4 sm:mb-6">
-        <Typography variant="body" color="muted" className="mb-4 text-sm sm:text-base text-center">
+        <Typography variant="body" color="muted" className="text-sm sm:text-base text-center">
           {t("description")}
         </Typography>
       </div>

@@ -321,7 +321,7 @@
     "retryLater": "しばらく時間をおいてから再度お試しください"
   },
   "bookmarklet": {
-    "title": "SafariでURLを保存する設定",
+    "title": "共有されたURLを保存",
     "description": "iPhone SafariでMemoLiaにURLを送信できるように設定します",
     "backToDashboard": "ダッシュボードに戻る",
     "step1": "ステップ1",
