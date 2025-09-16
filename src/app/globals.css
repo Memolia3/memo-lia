@@ -2,23 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 拡大率対応のベーススタイル */
 @layer base {
   html {
-    /* スムーズなスクロール */
     scroll-behavior: smooth;
-    /* 拡大時のテキストサイズ調整 */
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
   }
 
   body {
-    /* 拡大時のレイアウト崩れ防止 */
     min-width: 0;
     overflow-x: hidden;
   }
 
-  /* 拡大時のコンテナ対応 */
   .container {
     min-width: 0;
     width: 100%;
@@ -52,20 +47,17 @@
 
   /* 拡大率対応ユーティリティ */
   .zoom-safe {
-    /* 拡大時のレイアウト崩れ防止 */
     min-width: 0;
     max-width: 100%;
     overflow: hidden;
   }
 
   .zoom-text {
-    /* テキストの拡大対応 */
     font-size: clamp(0.875rem, 2.5vw, 1rem);
     line-height: 1.5;
   }
 
   .zoom-container {
-    /* コンテナの拡大対応 */
     width: 100%;
     min-width: 0;
     max-width: 100vw;
@@ -74,23 +66,20 @@
   }
 
   .zoom-grid {
-    /* グリッドレイアウトの拡大対応 */
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
     gap: clamp(0.5rem, 2vw, 1rem);
   }
 
   .zoom-flex {
-    /* フレックスレイアウトの拡大対応 */
     display: flex;
     flex-wrap: wrap;
     gap: clamp(0.5rem, 2vw, 1rem);
     min-width: 0;
   }
 
-  /* 拡大率150%以上でpy-8とp-6を無効化 - より強力なセレクタ */
+  /* 拡大率150%以上でpy-8とp-6を無効化 */
   @media (min-zoom: 150%) {
-    /* 全てのlg:py-8クラスを対象 */
     .lg\:py-8,
     [class*="lg:py-8"],
     div[class*="lg:py-8"],
@@ -100,7 +89,6 @@
       padding-bottom: 0 !important;
     }
 
-    /* 全てのlg:p-6クラスを対象 */
     .lg\:p-6,
     [class*="lg:p-6"],
     div[class*="lg:p-6"],
@@ -110,7 +98,7 @@
     }
   }
 
-  /* JavaScriptで追加されるクラス用 - より強力なセレクタ */
+  /* JavaScriptで追加されるクラス用 */
   .zoom-150-plus .lg\:py-8,
   .zoom-150-plus [class*="lg:py-8"],
   .zoom-150-plus div[class*="lg:py-8"],
@@ -150,13 +138,11 @@
 
   /* 拡大率対応パディングユーティリティ */
   .zoom-padding {
-    /* 通常時は標準パディング */
     padding: 1.5rem;
   }
 
   @media (min-width: 1024px) {
     .zoom-padding {
-      /* デスクトップ時はpy-8相当 */
       padding-top: 2rem;
       padding-bottom: 2rem;
     }
@@ -164,7 +150,6 @@
 
   @media (min-zoom: 150%) {
     .zoom-padding {
-      /* 拡大率150%以上ではpy-8を無効化 */
       padding-top: 1.5rem;
       padding-bottom: 1.5rem;
     }
@@ -174,7 +159,6 @@
 /* ダークモード対応のカスタムプロパティ */
 @layer base {
   :root {
-    /* ライトモード */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -203,7 +187,6 @@
   }
 
   .dark {
-    /* ダークモード */
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
@@ -240,7 +223,6 @@
   }
 }
 
-/* フォーム要素のリセット */
 input,
 button,
 textarea,
@@ -248,10 +230,62 @@ select {
   color: inherit;
 }
 
-/* アニメーション設定 */
 * {
   transition:
     background-color 0.3s ease,
     color 0.3s ease,
     border-color 0.3s ease;
+}
+
+/* カスタムローディングアニメーション */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-8px) scale(1.1);
+    opacity: 1;
+  }
+}
+
+@keyframes glass-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes morph {
+  0%,
+  100% {
+    border-radius: 50%;
+    transform: rotate(0deg);
+  }
+  25% {
+    border-radius: 40% 60% 40% 60%;
+    transform: rotate(90deg);
+  }
+  50% {
+    border-radius: 60% 40% 60% 40%;
+    transform: rotate(180deg);
+  }
+  75% {
+    border-radius: 40% 60% 40% 60%;
+    transform: rotate(270deg);
+  }
+}
+
+@keyframes wave {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-10px);
+  }
 }

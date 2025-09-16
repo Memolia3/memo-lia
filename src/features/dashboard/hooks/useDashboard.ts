@@ -6,35 +6,17 @@ import { useNotificationHelpers } from "@/hooks/useNotificationHelpers";
 import { toUrlSafe } from "@/utils";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import { useCategories } from "./useCategories";
+import { useCallback } from "react";
 
 /**
  * ダッシュボード用のフック
+ * 認証状態とナビゲーション機能のみを提供
  */
 export const useDashboard = () => {
   const { session, isAuthenticated, isLoading } = useSession();
   const router = useRouter();
   const { showError } = useNotificationHelpers();
   const t = useTranslations("dashboard");
-
-  const userId = session?.user?.id;
-  const {
-    data: categories = [],
-    isLoading: categoriesLoading,
-    error: categoriesError,
-  } = useCategories(userId || "");
-
-  const [localCategories, setLocalCategories] = useState<CategoryData[]>(categories);
-
-  // ローカルカテゴリを初期化
-  useEffect(() => {
-    setLocalCategories(categories);
-  }, [categories]);
-
-  const handleCategoryDelete = useCallback((categoryId: string) => {
-    setLocalCategories(prev => prev.filter(category => category.id !== categoryId));
-  }, []);
 
   const handleCategoryClick = useCallback(
     (category: CategoryData) => {
@@ -62,10 +44,7 @@ export const useDashboard = () => {
   return {
     user: session?.user,
     isAuthenticated,
-    isLoading: isLoading || categoriesLoading,
-    categories: localCategories,
-    error: categoriesError,
+    isLoading,
     handleCategoryClick,
-    handleCategoryDelete,
   };
 };

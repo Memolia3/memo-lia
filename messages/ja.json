@@ -33,6 +33,10 @@
     "description": "以下のいずれかの方法でログインしてください",
     "authRequired": "認証が必要です",
     "authenticating": "認証中...",
+    "loading": {
+      "title": "認証状態を確認中",
+      "description": "認証状態を確認しています"
+    },
     "safariBookmarkletMessage": "Safariでブックマークレットを使用するには、先にMemoLiaにログインしてください。プライベートモードでは使用できません。",
     "loginButton": "ログインする",
     "backToTop": "トップページに戻る",
@@ -67,6 +71,8 @@
     "save": "保存",
     "cancel": "キャンセル",
     "search": "検索",
+    "retry": "再試行",
+    "reload": "ページを再読み込み",
     "errors": {
       "duplicateDataDetected": "データの重複が検出されました",
       "referenceIntegrityError": "参照整合性エラーが発生しました",
@@ -87,9 +93,15 @@
     "error": "エラーが発生しました",
     "dashboard": "ダッシュボード"
   },
+  "error": {
+    "title": "エラーが発生しました",
+    "message": "申し訳ございません。予期しないエラーが発生しました。",
+    "helpText": "問題が解決しない場合は、ページを再読み込みしてください。"
+  },
   "dashboard": {
     "title": "ダッシュボード",
     "loading": "読み込み中...",
+    "loadingCategories": "カテゴリを取得中",
     "unauthenticated": "認証が必要です",
     "error": "データの読み込みに失敗しました",
     "errorSubMessage": "通知をご確認ください",
@@ -99,7 +111,10 @@
     },
     "emptyState": {
       "title": "カテゴリが0件です",
-      "description": "新しいカテゴリフォルダを作成して、URLを整理しましょう"
+      "description": "新しいカテゴリフォルダを作成して、URLを整理しましょう",
+      "loading": "読み込み中...",
+      "loadingCategories": "カテゴリを取得中",
+      "error": "エラーが発生しました"
     },
     "navigationFailed": "ページの遷移に失敗しました",
     "retryLater": "しばらく時間をおいてから再度お試しください",
@@ -223,6 +238,7 @@
   "genreDetail": {
     "title": "ジャンル詳細",
     "loading": "読み込み中...",
+    "loadingDescription": "ジャンルとURLを取得しています",
     "notFound": {
       "title": "ジャンルが見つかりません",
       "description": "指定されたジャンルは存在しないか、アクセス権限がありません。"
@@ -246,10 +262,12 @@
       "description": "このジャンルに保存されているURLの一覧です。",
       "empty": "このジャンルにはまだURLが保存されていません。",
       "emptyDescription": "URLを追加して、お気に入りのサイトを整理しましょう。",
+      "loading": "URLメタデータを取得中...",
       "actions": {
         "open": "開く",
         "delete": "削除",
-        "deleting": "削除中..."
+        "deleting": "削除中...",
+        "openMenu": "URLメニューを開く"
       },
       "notifications": {
         "deleteSuccess": "URL削除完了",

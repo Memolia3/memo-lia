@@ -1,7 +1,7 @@
 "use client";
 
 import { AppHeader } from "@/components/layout";
-import { Button, Divider, Icon, ScrollArea, Typography, UserInfo } from "@/components/ui";
+import { Button, Divider, Icon, Loading, ScrollArea, Typography, UserInfo } from "@/components/ui";
 import { UrlCreateButton, UrlGrid, useGenreDetail } from "@/features/genreDetail";
 import { AdSense } from "@/features/google";
 import { cn } from "@/utils";
@@ -43,12 +43,12 @@ export const GenreDetailMobile: React.FC<GenreDetailMobileProps> = ({
       <div className={cn("h-full flex flex-col", className)}>
         <AppHeader title={t("title")} userInfo={<UserInfo />} />
         <main className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <div className="w-8 h-8 border-2 border-gray-300 border-t-primary rounded-full animate-spin mx-auto mb-4" />
-            <Typography variant="body" color="muted">
-              {t("loading")}
-            </Typography>
-          </div>
+          <Loading
+            size="lg"
+            variant="spinner"
+            text={t("loading")}
+            description={t("loadingDescription")}
+          />
         </main>
       </div>
     );

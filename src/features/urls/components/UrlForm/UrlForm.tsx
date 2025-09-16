@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Typography } from "@/components/ui";
+import { Button, Loading, Typography } from "@/components/ui";
 import { UrlPreview } from "@/components/url";
 import { useUrlMetadata } from "@/hooks";
 import { cn } from "@/utils";
@@ -119,11 +119,14 @@ export const UrlForm: React.FC<UrlFormProps> = ({
             </Typography>
           )}
           {isValidating && (
-            <div className="flex items-center gap-2 mt-2">
-              <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-              <Typography variant="caption" color="muted">
-                {t("messages.fetchingMetadata")}
-              </Typography>
+            <div className="mt-2">
+              <Loading
+                size="sm"
+                variant="spinner"
+                text={t("messages.fetchingMetadata")}
+                showBackground={false}
+                className="justify-start"
+              />
             </div>
           )}
         </div>

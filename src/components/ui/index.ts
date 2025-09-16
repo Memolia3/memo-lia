@@ -50,3 +50,7 @@ export type { AuthGuardProps } from "./AuthGuard";
 // Tooltip
 export { Tooltip } from "./Tooltip";
 export type { TooltipProps } from "./Tooltip";
+
+// Loading
+export { Loading } from "./Loading";
+export type { LoadingProps } from "./Loading";

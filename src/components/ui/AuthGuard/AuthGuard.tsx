@@ -1,6 +1,6 @@
 "use client";
 
-import { Container } from "@/components/ui";
+import { Container, Loading } from "@/components/ui";
 import { cn } from "@/utils";
 import { useTranslations } from "next-intl";
 import type { AuthGuardProps } from "./AuthGuard.types";
@@ -29,10 +29,12 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
         maxWidth="7xl"
         className={cn("h-full flex items-center justify-center", className)}
       >
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-muted">{loadingMessage || t("loading")}</p>
-        </div>
+        <Loading
+          size="lg"
+          variant="spinner"
+          text={loadingMessage || t("loading")}
+          description={t("auth.loading.description")}
+        />
       </Container>
     );
   }

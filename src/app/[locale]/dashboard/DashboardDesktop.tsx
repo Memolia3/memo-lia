@@ -17,32 +17,21 @@ export interface DashboardDesktopProps {
  * PC画面用のレイアウト
  */
 export const DashboardDesktop: React.FC<DashboardDesktopProps> = ({ className }) => {
-  const {
-    isAuthenticated,
-    isLoading,
-    categories,
-    error,
-    handleCategoryClick,
-    handleCategoryDelete,
-  } = useDashboard();
+  const { isAuthenticated, isLoading, handleCategoryClick } = useDashboard();
   const t = useTranslations("dashboard");
 
   return (
     <AuthGuard
       isAuthenticated={isAuthenticated}
       isLoading={isLoading}
-      error={error ? error.message : null}
+      error={null}
       className={className}
     >
       <div className={cn("h-full flex flex-col overflow-visible zoom-safe", className)}>
         <AppHeader title={t("title")} userInfo={<UserInfo />} />
         <div className="flex-1 flex flex-col overflow-hidden zoom-container">
           <div className="max-w-7xl mx-auto w-full flex flex-col h-full zoom-safe">
-            <DashboardContent
-              categories={categories}
-              onCategoryClick={handleCategoryClick}
-              onCategoryDelete={handleCategoryDelete}
-            />
+            <DashboardContent onCategoryClick={handleCategoryClick} />
           </div>
         </div>
 

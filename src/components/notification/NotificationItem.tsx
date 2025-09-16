@@ -144,7 +144,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = memo(
         role="alert"
         aria-live="polite"
         aria-atomic="true"
-        aria-label={`${notification.type}通知: ${notification.message}`}
+        aria-label={`${notification.type} : ${notification.message}`}
         tabIndex={0}
         onKeyDown={handleKeyDown}
       >
@@ -153,7 +153,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = memo(
           <button
             onClick={handleClose}
             className="absolute top-2 right-2 p-1 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
-            aria-label="通知を閉じる"
+            aria-label="close"
           >
             <X className="w-4 h-4" />
           </button>

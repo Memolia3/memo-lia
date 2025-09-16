@@ -1,6 +1,6 @@
 "use client";
 
-import { Typography } from "@/components/ui/Typography";
+import { Loading, Typography } from "@/components/ui";
 import { UrlMetadata } from "@/types/url-metadata";
 import { cn } from "@/utils";
 import { useTranslations } from "next-intl";
@@ -30,13 +30,12 @@ export const UrlPreview: React.FC<UrlPreviewProps> = ({
           {t("preview")}
         </Typography>
         <div className="bg-white/5 dark:bg-gray-800/5 backdrop-blur-sm border border-white/10 dark:border-gray-700/10 rounded-lg p-4">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded animate-pulse" />
-            <div className="flex-1 space-y-2">
-              <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded animate-pulse w-3/4" />
-              <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded animate-pulse w-1/2" />
-            </div>
-          </div>
+          <Loading
+            size="sm"
+            variant="dots"
+            text={t("messages.fetchingMetadata")}
+            showBackground={false}
+          />
         </div>
       </div>
     );
