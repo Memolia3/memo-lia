@@ -212,7 +212,7 @@
       }
     },
     "buttons": {
-      "backToDashboard": "ダッシュボードに戻る",
+      "backToDashboard": "ダッシュボード",
       "createGenre": "ジャンル作成"
     }
   },
@@ -404,7 +404,7 @@
   "bookmarklet": {
     "title": "共有されたURLを保存",
     "description": "iOS Safari・iOS Google ChromeでMemoLiaにURLを送信できるように設定します",
-    "backToDashboard": "ダッシュボードに戻る",
+    "backToDashboard": "ダッシュボード",
     "step1": "ステップ1",
     "step1Description": "下のボタンを押してブックマークレットをコピーします",
     "step2": "ステップ2",

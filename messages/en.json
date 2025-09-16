@@ -197,7 +197,7 @@
       }
     },
     "buttons": {
-      "backToDashboard": "Back to Dashboard",
+      "backToDashboard": "Dashboard",
       "createGenre": "Create Genre"
     }
   },
@@ -386,7 +386,7 @@
   "bookmarklet": {
     "title": "Save Shared URL",
     "description": "Set up iOS Safari and iOS Google Chrome to send URLs to MemoLia",
-    "backToDashboard": "Back to Dashboard",
+    "backToDashboard": "Dashboard",
     "step1": "Step 1",
     "step1Description": "Press the button below to copy the bookmarklet",
     "step2": "Step 2",
