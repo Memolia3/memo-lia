@@ -13,7 +13,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   // セッション設定
   session: {
     strategy: "jwt",
-    maxAge: 24 * 60 * 60, // 1 day (セキュリティ向上のため短縮)
+    maxAge: 24 * 60 * 60, // 1 day
   },
   // ページ設定
   pages: {

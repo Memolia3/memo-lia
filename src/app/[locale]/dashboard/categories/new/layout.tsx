@@ -15,9 +15,9 @@ export async function generateMetadata({
   const { locale } = await params;
 
   const metaOptions: PageMetaOptions = {
-    title: isLocaleEnglish(locale) ? "Add Category" : "カテゴリ追加",
-    description: isLocaleEnglish(locale) ? "Add Category" : "カテゴリ追加",
-    keywords: isLocaleEnglish(locale) ? ["add category"] : ["カテゴリ追加"],
+    title: isLocaleEnglish(locale) ? "Create Category" : "カテゴリ作成",
+    description: isLocaleEnglish(locale) ? "Create Category" : "カテゴリ作成",
+    keywords: isLocaleEnglish(locale) ? ["create category"] : ["カテゴリ作成"],
     type: "website",
     url: "/dashboard/categories/new",
   };
