@@ -14,8 +14,14 @@ export const UrlGrid: React.FC<UrlGridProps> = memo(
     // URL取得中のローディング表示
     if (isLoading) {
       return (
-        <div className="flex items-center justify-center py-12">
-          <Loading size="lg" variant="spinner" text={t("urls.loading")} showBackground={false} />
+        <div className="flex items-center justify-center py-6">
+          <Loading
+            size="md"
+            variant="spinner"
+            text={t("urls.loading")}
+            showBackground={false}
+            className="flex-row gap-3 py-0"
+          />
         </div>
       );
     }

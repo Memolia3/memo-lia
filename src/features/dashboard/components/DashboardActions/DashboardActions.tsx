@@ -11,7 +11,7 @@ interface DashboardActionsProps {
 }
 
 export const DashboardActions: React.FC<DashboardActionsProps> = () => {
-  const tForm = useTranslations("categoryForm");
+  const t = useTranslations("dashboard");
   const tBookmarklet = useTranslations("bookmarklet");
   const router = useRouter();
 
@@ -28,7 +28,7 @@ export const DashboardActions: React.FC<DashboardActionsProps> = () => {
       </Button>
       <Link href="/dashboard/categories/new">
         <Button variant="primary" size="sm">
-          + {tForm("buttons.create")}
+          + {t("buttons.createCategory")}
         </Button>
       </Link>
     </div>

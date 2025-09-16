@@ -1,7 +1,7 @@
 "use client";
 
+import { Container, Loading } from "@/components/ui";
 import { Button } from "@/components/ui/Button";
-import { Container } from "@/components/ui/Container";
 import { Typography } from "@/components/ui/Typography";
 import { useSession } from "@/features/auth/hooks";
 import { useLocale, useTranslations } from "next-intl";
@@ -35,12 +35,13 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
   if (isLoading) {
     return (
       <Container className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-gray-300 border-t-primary rounded-full animate-spin mx-auto mb-4" />
-          <Typography variant="body" color="muted">
-            {t("authenticating")}
-          </Typography>
-        </div>
+        <Loading
+          size="md"
+          variant="spinner"
+          text={t("authenticating")}
+          showBackground={false}
+          className="flex-row gap-3 py-0"
+        />
       </Container>
     );
   }

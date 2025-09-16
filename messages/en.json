@@ -108,7 +108,10 @@
     "categoryLoadFailed": "Failed to load categories",
     "openMenu": "Open menu",
     "deleting": "Deleting...",
-    "delete": "Delete"
+    "delete": "Delete",
+    "buttons": {
+      "createCategory": "Create Category"
+    }
   },
     "categoryForm": {
       "title": "Create Category",
@@ -195,7 +198,7 @@
     },
     "buttons": {
       "backToDashboard": "Back to Dashboard",
-      "createGenre": "Create"
+      "createGenre": "Create Genre"
     }
   },
   "genreForm": {
@@ -263,7 +266,7 @@
       "backToCategory": "Back to Category"
     },
     "buttons": {
-      "createUrl": "Create"
+      "createUrl": "Save URL"
     }
   },
   "urlForm": {

@@ -40,7 +40,7 @@ const PAGE_INFO_MAP: Record<string, PageInfo> = {
     route: "/dashboard/category/[id]/[name]/genres/new",
   },
   "url-create": {
-    title: { ja: "URL作成", en: "Create URL" },
+    title: { ja: "URL保存", en: "Save URL" },
     route: "/dashboard/category/[id]/[name]/genre/[genreId]/[genreName]/urls/new",
   },
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import { Typography } from "@/components/ui";
+import { Loading, Typography } from "@/components/ui";
 import { useSession } from "@/features/auth/hooks";
 import { cn } from "@/utils";
 import { useTranslations } from "next-intl";
@@ -20,7 +20,7 @@ export const UserInfo: React.FC<UserInfoProps> = ({ className }) => {
   if (isLoading) {
     return (
       <div className={cn("flex items-center space-x-3", className)}>
-        <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
+        <Loading size="sm" variant="spinner" showBackground={false} className="py-0" />
         <div className="w-24 h-5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
       </div>
     );

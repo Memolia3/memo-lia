@@ -2,8 +2,8 @@ import { getCategoryById, getGenreById } from "@/actions/categories";
 import { auth } from "@/auth";
 import { Container } from "@/components/ui";
 import { getCurrentPageInfo } from "@/utils";
+import { generateMetadata as generateMeta, isLocaleEnglish } from "@/utils/meta";
 import { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
 import dynamic from "next/dynamic";
 import { notFound, redirect } from "next/navigation";
 
@@ -22,15 +22,21 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "metadata.urlAdd" });
   const pageInfo = getCurrentPageInfo(
     "/dashboard/category/[id]/[name]/genre/[genreId]/[genreName]/urls/new"
   );
 
-  return {
-    title: pageInfo?.title?.[locale as "ja" | "en"] || t("title"),
-    description: t("description"),
+  const metaOptions = {
+    title:
+      pageInfo?.title?.[locale as "ja" | "en"] ||
+      (isLocaleEnglish(locale) ? "Save URL" : "URL保存"),
+    description: isLocaleEnglish(locale) ? "Save URL" : "URL保存",
+    keywords: isLocaleEnglish(locale) ? ["save url"] : ["URL保存"],
+    type: "website" as const,
+    url: "/dashboard/category/[id]/[name]/genre/[genreId]/[genreName]/urls/new",
   };
+
+  return generateMeta(locale, metaOptions);
 }
 
 export default async function UrlAddPage({ params }: PageProps) {
