@@ -7,12 +7,13 @@ import { useNotificationHelpers } from "@/hooks/useNotificationHelpers";
 import { Genre } from "@/types/database";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface UseGenreDetailReturn {
   genre: Genre | null;
   urls: UrlData[];
   isLoading: boolean;
+  urlsLoading: boolean;
   error: Error | null;
   handleBackToCategory: () => void;
   handleUrlClick: (url: UrlData) => void;
@@ -31,6 +32,7 @@ export const useGenreDetail = (
   const [genre, setGenre] = useState<Genre | null>(null);
   const [urls, setUrls] = useState<UrlData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [urlsLoading, setUrlsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
@@ -47,10 +49,6 @@ export const useGenreDetail = (
         }
 
         setGenre(genreData);
-
-        // URL一覧の取得
-        const urlData = await getUrlsByGenreAction(genreId);
-        setUrls(urlData);
       } catch (err) {
         setError(err instanceof Error ? err : new Error("Failed to fetch genre"));
       } finally {
@@ -63,7 +61,26 @@ export const useGenreDetail = (
     }
   }, [genreId, userId]);
 
-  const handleBackToCategory = () => {
+  // URL取得を独立したuseEffectで管理
+  useEffect(() => {
+    const fetchUrls = async () => {
+      if (!genreId || !genre) return;
+
+      try {
+        setUrlsLoading(true);
+        const urlData = await getUrlsByGenreAction(genreId);
+        setUrls(urlData);
+      } catch {
+        setUrls([]); // エラー時は空配列
+      } finally {
+        setUrlsLoading(false);
+      }
+    };
+
+    fetchUrls();
+  }, [genreId, genre]);
+
+  const handleBackToCategory = useCallback(() => {
     // カテゴリ詳細ページに戻る
     const currentLocale =
       typeof window !== "undefined"
@@ -78,12 +95,12 @@ export const useGenreDetail = (
     if (currentCategoryName) {
       router.push(`/${currentLocale}/dashboard/category/${categoryId}/${currentCategoryName}`);
     }
-  };
+  }, [router, categoryId]);
 
-  const handleUrlClick = (url: UrlData) => {
+  const handleUrlClick = useCallback((url: UrlData) => {
     // URLを新しいタブで開く
     window.open(url.url, "_blank", "noopener,noreferrer");
-  };
+  }, []);
 
   const handleUrlDelete = async (urlId: string) => {
     try {
@@ -136,6 +153,7 @@ export const useGenreDetail = (
     genre,
     urls,
     isLoading,
+    urlsLoading,
     error,
     handleBackToCategory,
     handleUrlClick,

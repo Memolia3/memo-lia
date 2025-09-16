@@ -165,6 +165,7 @@ export const getUrlsByGenre = async (genreId: string, userId: string): Promise<U
       INNER JOIN url_categories uc ON u.id = uc.url_id
       WHERE uc.genre_id = ${genreId} AND uc.user_id = ${userId}
       ORDER BY u.created_at DESC
+      LIMIT 100
     `;
 
     return result.map((row: Record<string, unknown>) => ({

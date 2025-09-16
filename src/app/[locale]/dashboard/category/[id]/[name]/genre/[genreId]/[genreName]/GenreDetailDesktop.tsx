@@ -32,6 +32,7 @@ export const GenreDetailDesktop: React.FC<GenreDetailDesktopProps> = ({
     genre,
     urls,
     isLoading,
+    urlsLoading,
     error,
     handleBackToCategory,
     handleUrlClick,
@@ -48,7 +49,7 @@ export const GenreDetailDesktop: React.FC<GenreDetailDesktopProps> = ({
             size="lg"
             variant="spinner"
             text={t("loading")}
-            description={t("loadingDescription")}
+            description="ジャンル情報を取得しています"
           />
         </main>
       </div>
@@ -189,7 +190,12 @@ export const GenreDetailDesktop: React.FC<GenreDetailDesktopProps> = ({
             {/* スクロール可能なURL一覧エリア */}
             <ScrollArea className="flex-1 px-4 sm:px-6 pb-4 sm:pb-6 zoom-safe">
               <div className="p-1.5 zoom-container">
-                <UrlGrid urls={urls} onUrlClick={handleUrlClick} onUrlDelete={handleUrlDelete} />
+                <UrlGrid
+                  urls={urls}
+                  onUrlClick={handleUrlClick}
+                  onUrlDelete={handleUrlDelete}
+                  isLoading={urlsLoading}
+                />
               </div>
             </ScrollArea>
           </div>

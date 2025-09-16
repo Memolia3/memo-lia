@@ -53,6 +53,7 @@ export async function getCategories(userId: string): Promise<CategoryData[]> {
         AND is_active = true
         AND is_folder = true
       ORDER BY sort_order ASC, created_at ASC
+      LIMIT 50
     `;
     return result.map((row: Record<string, unknown>) => ({
       id: row.id as string,

@@ -1,7 +1,7 @@
 "use client";
 
 import { AppHeader } from "@/components/layout";
-import { Divider, Icon, ScrollArea, Typography, UserInfo } from "@/components/ui";
+import { Divider, Icon, Loading, ScrollArea, Typography, UserInfo } from "@/components/ui";
 import { ActionButtons } from "@/features/categoryDetail/components/ActionButtons";
 import { GenreCreateButton } from "@/features/categoryDetail/components/GenreCreateButton";
 import { GenreGrid } from "@/features/categoryDetail/components/GenreGrid";
@@ -126,11 +126,13 @@ export const CategoryDetailDesktop: React.FC<CategoryDetailDesktopProps> = ({
             {/* スクロール可能なジャンル一覧エリア */}
             <ScrollArea className="flex-1 px-4 sm:px-6 pb-4 sm:pb-6 zoom-safe">
               {isLoading ? (
-                <div className="text-center py-8 text-gray-500 dark:text-gray-400 zoom-container">
-                  <div className="w-8 h-8 border-2 border-gray-300 border-t-primary rounded-full animate-spin mx-auto mb-4" />
-                  <Typography variant="body" color="muted" className="zoom-text">
-                    {t("genres.loading")}
-                  </Typography>
+                <div className="flex items-center justify-center py-8 zoom-container">
+                  <Loading
+                    size="lg"
+                    variant="spinner"
+                    text={t("genres.loading")}
+                    showBackground={false}
+                  />
                 </div>
               ) : error ? (
                 <div className="text-center py-8 zoom-container">

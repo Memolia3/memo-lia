@@ -1,7 +1,7 @@
 "use client";
 
 import { AppHeader } from "@/components/layout";
-import { Divider, Icon, ScrollArea, Typography, UserInfo } from "@/components/ui";
+import { Divider, Icon, Loading, ScrollArea, Typography, UserInfo } from "@/components/ui";
 import { ActionButtons } from "@/features/categoryDetail/components/ActionButtons";
 import { GenreCreateButton } from "@/features/categoryDetail/components/GenreCreateButton";
 import { GenreGrid } from "@/features/categoryDetail/components/GenreGrid";
@@ -88,8 +88,13 @@ export const CategoryDetailMobile: React.FC<CategoryDetailMobileProps> = ({
             {/* スクロール可能なジャンル一覧エリア */}
             <ScrollArea className="flex-1 px-4 pb-4">
               {isLoading ? (
-                <div className="text-center py-6 text-gray-500 dark:text-gray-400">
-                  {t("genres.loading")}
+                <div className="flex items-center justify-center py-8">
+                  <Loading
+                    size="lg"
+                    variant="spinner"
+                    text={t("genres.loading")}
+                    showBackground={false}
+                  />
                 </div>
               ) : error ? (
                 <div className="text-center py-6">

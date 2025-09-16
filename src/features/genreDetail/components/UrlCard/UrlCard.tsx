@@ -5,10 +5,10 @@ import { cn } from "@/utils";
 import { ExternalLink, Globe, MoreVertical, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { UrlCardProps } from "./UrlCard.types";
 
-export const UrlCard: React.FC<UrlCardProps> = ({ url, onClick, onDelete, className }) => {
+export const UrlCard: React.FC<UrlCardProps> = memo(({ url, onClick, onDelete, className }) => {
   const t = useTranslations("genreDetail.urls.actions");
   const [showMenu, setShowMenu] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -146,7 +146,7 @@ export const UrlCard: React.FC<UrlCardProps> = ({ url, onClick, onDelete, classN
         <button
           onClick={handleMenuClick}
           className="p-1.5 rounded-full bg-white dark:bg-gray-700 shadow-sm hover:shadow-md hover:bg-blue-50 dark:hover:bg-blue-900/50 transition-all duration-200 border border-gray-200 dark:border-gray-600"
-          aria-label={t("urls.actions.openMenu")}
+          aria-label={t("openMenu")}
         >
           <MoreVertical className="w-4 h-4 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200" />
         </button>
@@ -178,4 +178,6 @@ export const UrlCard: React.FC<UrlCardProps> = ({ url, onClick, onDelete, classN
       </div>
     </div>
   );
-};
+});
+
+UrlCard.displayName = "UrlCard";

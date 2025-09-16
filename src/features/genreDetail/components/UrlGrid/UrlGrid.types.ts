@@ -4,5 +4,6 @@ export interface UrlGridProps {
   urls: UrlData[];
   onUrlClick: (url: UrlData) => void;
   onUrlDelete?: (urlId: string) => void;
+  isLoading?: boolean;
   className?: string;
 }

@@ -31,6 +31,7 @@ export const GenreDetailMobile: React.FC<GenreDetailMobileProps> = ({
     genre,
     urls,
     isLoading,
+    urlsLoading,
     error,
     handleBackToCategory,
     handleUrlClick,
@@ -47,7 +48,7 @@ export const GenreDetailMobile: React.FC<GenreDetailMobileProps> = ({
             size="lg"
             variant="spinner"
             text={t("loading")}
-            description={t("loadingDescription")}
+            description="ジャンル情報を取得しています"
           />
         </main>
       </div>
@@ -149,7 +150,12 @@ export const GenreDetailMobile: React.FC<GenreDetailMobileProps> = ({
             {/* スクロール可能なURL一覧エリア */}
             <ScrollArea className="flex-1 px-4 pb-4">
               <div className="p-1.5">
-                <UrlGrid urls={urls} onUrlClick={handleUrlClick} onUrlDelete={handleUrlDelete} />
+                <UrlGrid
+                  urls={urls}
+                  onUrlClick={handleUrlClick}
+                  onUrlDelete={handleUrlDelete}
+                  isLoading={urlsLoading}
+                />
               </div>
             </ScrollArea>
           </div>
