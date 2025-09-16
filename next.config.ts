@@ -32,8 +32,7 @@ const nextConfig: NextConfig = {
   // 実験的機能の設定
   experimental: {
     // SSGでの最適化
-    optimizePackageImports: ["next-intl", "lucide-react", "@radix-ui/react-icons"],
-    optimizeCss: true,
+    optimizePackageImports: ["next-intl"],
   },
   // コンパイラーの最適化
   compiler: {
