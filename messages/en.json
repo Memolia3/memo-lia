@@ -339,7 +339,9 @@
     "userIdNotSpecified": "User ID is not specified",
     "invalidUserId": "Invalid user ID",
     "invalidGenreId": "Invalid genre ID",
-    "authFailed": "Authentication failed"
+    "authFailed": "Authentication failed",
+    "authInfoNotRetrieved": "Failed to retrieve authentication information",
+    "pleaseRefreshPage": "Please refresh the page"
   },
   "notifications": {
     "unknownError": "An unknown error occurred",

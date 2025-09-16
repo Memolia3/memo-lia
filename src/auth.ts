@@ -102,9 +102,57 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
                 ? Math.floor(new Date(userData.provider.expires_at).getTime() / 1000)
                 : undefined,
             };
+          } else {
+            // ユーザー情報が見つからない場合、同期処理を実行
+            try {
+              const { user: syncedUser, provider: syncedProvider } = await syncUserOnAuth(
+                user.email!,
+                user.name || undefined,
+                user.image || undefined,
+                account
+              );
+
+              return {
+                ...token,
+                id: syncedUser.id,
+                email: syncedUser.email,
+                name: syncedUser.name,
+                picture: syncedUser.avatar_url,
+                provider: account.provider,
+                accessToken: syncedProvider?.access_token,
+                refreshToken: syncedProvider?.refresh_token,
+                expiresAt: syncedProvider?.expires_at
+                  ? Math.floor(new Date(syncedProvider.expires_at).getTime() / 1000)
+                  : undefined,
+              };
+            } catch {
+              // 同期処理も失敗した場合は、基本的な情報のみを返す
+              return {
+                ...token,
+                id: user.id,
+                email: user.email,
+                name: user.name,
+                picture: user.image,
+                provider: account.provider,
+                accessToken: account.access_token,
+                refreshToken: account.refresh_token,
+                expiresAt: account.expires_at,
+              };
+            }
           }
         } catch {
-          // ユーザー情報の取得に失敗
+          // ユーザー情報の取得に失敗した場合、基本的な情報のみを返す
+          return {
+            ...token,
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            picture: user.image,
+            provider: account.provider,
+            accessToken: account.access_token,
+            refreshToken: account.refresh_token,
+            expiresAt: account.expires_at,
+          };
         }
       }
 

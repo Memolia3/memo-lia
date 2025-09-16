@@ -22,10 +22,11 @@ export interface CategoryAddMobileProps {
  * スマートフォン画面用のレイアウト
  */
 export const CategoryAddMobile: React.FC<CategoryAddMobileProps> = ({ className }) => {
-  const { data: session } = useSession();
+  const { data: session, status: sessionStatus } = useSession();
   const { addNotification } = useNotification();
   const router = useRouter();
   const t = useTranslations("categoryForm");
+  const tErrors = useTranslations("errors");
   const [isLoading, setIsLoading] = useState(false);
 
   // ブラウザの言語設定から言語を取得
@@ -39,7 +40,22 @@ export const CategoryAddMobile: React.FC<CategoryAddMobileProps> = ({ className 
   };
 
   const handleCreateCategory = async (data: Parameters<typeof createCategory>[1]) => {
-    if (!session?.user?.id) return;
+    // セッションがまだ読み込み中の場合は待機
+    if (sessionStatus === "loading") {
+      return;
+    }
+
+    if (!session?.user?.id) {
+      // セッション読み込み完了後もユーザーIDがない場合はエラー
+      addNotification({
+        type: "error",
+        message: tErrors("authInfoNotRetrieved"),
+        description: tErrors("pleaseRefreshPage"),
+        duration: 5000,
+        severity: "high",
+      });
+      return;
+    }
 
     setIsLoading(true);
     try {
@@ -90,7 +106,11 @@ export const CategoryAddMobile: React.FC<CategoryAddMobileProps> = ({ className 
 
       <ScrollArea className="flex-1 px-4 py-6 sm:px-6 sm:py-8">
         <div className="flex items-center min-h-full">
-          <CategoryForm onSubmit={handleCreateCategory} isLoading={isLoading} className="w-full" />
+          <CategoryForm
+            onSubmit={handleCreateCategory}
+            isLoading={isLoading || sessionStatus === "loading"}
+            className="w-full"
+          />
         </div>
       </ScrollArea>
 

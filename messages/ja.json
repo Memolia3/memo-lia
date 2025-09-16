@@ -357,7 +357,9 @@
     "userIdNotSpecified": "ユーザーIDが指定されていません",
     "invalidUserId": "無効なユーザーIDです",
     "invalidGenreId": "無効なジャンルIDです",
-    "authFailed": "認証処理に失敗しました"
+    "authFailed": "認証処理に失敗しました",
+    "authInfoNotRetrieved": "認証情報が取得できませんでした",
+    "pleaseRefreshPage": "ページを再読み込みしてください"
   },
   "notifications": {
     "unknownError": "不明なエラーが発生しました",
