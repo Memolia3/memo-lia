@@ -281,7 +281,7 @@
       "placeholder": "URL情報がここに表示されます（実装予定）"
     },
     "actions": {
-      "backToCategory": "カテゴリ詳細に戻る"
+      "backToCategory": "カテゴリ詳細"
     },
     "buttons": {
       "createUrl": "URL保存"

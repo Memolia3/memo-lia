@@ -263,7 +263,7 @@
       "placeholder": "URL information will be displayed here (to be implemented)"
     },
     "actions": {
-      "backToCategory": "Back to Category"
+      "backToCategory": "Category Detail"
     },
     "buttons": {
       "createUrl": "Save URL"
