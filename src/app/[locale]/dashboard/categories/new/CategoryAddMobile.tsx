@@ -7,7 +7,7 @@ import { ScrollArea, UserInfo } from "@/components/ui";
 import { getNotificationMessage, NOTIFICATION_MESSAGES } from "@/constants/notification";
 import { CategoryForm } from "@/features/categories/components/CategoryForm";
 import { AdSense } from "@/features/google";
-import { cn } from "@/utils";
+import { cn, isShowAdsense } from "@/utils";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -115,9 +115,11 @@ export const CategoryAddMobile: React.FC<CategoryAddMobileProps> = ({ className 
       </ScrollArea>
 
       {/* AdSense広告 - 画面の一番下 */}
-      <div className="px-4 py-4 border-t border-gray-200 dark:border-gray-700 hidden">
-        <AdSense adSlot="1234567890" adFormat="fluid" responsive={true} className="w-full" />
-      </div>
+      {isShowAdsense && (
+        <div className="px-4 py-4 border-t border-gray-200 dark:border-gray-700">
+          <AdSense adSlot="1234567890" adFormat="fluid" responsive={true} className="w-full" />
+        </div>
+      )}
     </div>
   );
 };

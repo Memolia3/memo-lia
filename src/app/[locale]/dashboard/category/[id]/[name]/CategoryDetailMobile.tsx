@@ -8,7 +8,7 @@ import { GenreGrid } from "@/features/categoryDetail/components/GenreGrid";
 import { useCategoryDetail, useGenres } from "@/features/categoryDetail/hooks";
 import { CategoryDetailMobileProps } from "@/features/categoryDetail/types";
 import { AdSense } from "@/features/google";
-import { cn } from "@/utils";
+import { cn, isShowAdsense } from "@/utils";
 import { Folder } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -112,9 +112,11 @@ export const CategoryDetailMobile: React.FC<CategoryDetailMobileProps> = ({
       </main>
 
       {/* AdSense広告 - 画面の一番下 */}
-      <div className="px-4 py-4 border-t border-gray-200 dark:border-gray-700 hidden">
-        <AdSense adSlot="1234567890" adFormat="fluid" responsive={true} className="w-full" />
-      </div>
+      {isShowAdsense && (
+        <div className="px-4 py-4 border-t border-gray-200 dark:border-gray-700">
+          <AdSense adSlot="1234567890" adFormat="fluid" responsive={true} className="w-full" />
+        </div>
+      )}
     </div>
   );
 };

@@ -6,7 +6,7 @@ import { useNotification } from "@/components/notification";
 import { ScrollArea, UserInfo } from "@/components/ui";
 import { AdSense } from "@/features/google";
 import { UrlForm, UrlFormData } from "@/features/urls";
-import { cn } from "@/utils";
+import { cn, isShowAdsense } from "@/utils";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -106,9 +106,11 @@ export default function UrlAddDesktop({ category, genre, locale, className }: Ur
       </ScrollArea>
 
       {/* AdSense広告 - 画面の一番下 */}
-      <div className="px-4 py-4 sm:px-6 sm:py-6 border-t border-gray-200 dark:border-gray-700 hidden">
-        <AdSense adSlot="1234567890" adFormat="fluid" responsive={true} className="w-full" />
-      </div>
+      {isShowAdsense && (
+        <div className="px-4 py-4 sm:px-6 sm:py-6 border-t border-gray-200 dark:border-gray-700">
+          <AdSense adSlot="1234567890" adFormat="fluid" responsive={true} className="w-full" />
+        </div>
+      )}
     </div>
   );
 }

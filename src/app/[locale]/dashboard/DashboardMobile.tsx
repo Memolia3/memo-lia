@@ -5,7 +5,7 @@ import { AuthGuard, UserInfo } from "@/components/ui";
 import { DashboardContent } from "@/features/dashboard/components/DashboardContent";
 import { useDashboard } from "@/features/dashboard/hooks/useDashboard";
 import { AdSense } from "@/features/google";
-import { cn } from "@/utils";
+import { cn, isShowAdsense } from "@/utils";
 import { useTranslations } from "next-intl";
 
 export interface DashboardMobileProps {
@@ -32,9 +32,11 @@ export const DashboardMobile: React.FC<DashboardMobileProps> = ({ className }) =
         <DashboardContent onCategoryClick={handleCategoryClick} />
 
         {/* AdSense広告 - 画面の一番下 */}
-        <div className="px-4 py-4 border-t border-gray-200 dark:border-gray-700 hidden">
-          <AdSense adSlot="1234567890" adFormat="fluid" responsive={true} className="w-full" />
-        </div>
+        {isShowAdsense && (
+          <div className="px-4 py-4 border-t border-gray-200 dark:border-gray-700">
+            <AdSense adSlot="1234567890" adFormat="fluid" responsive={true} className="w-full" />
+          </div>
+        )}
       </div>
     </AuthGuard>
   );

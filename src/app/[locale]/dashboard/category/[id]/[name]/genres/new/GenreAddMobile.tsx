@@ -7,7 +7,7 @@ import { ScrollArea, UserInfo } from "@/components/ui";
 import { getNotificationMessage, NOTIFICATION_MESSAGES } from "@/constants/notification";
 import { GenreForm } from "@/features/genres";
 import { AdSense } from "@/features/google";
-import { cn, getErrorI18nKey } from "@/utils";
+import { cn, getErrorI18nKey, isShowAdsense } from "@/utils";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -102,9 +102,11 @@ export const GenreAddMobile: React.FC<GenreAddMobileProps> = ({
       </ScrollArea>
 
       {/* AdSense広告 - 画面の一番下 */}
-      <div className="px-4 py-4 border-t border-gray-200 dark:border-gray-700 hidden">
-        <AdSense adSlot="1234567890" adFormat="fluid" responsive={true} className="w-full" />
-      </div>
+      {isShowAdsense && (
+        <div className="px-4 py-4 border-t border-gray-200 dark:border-gray-700">
+          <AdSense adSlot="1234567890" adFormat="fluid" responsive={true} className="w-full" />
+        </div>
+      )}
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import { Button, Divider, GlassBackground, Icon, Image, Typography } from "@/components/ui";
 import { ROUTE } from "@/constants";
 import { AdSense } from "@/features/google";
+import { isShowAdsense } from "@/utils";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
@@ -101,9 +102,11 @@ export const TopMobile: React.FC = () => {
       </div>
 
       {/* モバイル画面専用: 下部のAdSense広告 */}
-      <div className="mt-8 px-4">
-        <AdSense adSlot="1234567890" adFormat="fluid" responsive={true} className="w-full" />
-      </div>
+      {isShowAdsense && (
+        <div className="mt-8 px-4">
+          <AdSense adSlot="1234567890" adFormat="fluid" responsive={true} className="w-full" />
+        </div>
+      )}
     </div>
   );
 };

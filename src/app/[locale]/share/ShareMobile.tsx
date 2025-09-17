@@ -4,7 +4,7 @@ import { AppHeader } from "@/components/layout";
 import { ScrollArea, UserInfo } from "@/components/ui";
 import { AdSense } from "@/features/google";
 import { ShareHandler } from "@/features/share/components/ShareHandler";
-import { cn } from "@/utils";
+import { cn, isShowAdsense } from "@/utils";
 import { useTranslations } from "next-intl";
 
 interface SharedData {
@@ -33,9 +33,11 @@ export const ShareMobile: React.FC<ShareMobileProps> = ({ locale, sharedData, cl
       </ScrollArea>
 
       {/* AdSense広告 - 画面の一番下 */}
-      <div className="px-4 py-4 border-t border-gray-200 dark:border-gray-700 hidden">
-        <AdSense adSlot="1234567890" adFormat="fluid" responsive={true} className="w-full" />
-      </div>
+      {isShowAdsense && (
+        <div className="px-4 py-4 border-t border-gray-200 dark:border-gray-700">
+          <AdSense adSlot="1234567890" adFormat="fluid" responsive={true} className="w-full" />
+        </div>
+      )}
     </div>
   );
 };

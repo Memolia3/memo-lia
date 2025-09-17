@@ -1,6 +1,7 @@
 import { Button, Divider, GlassBackground, Icon, Image, Typography } from "@/components/ui";
 import { ROUTE } from "@/constants";
 import { AdSense } from "@/features/google";
+import { isShowAdsense } from "@/utils";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
@@ -108,9 +109,11 @@ export const TopDesktop: React.FC = () => {
       </div>
 
       {/* PC画面専用: 下部の横長AdSense広告 */}
-      <div className="mt-8">
-        <AdSense adSlot="1234567890" adFormat="fluid" responsive={true} className="w-full" />
-      </div>
+      {isShowAdsense && (
+        <div className="mt-8">
+          <AdSense adSlot="1234567890" adFormat="fluid" responsive={true} className="w-full" />
+        </div>
+      )}
     </div>
   );
 };

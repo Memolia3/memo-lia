@@ -4,7 +4,7 @@ import { AppHeader } from "@/components/layout";
 import { Button, Divider, Icon, Loading, ScrollArea, Typography, UserInfo } from "@/components/ui";
 import { UrlCreateButton, UrlGrid, useGenreDetail } from "@/features/genreDetail";
 import { AdSense } from "@/features/google";
-import { cn } from "@/utils";
+import { cn, isShowAdsense } from "@/utils";
 import { ArrowLeft, Folder } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -163,9 +163,11 @@ export const GenreDetailMobile: React.FC<GenreDetailMobileProps> = ({
       </main>
 
       {/* AdSense広告 - 画面の一番下 */}
-      <div className="px-4 py-4 border-t border-gray-200 dark:border-gray-700 hidden">
-        <AdSense adSlot="1234567890" adFormat="fluid" responsive={true} className="w-full" />
-      </div>
+      {isShowAdsense && (
+        <div className="px-4 py-4 border-t border-gray-200 dark:border-gray-700">
+          <AdSense adSlot="1234567890" adFormat="fluid" responsive={true} className="w-full" />
+        </div>
+      )}
     </div>
   );
 };

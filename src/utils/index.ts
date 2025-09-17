@@ -1,4 +1,5 @@
 export * from "./cn";
+export * from "./config";
 export * from "./error-messages";
 export * from "./meta";
 export * from "./page-title";

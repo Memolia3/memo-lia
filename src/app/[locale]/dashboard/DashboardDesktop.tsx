@@ -5,7 +5,7 @@ import { AuthGuard, UserInfo } from "@/components/ui";
 import { DashboardContent } from "@/features/dashboard/components/DashboardContent";
 import { useDashboard } from "@/features/dashboard/hooks/useDashboard";
 import { AdSense } from "@/features/google";
-import { cn } from "@/utils";
+import { cn, isShowAdsense } from "@/utils";
 import { useTranslations } from "next-intl";
 
 export interface DashboardDesktopProps {
@@ -36,14 +36,16 @@ export const DashboardDesktop: React.FC<DashboardDesktopProps> = ({ className })
         </div>
 
         {/* AdSense広告 - 画面の一番下 */}
-        <div className="px-4 py-4 sm:px-6 sm:py-6 border-t border-gray-200 dark:border-gray-700 zoom-container hidden">
-          <AdSense
-            adSlot="1234567890"
-            adFormat="fluid"
-            responsive={true}
-            className="w-full zoom-safe"
-          />
-        </div>
+        {isShowAdsense && (
+          <div className="px-4 py-4 sm:px-6 sm:py-6 border-t border-gray-200 dark:border-gray-700 zoom-container">
+            <AdSense
+              adSlot="1234567890"
+              adFormat="fluid"
+              responsive={true}
+              className="w-full zoom-safe"
+            />
+          </div>
+        )}
       </div>
     </AuthGuard>
   );
