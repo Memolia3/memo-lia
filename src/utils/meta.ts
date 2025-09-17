@@ -98,5 +98,8 @@ export const generateMetadata = (locale: string, options: PageMetaOptions = {}):
     verification: {
       google: process.env.GOOGLE_SITE_VERIFICATION,
     },
+    other: {
+      "google-adsense-account": process.env.GOOGLE_ADSENSE_ACCOUNT || "",
+    },
   };
 };

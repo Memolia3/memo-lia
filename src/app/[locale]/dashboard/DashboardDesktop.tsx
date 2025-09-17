@@ -36,7 +36,7 @@ export const DashboardDesktop: React.FC<DashboardDesktopProps> = ({ className })
         </div>
 
         {/* AdSense広告 - 画面の一番下 */}
-        <div className="px-4 py-4 sm:px-6 sm:py-6 border-t border-gray-200 dark:border-gray-700 zoom-container">
+        <div className="px-4 py-4 sm:px-6 sm:py-6 border-t border-gray-200 dark:border-gray-700 zoom-container hidden">
           <AdSense
             adSlot="1234567890"
             adFormat="fluid"
