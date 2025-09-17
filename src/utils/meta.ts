@@ -56,8 +56,8 @@ export const generateMetadata = (locale: string, options: PageMetaOptions = {}):
       icon: [
         { url: "/favicon.ico", sizes: "any" },
         { url: "/icon.png", type: "image/png", sizes: "32x32" },
-        { url: "/assets/images/memo-lia-icon.png", type: "image/png", sizes: "192x192" },
-        { url: "/assets/images/memo-lia-icon.png", type: "image/png", sizes: "512x512" },
+        { url: "/assets/images/memo-lia-pwa-icon.png", type: "image/png", sizes: "192x192" },
+        { url: "/assets/images/memo-lia-pwa-icon.png", type: "image/png", sizes: "512x512" },
       ],
       apple: [{ url: "/apple-icon.png", sizes: "180x180" }],
     },

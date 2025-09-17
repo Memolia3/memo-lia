@@ -1,5 +1,5 @@
 const CACHE_NAME = "memolia-v1";
-const urlsToCache = ["/", "/manifest.json", "/assets/images/memo-lia-icon.png"];
+const urlsToCache = ["/", "/manifest.json", "/assets/images/memo-lia-pwa-icon.png"];
 
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache)));
