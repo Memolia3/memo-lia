@@ -32,11 +32,7 @@ const nextConfig: NextConfig = {
   // 実験的機能の設定
   experimental: {
     // SSGでの最適化
-    optimizePackageImports: ["next-intl", "lucide-react", "@tanstack/react-query"],
-    // パフォーマンス最適化
-    optimizeCss: true,
-    // Bundle analyzer
-    // bundlePagesRouterDependencies: true, // This option doesn't exist
+    optimizePackageImports: ["next-intl"],
   },
   // コンパイラーの最適化
   compiler: {
