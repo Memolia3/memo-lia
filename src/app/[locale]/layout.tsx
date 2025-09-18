@@ -65,6 +65,10 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} className="dark:bg-gray-900 h-full">
+      <head>
+        {/* Critical CSS preload */}
+        <link rel="preload" href="/globals.css" as="style" />
+      </head>
       <body
         className="antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 h-full"
         suppressHydrationWarning={true}

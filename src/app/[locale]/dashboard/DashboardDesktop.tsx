@@ -1,7 +1,7 @@
 "use client";
 
 import { AppHeader } from "@/components/layout";
-import { AuthGuard, Loading, UserInfo } from "@/components/ui";
+import { AuthGuard, UserInfo } from "@/components/ui";
 import { useDashboard } from "@/features/dashboard/hooks/useDashboard";
 import { cn, isShowAdsense } from "@/utils";
 import { useTranslations } from "next-intl";
@@ -16,8 +16,22 @@ const DashboardContent = dynamic(
   {
     ssr: true,
     loading: () => (
-      <div className="flex-1 flex items-center justify-center">
-        <Loading size="md" variant="spinner" showBackground={false} />
+      <div className="flex-1 px-4 py-6 sm:px-6 sm:py-8">
+        <div className="max-w-7xl mx-auto space-y-6">
+          {/* Skeleton for DashboardActions */}
+          <div className="flex justify-center">
+            <div className="loading-skeleton w-32 h-10 rounded-lg" />
+          </div>
+          {/* Skeleton for CategoryGrid */}
+          <div
+            className="grid gap-6 justify-items-center"
+            style={{ gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))" }}
+          >
+            {Array.from({ length: 6 }, (_, i) => (
+              <div key={`skeleton-${i}`} className="loading-skeleton w-24 h-24 rounded-lg" />
+            ))}
+          </div>
+        </div>
       </div>
     ),
   }
@@ -54,8 +68,25 @@ export const DashboardDesktop: React.FC<DashboardDesktopProps> = ({ className })
           <div className="max-w-7xl mx-auto w-full flex flex-col h-full zoom-safe">
             <Suspense
               fallback={
-                <div className="flex-1 flex items-center justify-center">
-                  <Loading size="md" variant="spinner" showBackground={false} />
+                <div className="flex-1 px-4 py-6 sm:px-6 sm:py-8">
+                  <div className="max-w-7xl mx-auto space-y-6">
+                    {/* Skeleton for DashboardActions */}
+                    <div className="flex justify-center">
+                      <div className="loading-skeleton w-32 h-10 rounded-lg" />
+                    </div>
+                    {/* Skeleton for CategoryGrid */}
+                    <div
+                      className="grid gap-6 justify-items-center"
+                      style={{ gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))" }}
+                    >
+                      {Array.from({ length: 6 }, (_, i) => (
+                        <div
+                          key={`skeleton-suspense-${i}`}
+                          className="loading-skeleton w-24 h-24 rounded-lg"
+                        />
+                      ))}
+                    </div>
+                  </div>
                 </div>
               }
             >
