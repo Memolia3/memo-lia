@@ -12,7 +12,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useGenres } from "../../hooks/useGenres";
-import { validateBookmarkletSecurity } from "../../hooks/useShareValidation";
+import { validateBookmarkletSecurity, validateUrl } from "../../hooks/useShareValidation";
 
 interface SharedData {
   title?: string;
@@ -48,20 +48,38 @@ export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData, 
     error: previewError,
   } = useUrlMetadata(sharedData.url || "", { autoFetch: !!sharedData.url && !!session?.user?.id });
 
-  // セキュリティ検証の実行
+  // セキュリティ検証の実行（ブックマークレット対応）
   useEffect(() => {
     if (sharedData.url && sharedData.title) {
-      const securityCheck = validateBookmarkletSecurity(
-        sharedData.url,
-        sharedData.title,
-        navigator.userAgent,
-        document.referrer
-      );
+      // ブックマークレットからのアクセスの場合は検証を緩和
+      const isBookmarklet =
+        !document.referrer ||
+        document.referrer.includes("javascript:") ||
+        document.referrer.includes("bookmarklet") ||
+        document.referrer.includes("memolia");
 
-      if (!securityCheck.isValid) {
-        setSecurityError(securityCheck.reason || "Security validation failed");
+      if (isBookmarklet) {
+        // ブックマークレットの場合は基本的な検証のみ
+        const basicCheck = validateUrl(sharedData.url);
+        if (!basicCheck) {
+          setSecurityError("Invalid URL");
+        } else {
+          setSecurityError(null);
+        }
       } else {
-        setSecurityError(null);
+        // 通常のアクセスの場合は完全な検証
+        const securityCheck = validateBookmarkletSecurity(
+          sharedData.url,
+          sharedData.title,
+          navigator.userAgent,
+          document.referrer
+        );
+
+        if (!securityCheck.isValid) {
+          setSecurityError(securityCheck.reason || "Security validation failed");
+        } else {
+          setSecurityError(null);
+        }
       }
     }
   }, [sharedData.url, sharedData.title]);

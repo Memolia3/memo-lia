@@ -231,36 +231,55 @@ export function getClientIP(headers: Headers): string {
   );
 }
 
-// セキュリティ強化のための追加検証
+// セキュリティ強化のための追加検証（ブックマークレット対応版）
 export function validateBookmarkletSecurity(
   url: string,
   title: string,
   userAgent: string | null,
   referer: string | null
 ): { isValid: boolean; reason?: string } {
-  // 1. ブックマークレット特有の検証
-  if (referer && referer.includes("javascript:")) {
-    return { isValid: false, reason: "Suspicious referer detected" };
+  // 1. ブックマークレット特有の検証（緩和）
+  // ブックマークレットは通常リファラーがないか、javascript:になることがある
+  // ただし、明らかに悪意のあるパターンのみブロック
+  if (
+    referer &&
+    referer.includes("javascript:") &&
+    !referer.includes("bookmarklet") &&
+    !referer.includes("memolia")
+  ) {
+    // より厳密なチェック：危険なパターンのみ
+    const dangerousRefererPatterns = [
+      /javascript:\s*eval/i,
+      /javascript:\s*function/i,
+      /javascript:\s*setTimeout/i,
+      /javascript:\s*setInterval/i,
+    ];
+
+    for (const pattern of dangerousRefererPatterns) {
+      if (pattern.test(referer)) {
+        return { isValid: false, reason: "Suspicious referer detected" };
+      }
+    }
   }
 
-  // 2. 異常に長いタイトルの検証
-  if (title && title.length > 500) {
+  // 2. 異常に長いタイトルの検証（緩和）
+  if (title && title.length > 1000) {
     return { isValid: false, reason: "Title too long" };
   }
 
-  // 3. 異常なURLパラメータの検証
+  // 3. 異常なURLパラメータの検証（緩和）
   try {
     const urlObj = new URL(url);
     const params = urlObj.searchParams;
 
-    // パラメータの数が異常に多い場合
-    if (params.size > 20) {
+    // パラメータの数が異常に多い場合（緩和）
+    if (params.size > 50) {
       return { isValid: false, reason: "Too many URL parameters" };
     }
 
-    // パラメータの値が異常に長い場合
+    // パラメータの値が異常に長い場合（緩和）
     for (const [, value] of params) {
-      if (value.length > 1000) {
+      if (value.length > 2000) {
         return { isValid: false, reason: "URL parameter value too long" };
       }
     }
@@ -268,25 +287,22 @@ export function validateBookmarkletSecurity(
     return { isValid: false, reason: "Invalid URL structure" };
   }
 
-  // 4. User-Agentの検証強化
-  if (!userAgent || userAgent.length < 20) {
+  // 4. User-Agentの検証（緩和）
+  if (!userAgent || userAgent.length < 5) {
     return { isValid: false, reason: "Invalid or missing User-Agent" };
   }
 
-  // 5. 疑わしいUser-Agentパターンの検証
-  const suspiciousUserAgents = [
-    /bot/i,
-    /crawler/i,
-    /spider/i,
-    /scraper/i,
-    /curl/i,
-    /wget/i,
-    /python/i,
-    /java/i,
-    /php/i,
+  // 5. 疑わしいUser-Agentパターンの検証（緩和）
+  // 明らかにボットと分かるもののみブロック
+  const criticalUserAgents = [
+    /^curl\//i,
+    /^wget\//i,
+    /^python-requests/i,
+    /^java\/\d/i,
+    /^php\/\d/i,
   ];
 
-  for (const pattern of suspiciousUserAgents) {
+  for (const pattern of criticalUserAgents) {
     if (pattern.test(userAgent)) {
       return { isValid: false, reason: "Automated request detected" };
     }
