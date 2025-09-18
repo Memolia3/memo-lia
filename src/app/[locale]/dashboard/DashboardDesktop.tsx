@@ -1,12 +1,33 @@
 "use client";
 
 import { AppHeader } from "@/components/layout";
-import { AuthGuard, UserInfo } from "@/components/ui";
-import { DashboardContent } from "@/features/dashboard/components/DashboardContent";
+import { AuthGuard, Loading, UserInfo } from "@/components/ui";
 import { useDashboard } from "@/features/dashboard/hooks/useDashboard";
-import { AdSense } from "@/features/google";
 import { cn, isShowAdsense } from "@/utils";
 import { useTranslations } from "next-intl";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+// DashboardContentを遅延読み込み
+const DashboardContent = dynamic(
+  () =>
+    import("@/features/dashboard/components/DashboardContent").then(mod => ({
+      default: mod.DashboardContent,
+    })),
+  {
+    ssr: true,
+    loading: () => (
+      <div className="flex-1 flex items-center justify-center">
+        <Loading size="md" variant="spinner" showBackground={false} />
+      </div>
+    ),
+  }
+);
+
+// AdSenseコンポーネントを遅延読み込み
+const AdSense = dynamic(() => import("@/features/google").then(mod => ({ default: mod.AdSense })), {
+  ssr: false,
+  loading: () => <div className="w-full h-24 bg-gray-100 dark:bg-gray-800 animate-pulse rounded" />,
+});
 
 export interface DashboardDesktopProps {
   className?: string;
@@ -31,19 +52,33 @@ export const DashboardDesktop: React.FC<DashboardDesktopProps> = ({ className })
         <AppHeader title={t("title")} userInfo={<UserInfo />} />
         <div className="flex-1 flex flex-col overflow-hidden zoom-container">
           <div className="max-w-7xl mx-auto w-full flex flex-col h-full zoom-safe">
-            <DashboardContent onCategoryClick={handleCategoryClick} />
+            <Suspense
+              fallback={
+                <div className="flex-1 flex items-center justify-center">
+                  <Loading size="md" variant="spinner" showBackground={false} />
+                </div>
+              }
+            >
+              <DashboardContent onCategoryClick={handleCategoryClick} />
+            </Suspense>
           </div>
         </div>
 
         {/* AdSense広告 - 画面の一番下 */}
         {isShowAdsense && (
           <div className="px-4 py-4 sm:px-6 sm:py-6 border-t border-gray-200 dark:border-gray-700 zoom-container">
-            <AdSense
-              adSlot="1234567890"
-              adFormat="fluid"
-              responsive={true}
-              className="w-full zoom-safe"
-            />
+            <Suspense
+              fallback={
+                <div className="w-full h-24 bg-gray-100 dark:bg-gray-800 animate-pulse rounded" />
+              }
+            >
+              <AdSense
+                adSlot="1234567890"
+                adFormat="fluid"
+                responsive={true}
+                className="w-full zoom-safe"
+              />
+            </Suspense>
           </div>
         )}
       </div>

@@ -1,25 +1,40 @@
-const CACHE_NAME = "memolia-v1";
-const urlsToCache = ["/", "/manifest.json", "/assets/images/memo-lia-pwa-icon.png"];
+const STATIC_CACHE_NAME = "memolia-static-v2";
+const DYNAMIC_CACHE_NAME = "memolia-dynamic-v2";
+
+const urlsToCache = [
+  "/",
+  "/manifest.json",
+  "/assets/images/memo-lia-pwa-icon.png",
+  "/assets/images/memo-lia-icon.png",
+  "/favicon.ico",
+];
 
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
+    caches.open(STATIC_CACHE_NAME).then(cache => {
       return cache.addAll(urlsToCache);
     })
   );
+  // 新しいService Workerを即座にアクティブにする
+  self.skipWaiting();
 });
 
 self.addEventListener("activate", event => {
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
+    Promise.all([
+      // 古いキャッシュを削除
+      caches.keys().then(cacheNames => {
+        return Promise.all(
+          cacheNames.map(cacheName => {
+            if (cacheName !== STATIC_CACHE_NAME && cacheName !== DYNAMIC_CACHE_NAME) {
+              return caches.delete(cacheName);
+            }
+          })
+        );
+      }),
+      // すべてのクライアントを制御下に置く
+      self.clients.claim(),
+    ])
   );
 });
 
@@ -51,30 +66,30 @@ self.addEventListener("fetch", event => {
     return;
   }
 
-  // 通常のキャッシュ処理
+  // 通常のキャッシュ処理 - Network First戦略
   event.respondWith(
-    caches.match(event.request).then(response => {
-      if (response) {
-        return response;
-      }
+    caches.open(DYNAMIC_CACHE_NAME).then(cache => {
+      return fetch(event.request)
+        .then(fetchResponse => {
+          // リダイレクトレスポンスはキャッシュしない
+          if (
+            fetchResponse.type === "opaqueredirect" ||
+            (fetchResponse.status >= 300 && fetchResponse.status < 400)
+          ) {
+            return fetchResponse;
+          }
 
-      return fetch(event.request).then(fetchResponse => {
-        // リダイレクトレスポンスはキャッシュしない
-        if (
-          fetchResponse.type === "opaqueredirect" ||
-          (fetchResponse.status >= 300 && fetchResponse.status < 400)
-        ) {
+          // 正常なレスポンスのみキャッシュ
+          if (fetchResponse.status === 200) {
+            cache.put(event.request, fetchResponse.clone());
+          }
+
           return fetchResponse;
-        }
-
-        // 正常なレスポンスのみキャッシュ
-        const responseClone = fetchResponse.clone();
-        caches.open(CACHE_NAME).then(cache => {
-          cache.put(event.request, responseClone);
+        })
+        .catch(() => {
+          // ネットワークエラーの場合はキャッシュから返す
+          return caches.match(event.request);
         });
-
-        return fetchResponse;
-      });
     })
   );
 });
