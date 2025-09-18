@@ -23,7 +23,7 @@ export const BookmarkletInstaller: React.FC<BookmarkletInstallerProps> = ({ clas
   };
 
   /**
-   * ブックマークレットのJavaScriptコード
+   * ブックマークレットのJavaScriptコード（難読化済み）
    *
    * 処理内容:
    * 1. 現在のページのタイトルとURLを取得
@@ -36,12 +36,15 @@ export const BookmarkletInstaller: React.FC<BookmarkletInstallerProps> = ({ clas
    * @type {string}
    */
   const bookmarklet = `javascript:(function(){
-    const t=document.title||'',u=location.href||'';
-    if(!u.startsWith('http')){alert('Invalid URL');return;}
-    const l=navigator.language.startsWith('ja')?'ja':'en';
-    const appUrl='${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}';
-    location.href=appUrl+'/'+l+'/share?title='+
-      encodeURIComponent(t)+'&url='+encodeURIComponent(u);
+    var _0x1a2b=document['title']||'',
+        _0x3c4d=location['href']||'';
+    if(!_0x3c4d['startsWith']('http')){
+      alert('Invalid URL');return;
+    }
+    var _0x5e6f=navigator['language']['startsWith']('ja')?'ja':'en',
+        _0x7g8h='${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}';
+    location['href']=_0x7g8h+'/'+_0x5e6f+'/share?title='+
+      encodeURIComponent(_0x1a2b)+'&url='+encodeURIComponent(_0x3c4d);
   })();`;
 
   const handleCopy = async () => {

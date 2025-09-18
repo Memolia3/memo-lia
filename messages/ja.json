@@ -392,6 +392,7 @@
     "saving": "保存中...",
     "saved": "URLを保存しました",
     "saveError": "URLの保存に失敗しました",
+    "securityError": "セキュリティ検証に失敗しました",
     "missingInfo": "必要な情報が不足しています",
     "defaultTitle": "共有されたリンク",
     "noTitle": "タイトルなし",

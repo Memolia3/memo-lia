@@ -374,6 +374,7 @@
     "saving": "Saving...",
     "saved": "URL saved successfully",
     "saveError": "Failed to save URL",
+    "securityError": "Security validation failed",
     "missingInfo": "Missing required information",
     "defaultTitle": "Shared Link",
     "noTitle": "No Title",

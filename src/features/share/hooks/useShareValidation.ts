@@ -12,10 +12,43 @@ const DANGEROUS_PATTERNS = [
   /onload=/i,
   /onerror=/i,
   /onclick=/i,
+  /onmouseover=/i,
+  /onfocus=/i,
+  /onblur=/i,
+  /onchange=/i,
+  /onsubmit=/i,
   /<script/i,
   /<\/script/i,
   /eval\(/i,
   /expression\(/i,
+  /setTimeout\(/i,
+  /setInterval\(/i,
+  /Function\(/i,
+  /new\s+Function/i,
+  /document\.write/i,
+  /innerHTML\s*=/i,
+  /outerHTML\s*=/i,
+  /document\.createElement/i,
+  /window\.open/i,
+  /location\.href\s*=/i,
+  /location\.replace/i,
+  /history\.pushState/i,
+  /history\.replaceState/i,
+  /fetch\(/i,
+  /XMLHttpRequest/i,
+  /WebSocket/i,
+  /postMessage/i,
+  /import\s*\(/i,
+  /require\s*\(/i,
+  /\.call\(/i,
+  /\.apply\(/i,
+  /\.bind\(/i,
+  /atob\(/i,
+  /btoa\(/i,
+  /unescape\(/i,
+  /escape\(/i,
+  /decodeURIComponent\(/i,
+  /encodeURIComponent\(/i,
 ];
 
 // URL検証関数
@@ -156,25 +189,35 @@ export function validateUserAgent(userAgent: string | null): boolean {
   return !!(userAgent && userAgent.length >= 10);
 }
 
-// レート制限チェック（簡易版）
-const requestCounts = new Map<string, { count: number; lastReset: number }>();
+// レート制限チェック（強化版）
+const requestCounts = new Map<string, { count: number; lastReset: number; suspicious: boolean }>();
 const RATE_LIMIT_WINDOW = 60000; // 1分
-const RATE_LIMIT_MAX_REQUESTS = 10; // 1分間に10回まで
+const RATE_LIMIT_MAX_REQUESTS = 5; // 1分間に5回まで（強化）
+const SUSPICIOUS_THRESHOLD = 3; // 3回で疑わしいとマーク
 
 export function checkRateLimit(ip: string): boolean {
   const now = Date.now();
   const userRequests = requestCounts.get(ip);
 
   if (!userRequests || now - userRequests.lastReset > RATE_LIMIT_WINDOW) {
-    requestCounts.set(ip, { count: 1, lastReset: now });
+    requestCounts.set(ip, { count: 1, lastReset: now, suspicious: false });
     return true;
   }
 
-  if (userRequests.count >= RATE_LIMIT_MAX_REQUESTS) {
+  // 疑わしいIPの場合はより厳しい制限
+  const maxRequests = userRequests.suspicious ? 2 : RATE_LIMIT_MAX_REQUESTS;
+
+  if (userRequests.count >= maxRequests) {
     return false;
   }
 
   userRequests.count++;
+
+  // 疑わしい行動の検出
+  if (userRequests.count >= SUSPICIOUS_THRESHOLD) {
+    userRequests.suspicious = true;
+  }
+
   return true;
 }
 
@@ -186,6 +229,70 @@ export function getClientIP(headers: Headers): string {
     headers.get("cf-connecting-ip") ||
     "unknown"
   );
+}
+
+// セキュリティ強化のための追加検証
+export function validateBookmarkletSecurity(
+  url: string,
+  title: string,
+  userAgent: string | null,
+  referer: string | null
+): { isValid: boolean; reason?: string } {
+  // 1. ブックマークレット特有の検証
+  if (referer && referer.includes("javascript:")) {
+    return { isValid: false, reason: "Suspicious referer detected" };
+  }
+
+  // 2. 異常に長いタイトルの検証
+  if (title && title.length > 500) {
+    return { isValid: false, reason: "Title too long" };
+  }
+
+  // 3. 異常なURLパラメータの検証
+  try {
+    const urlObj = new URL(url);
+    const params = urlObj.searchParams;
+
+    // パラメータの数が異常に多い場合
+    if (params.size > 20) {
+      return { isValid: false, reason: "Too many URL parameters" };
+    }
+
+    // パラメータの値が異常に長い場合
+    for (const [, value] of params) {
+      if (value.length > 1000) {
+        return { isValid: false, reason: "URL parameter value too long" };
+      }
+    }
+  } catch {
+    return { isValid: false, reason: "Invalid URL structure" };
+  }
+
+  // 4. User-Agentの検証強化
+  if (!userAgent || userAgent.length < 20) {
+    return { isValid: false, reason: "Invalid or missing User-Agent" };
+  }
+
+  // 5. 疑わしいUser-Agentパターンの検証
+  const suspiciousUserAgents = [
+    /bot/i,
+    /crawler/i,
+    /spider/i,
+    /scraper/i,
+    /curl/i,
+    /wget/i,
+    /python/i,
+    /java/i,
+    /php/i,
+  ];
+
+  for (const pattern of suspiciousUserAgents) {
+    if (pattern.test(userAgent)) {
+      return { isValid: false, reason: "Automated request detected" };
+    }
+  }
+
+  return { isValid: true };
 }
 
 // 共有データの検証とサニタイズ

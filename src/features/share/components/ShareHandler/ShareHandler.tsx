@@ -12,6 +12,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useGenres } from "../../hooks/useGenres";
+import { validateBookmarkletSecurity } from "../../hooks/useShareValidation";
 
 interface SharedData {
   title?: string;
@@ -37,12 +38,33 @@ export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData, 
   const tForm = useTranslations("urlForm");
   const [isLoading, setIsLoading] = useState(false);
 
+  // セキュリティ検証
+  const [securityError, setSecurityError] = useState<string | null>(null);
+
   // URLメタデータ取得フック
   const {
     metadata,
     isLoading: isValidating,
     error: previewError,
   } = useUrlMetadata(sharedData.url || "", { autoFetch: !!sharedData.url && !!session?.user?.id });
+
+  // セキュリティ検証の実行
+  useEffect(() => {
+    if (sharedData.url && sharedData.title) {
+      const securityCheck = validateBookmarkletSecurity(
+        sharedData.url,
+        sharedData.title,
+        navigator.userAgent,
+        document.referrer
+      );
+
+      if (!securityCheck.isValid) {
+        setSecurityError(securityCheck.reason || "Security validation failed");
+      } else {
+        setSecurityError(null);
+      }
+    }
+  }, [sharedData.url, sharedData.title]);
 
   // カテゴリが変更されたときにジャンルを取得
   useEffect(() => {
@@ -250,8 +272,22 @@ export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData, 
         </div>
       </form>
 
+      {/* セキュリティエラー表示 */}
+      {securityError && (
+        <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 mb-4">
+          <Typography variant="body" className="text-red-400 font-medium">
+            {t("securityError")}
+          </Typography>
+          <Typography variant="body-sm" className="text-red-300 mt-2">
+            {securityError}
+          </Typography>
+        </div>
+      )}
+
       {/* URLプレビュー */}
-      <UrlPreview metadata={metadata} error={previewError} isLoading={isValidating} />
+      {!securityError && (
+        <UrlPreview metadata={metadata} error={previewError} isLoading={isValidating} />
+      )}
     </div>
   );
 };
