@@ -223,7 +223,7 @@ export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData, 
             value={selectedCategoryId}
             onChange={e => setSelectedCategoryId(e.target.value)}
             className="w-full px-4 py-3 border border-white/20 rounded-lg
-              bg-white/10 dark:bg-gray-800/10 backdrop-blur-sm
+              bg-gray-800 dark:bg-gray-800
               text-white dark:text-white
               focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent
               transition-all duration-200"
@@ -250,7 +250,7 @@ export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData, 
               onChange={e => setSelectedGenreId(e.target.value)}
               disabled={genresLoading}
               className="w-full px-4 py-3 border border-white/20 rounded-lg
-                bg-white/10 dark:bg-gray-800/10 backdrop-blur-sm
+                bg-gray-800 dark:bg-gray-800
                 text-white dark:text-white disabled:opacity-50
                 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent
                 transition-all duration-200"
