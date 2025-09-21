@@ -10,9 +10,9 @@ interface UrlMetadata {
   url: string;
 }
 
-// メモリキャッシュ（本番環境ではRedisなどの外部キャッシュを使用推奨）
+// メモリキャッシュ（Vercel無料プラン向けに最適化）
 const metadataCache = new Map<string, { data: UrlMetadata; timestamp: number }>();
-const CACHE_TTL = 5 * 60 * 1000; // 5分間キャッシュ
+const CACHE_TTL = 10 * 60 * 1000; // 10分間キャッシュ（無料プラン対応）
 
 // 定期的なキャッシュクリーンアップ（5分ごと）
 setInterval(
@@ -32,8 +32,8 @@ export async function POST(request: NextRequest) {
     // レート制限チェック
     const clientIp =
       request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
-    if (checkRateLimit(`metadata:${clientIp}`, 10, 60000)) {
-      // 1分間に10回まで
+    if (checkRateLimit(`metadata:${clientIp}`, 20, 60000)) {
+      // 1分間に20回まで（無料プラン向けに緩和）
       return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
     }
 
@@ -72,12 +72,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid URL format" }, { status: 400 });
     }
 
-    // URLのHTMLを取得
+    // URLのHTMLを取得（Vercel無料プラン向けに短縮）
     const response = await fetch(validUrl.toString(), {
       headers: {
         "User-Agent": "Mozilla/5.0 (compatible; URL-metadata-bot/1.0)",
       },
-      signal: AbortSignal.timeout(10000), // 10秒でタイムアウト
+      signal: AbortSignal.timeout(5000), // 5秒でタイムアウト（無料プラン対応）
     });
 
     if (!response.ok) {
