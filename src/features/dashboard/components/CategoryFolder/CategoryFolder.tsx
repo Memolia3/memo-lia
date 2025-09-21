@@ -22,15 +22,15 @@ export const CategoryFolder: React.FC<CategoryFolderProps> = memo(
     const { addNotification } = useNotificationStore();
     const t = useTranslations("dashboard");
 
-    // ブラウザの言語設定から言語を取得
-    const getCurrentLocale = () => {
+    // ブラウザの言語設定から言語を取得（メモ化）
+    const getCurrentLocale = useCallback(() => {
       if (typeof window !== "undefined") {
         const pathname = window.location.pathname;
         const localeMatch = pathname.match(/^\/([a-z]{2})\//);
         return localeMatch ? localeMatch[1] : "ja";
       }
       return "ja";
-    };
+    }, []);
 
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {

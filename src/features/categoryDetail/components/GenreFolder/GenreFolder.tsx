@@ -9,7 +9,7 @@ import { Folder, MoreVertical } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { GenreFolderProps } from "./GenreFolder.types";
 
 export const GenreFolder: React.FC<GenreFolderProps> = ({ genre, className, onDelete }) => {
@@ -47,7 +47,7 @@ export const GenreFolder: React.FC<GenreFolderProps> = ({ genre, className, onDe
     };
   }, [showMenu]);
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     // ジャンル詳細ページに遷移
     const currentLocale = getCurrentLocale();
     const currentPath = window.location.pathname;
@@ -60,7 +60,7 @@ export const GenreFolder: React.FC<GenreFolderProps> = ({ genre, className, onDe
       const genreDetailUrl = `${basePath}/genre/${genre.id}/${encodedGenreName}`;
       router.push(genreDetailUrl);
     }
-  };
+  }, [genre.id, genre.name, router]);
 
   const handleMenuClick = (e: React.MouseEvent) => {
     e.stopPropagation();

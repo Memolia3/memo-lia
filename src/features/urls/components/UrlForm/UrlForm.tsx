@@ -25,7 +25,7 @@ export const UrlForm: React.FC<UrlFormProps> = memo(
       error: previewError,
     } = useUrlMetadata(
       formData.url,
-      { autoFetch: true, debounceMs: 800 } // 自動取得を有効にして、デバウンスを長めに設定
+      { autoFetch: true, debounceMs: 1200 } // 自動取得を有効にして、デバウンスを長めに設定
     );
 
     useEffect(() => {
@@ -48,7 +48,7 @@ export const UrlForm: React.FC<UrlFormProps> = memo(
         }));
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [metadata]); // formDataの依存関係を意図的に除外してパフォーマンスを向上
+    }, [metadata?.title, metadata?.description]); // 必要な部分のみを依存関係に追加
 
     const validateUrl = useCallback((url: string): boolean => {
       try {

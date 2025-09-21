@@ -73,6 +73,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       helpText: isJapanese
         ? "問題が解決しない場合は、ページを再読み込みしてください。"
         : "If the problem persists, please reload the page.",
+      details: isJapanese ? "エラー詳細:" : "Error details:",
+      stackTrace: isJapanese ? "スタックトレース" : "Stack trace",
     };
     return messages[key as keyof typeof messages] || key;
   };
@@ -113,7 +115,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                     color="primary"
                     className="mb-2 block"
                   >
-                    エラー詳細:
+                    {this.getErrorMessage("details")}
                   </Typography>
                   <Typography
                     variant="caption"
@@ -124,7 +126,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                   {this.state.error.stack && (
                     <details className="mt-2">
                       <summary className="cursor-pointer text-xs text-gray-600 dark:text-gray-400">
-                        スタックトレース
+                        {this.getErrorMessage("stackTrace")}
                       </summary>
                       <pre className="mt-2 text-xs text-gray-600 dark:text-gray-400 overflow-auto max-h-32">
                         {this.state.error.stack}

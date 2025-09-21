@@ -39,7 +39,7 @@ export const BookmarkletInstaller: React.FC<BookmarkletInstallerProps> = ({ clas
     var _0x1a2b=document['title']||'',
         _0x3c4d=location['href']||'';
     if(!_0x3c4d['startsWith']('http')){
-      alert('Invalid URL');return;
+      alert(navigator['language']['startsWith']('ja')?'無効なURLです':'Invalid URL');return;
     }
     var _0x5e6f=navigator['language']['startsWith']('ja')?'ja':'en',
         _0x7g8h='${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}';

@@ -49,7 +49,14 @@ export const NotificationContainer: React.FC = memo(() => {
   );
 
   // 表示中の通知のみをフィルタリング（メモ化）
-  const visibleNotifications = useMemo(() => notifications.filter(n => n.visible), [notifications]);
+  const visibleNotifications = useMemo(() => {
+    const visible = notifications.filter(n => n.visible);
+    // z-indexを事前計算して配列に含める
+    return visible.map((notification, index) => ({
+      ...notification,
+      zIndex: 50 + (visible.length - index),
+    }));
+  }, [notifications]);
 
   const containerClasses = getContainerStyles(position);
 
@@ -64,7 +71,7 @@ export const NotificationContainer: React.FC = memo(() => {
           key={notification.id}
           className="pointer-events-auto"
           style={{
-            zIndex: 50 + (visibleNotifications.length - visibleNotifications.indexOf(notification)),
+            zIndex: notification.zIndex,
           }}
         >
           <NotificationItem notification={notification} onClose={removeNotificationWithAnimation} />

@@ -14,7 +14,7 @@ export function useUrlMetadata(
   fetchMetadata: () => Promise<void>;
   clearMetadata: () => void;
 } {
-  const { autoFetch = true, debounceMs = 500 } = options;
+  const { autoFetch = true, debounceMs = 1000 } = options;
   const t = useTranslations("urlForm");
 
   const [state, setState] = useState<UrlMetadataState>({
@@ -85,7 +85,7 @@ export function useUrlMetadata(
     }, debounceMs);
 
     return () => clearTimeout(timeoutId);
-  }, [url, autoFetch, debounceMs, fetchMetadata]);
+  }, [url, autoFetch, debounceMs]);
 
   return {
     ...state,

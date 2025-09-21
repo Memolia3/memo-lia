@@ -10,6 +10,23 @@ interface UrlMetadata {
   url: string;
 }
 
+// メモリキャッシュ（本番環境ではRedisなどの外部キャッシュを使用推奨）
+const metadataCache = new Map<string, { data: UrlMetadata; timestamp: number }>();
+const CACHE_TTL = 5 * 60 * 1000; // 5分間キャッシュ
+
+// 定期的なキャッシュクリーンアップ（5分ごと）
+setInterval(
+  () => {
+    const now = Date.now();
+    for (const [key, entry] of metadataCache.entries()) {
+      if (now - entry.timestamp > CACHE_TTL) {
+        metadataCache.delete(key);
+      }
+    }
+  },
+  5 * 60 * 1000
+);
+
 export async function POST(request: NextRequest) {
   try {
     // レート制限チェック
@@ -30,6 +47,13 @@ export async function POST(request: NextRequest) {
 
     if (!url) {
       return NextResponse.json({ error: "URL is required" }, { status: 400 });
+    }
+
+    // キャッシュチェック
+    const cacheKey = url.toLowerCase();
+    const cached = metadataCache.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+      return NextResponse.json(cached.data);
     }
 
     // URLの妥当性チェック
@@ -118,6 +142,20 @@ export async function POST(request: NextRequest) {
     } else {
       // デフォルトファビコンを試す
       metadata.faviconUrl = `${validUrl.origin}/favicon.ico`;
+    }
+
+    // キャッシュに保存
+    metadataCache.set(cacheKey, {
+      data: metadata,
+      timestamp: Date.now(),
+    });
+
+    // キャッシュサイズ制限（1000件まで）
+    if (metadataCache.size > 1000) {
+      const firstKey = metadataCache.keys().next().value;
+      if (firstKey) {
+        metadataCache.delete(firstKey);
+      }
     }
 
     return NextResponse.json(metadata);

@@ -35,7 +35,7 @@ export const parseError = (error: unknown): ErrorDetails => {
     if (error.message === "NEXT_REDIRECT") {
       return {
         type: "unknown",
-        message: "リダイレクト処理中",
+        message: "Redirecting...",
         originalError: error,
       };
     }
@@ -44,7 +44,7 @@ export const parseError = (error: unknown): ErrorDetails => {
     if (error.name === "NetworkError" || error.message.includes("fetch")) {
       return {
         type: "network",
-        message: "ネットワークエラーが発生しました",
+        message: "Network error occurred",
         originalError: error,
       };
     }
@@ -53,7 +53,7 @@ export const parseError = (error: unknown): ErrorDetails => {
     if (error.name === "TimeoutError" || error.message.includes("timeout")) {
       return {
         type: "timeout",
-        message: "リクエストがタイムアウトしました",
+        message: "Request timed out",
         originalError: error,
       };
     }
@@ -86,7 +86,7 @@ export const parseError = (error: unknown): ErrorDetails => {
         if (status === 401) {
           return {
             type: "authentication",
-            message: "認証が必要です",
+            message: "Authentication required",
             status,
             originalError: error,
           };
@@ -95,7 +95,7 @@ export const parseError = (error: unknown): ErrorDetails => {
         if (status === 403) {
           return {
             type: "authorization",
-            message: "アクセス権限がありません",
+            message: "Access denied",
             status,
             originalError: error,
           };
@@ -104,7 +104,7 @@ export const parseError = (error: unknown): ErrorDetails => {
         if (status === 422) {
           return {
             type: "validation",
-            message: "入力内容に問題があります",
+            message: "Validation error",
             status,
             originalError: error,
           };
@@ -112,7 +112,7 @@ export const parseError = (error: unknown): ErrorDetails => {
 
         return {
           type: "client",
-          message: (errorObj.message as string) || "クライアントエラーが発生しました",
+          message: (errorObj.message as string) || "Client error occurred",
           status,
           originalError: error,
         };
@@ -121,7 +121,7 @@ export const parseError = (error: unknown): ErrorDetails => {
       if (status >= 500) {
         return {
           type: "server",
-          message: "サーバーエラーが発生しました",
+          message: "Server error occurred",
           status,
           originalError: error,
         };
@@ -130,7 +130,7 @@ export const parseError = (error: unknown): ErrorDetails => {
 
     return {
       type: "unknown",
-      message: (errorObj.message as string) || "不明なエラーが発生しました",
+      message: (errorObj.message as string) || "Unknown error occurred",
       originalError: error,
     };
   }
@@ -138,7 +138,7 @@ export const parseError = (error: unknown): ErrorDetails => {
   // その他の場合
   return {
     type: "unknown",
-    message: "不明なエラーが発生しました",
+    message: "Unknown error occurred",
     originalError: error,
   };
 };

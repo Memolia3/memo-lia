@@ -49,7 +49,7 @@ export const GenreDetailDesktop: React.FC<GenreDetailDesktopProps> = ({
             size="lg"
             variant="spinner"
             text={t("loading")}
-            description="ジャンル情報を取得しています"
+            description={t("loadingDescription")}
           />
         </main>
       </div>

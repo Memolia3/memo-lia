@@ -109,19 +109,29 @@ export const useNotificationStore = create<NotificationStore>()(
         };
 
         set(state => {
-          const newNotifications = [...state.notifications, notification]
-            .sort((a, b) => {
-              // 優先度でソート（高い優先度が先）
-              const priorityDiff = (b.priority || 0) - (a.priority || 0);
-              if (priorityDiff !== 0) return priorityDiff;
+          // 新しい通知を追加
+          const updatedNotifications = [...state.notifications, notification];
 
-              // 同じ優先度の場合は作成日時でソート（新しいものが先）
-              return b.createdAt.getTime() - a.createdAt.getTime();
-            })
-            .slice(0, state.maxNotifications);
+          // 最大通知数を超えている場合は、優先度と作成日時でソートしてからスライス
+          if (updatedNotifications.length > state.maxNotifications) {
+            const sortedNotifications = updatedNotifications
+              .sort((a, b) => {
+                // 優先度でソート（高い優先度が先）
+                const priorityDiff = (b.priority || 0) - (a.priority || 0);
+                if (priorityDiff !== 0) return priorityDiff;
+
+                // 同じ優先度の場合は作成日時でソート（新しいものが先）
+                return b.createdAt.getTime() - a.createdAt.getTime();
+              })
+              .slice(0, state.maxNotifications);
+
+            return {
+              notifications: sortedNotifications,
+            };
+          }
 
           return {
-            notifications: newNotifications,
+            notifications: updatedNotifications,
           };
         });
 

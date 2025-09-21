@@ -48,7 +48,7 @@ export const GenreDetailMobile: React.FC<GenreDetailMobileProps> = ({
             size="lg"
             variant="spinner"
             text={t("loading")}
-            description="ジャンル情報を取得しています"
+            description={t("loadingDescription")}
           />
         </main>
       </div>

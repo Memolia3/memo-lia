@@ -85,7 +85,9 @@
     },
     "loading": "Loading...",
     "error": "Error occurred",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "retry": "Retry",
+    "reload": "Reload page"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -99,7 +101,9 @@
     },
     "emptyState": {
       "title": "No categories found",
-      "description": "Create a new category folder to organize your URLs"
+      "description": "Create a new category folder to organize your URLs",
+      "loading": "Loading...",
+      "loadingCategories": "Loading categories..."
     },
     "navigationFailed": "Failed to navigate to page",
     "retryLater": "Please try again after a while",
@@ -226,6 +230,7 @@
   "genreDetail": {
     "title": "Genre Details",
     "loading": "Loading...",
+    "loadingDescription": "Loading genre information...",
     "notFound": {
       "title": "Genre Not Found",
       "description": "The specified genre does not exist or you don't have access permission."
@@ -249,6 +254,7 @@
       "description": "List of URLs saved in this genre.",
       "empty": "No URLs have been saved in this genre yet.",
       "emptyDescription": "Add URLs to organize your favorite sites.",
+      "loading": "Loading URLs...",
       "actions": {
         "open": "Open",
         "delete": "Delete",
@@ -412,5 +418,14 @@
       "title": "Create URL | Memolia",
       "description": "Add new URLs to organize your bookmarks"
     }
+  },
+  "errorBoundary": {
+    "title": "An error occurred",
+    "message": "Sorry, an unexpected error has occurred.",
+    "retryButton": "Retry",
+    "reloadButton": "Reload page",
+    "helpText": "If the problem persists, please reload the page.",
+    "details": "Error details:",
+    "stackTrace": "Stack trace"
   }
 }

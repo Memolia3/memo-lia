@@ -5,7 +5,7 @@ import { Loading } from "@/components/ui";
 import { useSession } from "@/features/auth/hooks";
 import { cn } from "@/utils";
 import { useTranslations } from "next-intl";
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { useCategories } from "../../hooks/useCategories";
 import { CategoryFolder } from "../CategoryFolder";
 import { DashboardActions } from "../DashboardActions";
@@ -27,12 +27,15 @@ export const CategoryGrid: React.FC<CategoryGridProps> = memo(
     const { session } = useSession();
     const userId = session?.user?.id || "";
 
+    // セッションIDをメモ化して不要な再レンダリングを防ぐ
+    const memoizedUserId = useMemo(() => userId, [userId]);
+
     // カテゴリデータの読み込み
     const {
       data: fetchedCategories = [],
       isLoading: categoriesLoading,
       error: categoriesError,
-    } = useCategories(userId);
+    } = useCategories(memoizedUserId);
 
     // ローカル状態管理
     const [localCategories, setLocalCategories] = useState<CategoryData[]>([]);
@@ -53,7 +56,7 @@ export const CategoryGrid: React.FC<CategoryGridProps> = memo(
         setLocalCategories(fetchedCategories);
         setIsInitialized(true);
       }
-    }, [fetchedCategories, propCategories]);
+    }, [fetchedCategories, propCategories?.length]);
 
     // カテゴリ削除ハンドラー
     const handleCategoryDelete = useCallback(
