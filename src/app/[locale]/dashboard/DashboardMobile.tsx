@@ -1,27 +1,12 @@
 "use client";
 
 import { AppHeader } from "@/components/layout";
-import { AuthGuard, Loading, UserInfo } from "@/components/ui";
+import { AuthGuard, UserInfo } from "@/components/ui";
+import { DashboardContent } from "@/features/dashboard/components/DashboardContent";
 import { cn, isShowAdsense } from "@/utils";
 import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
-
-// DashboardContentを遅延読み込み
-const DashboardContent = dynamic(
-  () =>
-    import("@/features/dashboard/components/DashboardContent").then(mod => ({
-      default: mod.DashboardContent,
-    })),
-  {
-    ssr: true,
-    loading: () => (
-      <div className="flex-1 flex items-center justify-center">
-        <Loading size="md" variant="spinner" showBackground={false} />
-      </div>
-    ),
-  }
-);
 
 // AdSenseコンポーネントを遅延読み込み
 const AdSense = dynamic(() => import("@/features/google").then(mod => ({ default: mod.AdSense })), {
@@ -52,15 +37,7 @@ export const DashboardMobile: React.FC<DashboardMobileProps> = ({ className }) =
     >
       <div className={cn("h-full flex flex-col", className)}>
         <AppHeader title={t("title")} userInfo={<UserInfo />} />
-        <Suspense
-          fallback={
-            <div className="flex-1 flex items-center justify-center">
-              <Loading size="md" variant="spinner" showBackground={false} />
-            </div>
-          }
-        >
-          <DashboardContent onCategoryClick={handleCategoryClick} />
-        </Suspense>
+        <DashboardContent onCategoryClick={handleCategoryClick} />
 
         {/* AdSense広告 - 画面の一番下 */}
         {isShowAdsense && (

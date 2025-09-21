@@ -1,27 +1,13 @@
 "use client";
 
 import { AppHeader } from "@/components/layout";
-import { AuthGuard, Loading, UserInfo } from "@/components/ui";
+import { AuthGuard, UserInfo } from "@/components/ui";
+import { DashboardContent } from "@/features/dashboard/components/DashboardContent";
 import { useDashboard } from "@/features/dashboard/hooks/useDashboard";
 import { cn, isShowAdsense } from "@/utils";
 import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
-// DashboardContentを遅延読み込み
-const DashboardContent = dynamic(
-  () =>
-    import("@/features/dashboard/components/DashboardContent").then(mod => ({
-      default: mod.DashboardContent,
-    })),
-  {
-    ssr: true,
-    loading: () => (
-      <div className="flex-1 flex items-center justify-center">
-        <Loading size="md" variant="spinner" showBackground={false} />
-      </div>
-    ),
-  }
-);
 
 // AdSenseコンポーネントを遅延読み込み
 const AdSense = dynamic(() => import("@/features/google").then(mod => ({ default: mod.AdSense })), {
@@ -52,15 +38,7 @@ export const DashboardDesktop: React.FC<DashboardDesktopProps> = ({ className })
         <AppHeader title={t("title")} userInfo={<UserInfo />} />
         <div className="flex-1 flex flex-col overflow-hidden zoom-container">
           <div className="max-w-7xl mx-auto w-full flex flex-col h-full zoom-safe">
-            <Suspense
-              fallback={
-                <div className="flex-1 flex items-center justify-center">
-                  <Loading size="md" variant="spinner" showBackground={false} />
-                </div>
-              }
-            >
-              <DashboardContent onCategoryClick={handleCategoryClick} />
-            </Suspense>
+            <DashboardContent onCategoryClick={handleCategoryClick} />
           </div>
         </div>
 

@@ -12,7 +12,7 @@ import { AuthProviderProps } from "./AuthProvider.types";
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   return (
     <SessionProvider
-      refetchInterval={5 * 60} // 5分ごとにセッションを再取得
+      refetchInterval={0} // セッション再取得を無効化（手動で管理）
       refetchOnWindowFocus={false} // ウィンドウフォーカス時の再取得を無効化
     >
       <AuthNotificationHandler />
