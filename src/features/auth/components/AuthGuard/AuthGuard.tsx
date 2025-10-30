@@ -63,7 +63,16 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
             </Typography>
 
             <div className="space-y-3">
-              <Button onClick={() => router.push(`/${locale}/auth`)} className="w-full">
+              <Button
+                onClick={() => {
+                  const callbackUrl =
+                    typeof window !== "undefined"
+                      ? `${window.location.pathname}${window.location.search}`
+                      : `/${locale}`;
+                  router.push(`/${locale}/auth?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+                }}
+                className="w-full"
+              >
                 {t("loginButton")}
               </Button>
 

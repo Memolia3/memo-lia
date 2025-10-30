@@ -34,16 +34,23 @@ export const useAuth = () => {
 
       setIsLoading(provider);
       try {
+        // 認証後の戻り先（auth ページのクエリ 'callbackUrl' を優先）
+        let redirectTo: string | undefined = undefined;
+        if (typeof window !== "undefined") {
+          const params = new URLSearchParams(window.location.search);
+          const cb = params.get("callbackUrl");
+          if (cb) redirectTo = cb;
+        }
         let result;
         switch (provider) {
           case "google":
-            result = await signInWithGoogle();
+            result = await signInWithGoogle(redirectTo);
             break;
           case "github":
-            result = await signInWithGitHub();
+            result = await signInWithGitHub(redirectTo);
             break;
           case "discord":
-            result = await signInWithDiscord();
+            result = await signInWithDiscord(redirectTo);
             break;
           default:
             throw new Error(

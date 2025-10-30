@@ -36,16 +36,16 @@ export interface AuthResult {
  * Google認証を行う
  * @returns 認証結果
  */
-export const signInWithGoogle = async (): Promise<AuthResult> => {
+export const signInWithGoogle = async (redirectTo?: string): Promise<AuthResult> => {
   try {
     await signIn(OAUTH_PROVIDER.GOOGLE, {
-      redirectTo: ROUTE.DASHBOARD,
+      redirectTo: redirectTo || ROUTE.DASHBOARD,
     });
 
     const successConfig = authSuccessHandler("Google");
     return {
       success: true,
-      redirectTo: ROUTE.DASHBOARD,
+      redirectTo: redirectTo || ROUTE.DASHBOARD,
       notification: {
         type: NOTIFICATION_TYPES.SUCCESS,
         message: successConfig.message,
@@ -96,16 +96,16 @@ export const signInWithGoogle = async (): Promise<AuthResult> => {
  * GitHub認証を行う
  * @returns 認証結果
  */
-export const signInWithGitHub = async (): Promise<AuthResult> => {
+export const signInWithGitHub = async (redirectTo?: string): Promise<AuthResult> => {
   try {
     await signIn(OAUTH_PROVIDER.GITHUB, {
-      redirectTo: ROUTE.DASHBOARD,
+      redirectTo: redirectTo || ROUTE.DASHBOARD,
     });
 
     const successConfig = authSuccessHandler("GitHub");
     return {
       success: true,
-      redirectTo: ROUTE.DASHBOARD,
+      redirectTo: redirectTo || ROUTE.DASHBOARD,
       notification: {
         type: NOTIFICATION_TYPES.SUCCESS,
         message: successConfig.message,
@@ -155,16 +155,16 @@ export const signInWithGitHub = async (): Promise<AuthResult> => {
  * Discord認証を行う
  * @returns 認証結果
  */
-export const signInWithDiscord = async (): Promise<AuthResult> => {
+export const signInWithDiscord = async (redirectTo?: string): Promise<AuthResult> => {
   try {
     await signIn(OAUTH_PROVIDER.DISCORD, {
-      redirectTo: ROUTE.DASHBOARD,
+      redirectTo: redirectTo || ROUTE.DASHBOARD,
     });
 
     const successConfig = authSuccessHandler("Discord");
     return {
       success: true,
-      redirectTo: ROUTE.DASHBOARD,
+      redirectTo: redirectTo || ROUTE.DASHBOARD,
       notification: {
         type: NOTIFICATION_TYPES.SUCCESS,
         message: successConfig.message,

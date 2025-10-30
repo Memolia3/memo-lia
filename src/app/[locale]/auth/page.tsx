@@ -1,3 +1,4 @@
+import { AppFooter } from "@/components/layout";
 import { Container } from "@/components/ui";
 import { AuthDesktop } from "./AuthDesktop";
 import { AuthMobile } from "./AuthMobile";
@@ -7,19 +8,21 @@ import { AuthMobile } from "./AuthMobile";
  */
 export default function AuthPage() {
   return (
-    <>
+    <div className="flex flex-col h-full">
       {/* PC画面 */}
-      <div className="hidden lg:block h-full">
+      <div className="hidden lg:block flex-1">
         <Container padding="md" maxWidth="7xl" className="h-full w-full overflow-hidden">
           <AuthDesktop />
         </Container>
       </div>
       {/* スマホ画面 */}
-      <div className="block lg:hidden h-full">
+      <div className="block lg:hidden flex-1">
         <Container maxWidth="7xl" className="h-full w-full overflow-hidden">
           <AuthMobile />
         </Container>
       </div>
-    </>
+      {/* フッター */}
+      <AppFooter />
+    </div>
   );
 }
