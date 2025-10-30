@@ -468,7 +468,7 @@
     "processing": "Processing..."
   },
   "share": {
-    "title": "Save Shared Link",
+    "title": "Share and Save URL",
     "description": "Select category and genre to save the URL",
     "selectCategory": "Select Category",
     "selectGenre": "Select Genre",
@@ -491,7 +491,7 @@
     "retryLater": "Please try again later"
   },
   "bookmarklet": {
-    "title": "Save Shared URL",
+    "title": "Share and Save URL",
     "description": "Set up iOS Safari and iOS Google Chrome to send URLs to MemoLia",
     "backToDashboard": "Dashboard",
     "step1": "Step 1",

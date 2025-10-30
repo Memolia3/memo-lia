@@ -480,7 +480,7 @@
     "processing": "処理中..."
   },
   "share": {
-    "title": "共有されたリンクを保存",
+    "title": "URLを共有して保存",
     "description": "カテゴリとジャンルを選択してURLを保存してください",
     "selectCategory": "カテゴリを選択",
     "selectGenre": "ジャンルを選択",
@@ -503,7 +503,7 @@
     "retryLater": "しばらく時間をおいてから再度お試しください"
   },
   "bookmarklet": {
-    "title": "共有されたURLを保存",
+    "title": "URLを共有して保存",
     "description": "iOS Safari・iOS Google ChromeでMemoLiaにURLを送信できるように設定します",
     "backToDashboard": "ダッシュボード",
     "step1": "ステップ1",
