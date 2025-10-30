@@ -1,8 +1,8 @@
 "use client";
 
 import { AppHeader } from "@/components/layout";
-import { AuthGuard, UserInfo } from "@/components/ui";
-import { DashboardContent } from "@/features/dashboard/components/DashboardContent";
+import { AuthGuard, ScrollArea, UserInfo } from "@/components/ui";
+import { CategoryGrid } from "@/features/dashboard/components/CategoryGrid";
 import { cn, isShowAdsense } from "@/utils";
 import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
@@ -37,7 +37,15 @@ export const DashboardMobile: React.FC<DashboardMobileProps> = ({ className }) =
     >
       <div className={cn("h-full flex flex-col", className)}>
         <AppHeader title={t("title")} userInfo={<UserInfo />} />
-        <DashboardContent onCategoryClick={handleCategoryClick} />
+        <main className="flex-1 flex flex-col overflow-hidden min-h-0 px-4 py-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col flex-1 min-h-0">
+            <ScrollArea className="flex-1 px-4 pb-4 min-h-0">
+              <div className="p-1.5">
+                <CategoryGrid onCategoryClick={handleCategoryClick} />
+              </div>
+            </ScrollArea>
+          </div>
+        </main>
 
         {/* AdSense広告 - 画面の一番下 */}
         {isShowAdsense && (
