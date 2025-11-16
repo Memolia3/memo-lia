@@ -28,7 +28,7 @@ export const META = {
     JA: ["ブックマーク", "URL管理"] as const,
   },
   URLS: {
-    BASE: process.env.NEXT_PUBLIC_APP_URL || "https://memolia.vercel.app",
+    BASE: process.env.NEXT_PUBLIC_APP_URL || "https://memo-lia.memolia8.com",
     CANONICAL: "/",
     OG_IMAGE: "/og-image.jpg",
   },

@@ -46,7 +46,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // 環境変数の設定
   env: {
-    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || "https://memolia.vercel.app",
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || "https://memo-lia.memolia8.com",
   },
   // 出力設定
   output: "standalone",

@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 
 // 主要ルートのサイトマップを生成（ロケール対応）
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://memolia.app";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://memo-lia.memolia8.com";
   const locales = ["ja", "en"]; // 必要に応じて追加
 
   const staticPaths = [
