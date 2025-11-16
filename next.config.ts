@@ -48,8 +48,6 @@ const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || "https://memo-lia.memolia8.com",
   },
-  // 出力設定
-  output: "standalone",
   // バンドルアナライザー（開発時のみ）
   ...(process.env.ANALYZE === "true" && {
     webpack: (config: { optimization?: Record<string, unknown> }) => {

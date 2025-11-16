@@ -1,9 +1,6 @@
 {
-  "buildCommand": "yarn vercel-build",
-  "outputDirectory": ".next",
   "framework": "nextjs",
   "installCommand": "yarn install",
-  "devCommand": "yarn dev",
   "functions": {
     "src/app/api/**/*.ts": {
       "maxDuration": 10
