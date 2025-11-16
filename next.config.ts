@@ -33,8 +33,6 @@ const nextConfig: NextConfig = {
   experimental: {
     // SSGでの最適化
     optimizePackageImports: ["next-intl", "@tanstack/react-query", "lucide-react", "zustand"],
-    // サーバーコンポーネントの最適化
-    optimizeServerReact: true,
   },
   // コンパイラーの最適化
   compiler: {
