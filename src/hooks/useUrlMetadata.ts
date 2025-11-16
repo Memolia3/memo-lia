@@ -85,7 +85,7 @@ export function useUrlMetadata(
     }, debounceMs);
 
     return () => clearTimeout(timeoutId);
-  }, [url, autoFetch, debounceMs]);
+  }, [url, autoFetch, debounceMs, fetchMetadata]);
 
   return {
     ...state,

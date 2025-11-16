@@ -12,7 +12,6 @@ import {
   type CreateCategoryData,
 } from "@/lib/db";
 import { getTranslations } from "next-intl/server";
-import { unstable_cache } from "next/cache";
 
 import {
   createGenre as dbCreateGenre,
@@ -30,38 +29,12 @@ export type { CategoryData, CategoryDeletionStats, CreateCategoryData } from "@/
 
 export type { CreateGenreData, GenreData, GenreDeletionStats } from "@/lib/db/genres";
 
-// キャッシュされたカテゴリ取得関数
-const getCachedCategories = (userId: string) =>
-  unstable_cache(
-    async () => {
-      return dbGetCategories(userId);
-    },
-    ["categories", userId],
-    {
-      revalidate: 60, // 60秒間キャッシュ
-      tags: [`categories-user-${userId}`],
-    }
-  )();
-
 /**
  * ユーザーのカテゴリ一覧を取得
  */
 export async function getCategories(userId: string): Promise<CategoryData[]> {
-  return getCachedCategories(userId);
+  return dbGetCategories(userId);
 }
-
-// キャッシュされたカテゴリ詳細取得関数
-const getCachedCategoryById = (categoryId: string, userId: string) =>
-  unstable_cache(
-    async () => {
-      return dbGetCategoryById(categoryId, userId);
-    },
-    ["category-by-id", categoryId, userId],
-    {
-      revalidate: 60, // 60秒間キャッシュ
-      tags: [`category-${categoryId}`, `categories-user-${userId}`],
-    }
-  )();
 
 /**
  * カテゴリの詳細情報を取得
@@ -70,21 +43,8 @@ export async function getCategoryById(
   categoryId: string,
   userId: string
 ): Promise<CategoryData | null> {
-  return getCachedCategoryById(categoryId, userId);
+  return dbGetCategoryById(categoryId, userId);
 }
-
-// キャッシュされたジャンル取得関数
-const getCachedGenresByCategory = (categoryId: string, userId: string) =>
-  unstable_cache(
-    async () => {
-      return dbGetGenresByCategory(categoryId, userId);
-    },
-    ["genres-by-category", categoryId, userId],
-    {
-      revalidate: 60, // 60秒間キャッシュ
-      tags: [`genres-category-${categoryId}`, `categories-user-${userId}`],
-    }
-  )();
 
 /**
  * カテゴリ内のジャンル一覧を取得
@@ -93,7 +53,7 @@ export async function getGenresByCategory(
   categoryId: string,
   userId: string
 ): Promise<GenreData[]> {
-  return getCachedGenresByCategory(categoryId, userId);
+  return dbGetGenresByCategory(categoryId, userId);
 }
 
 /**
