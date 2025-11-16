@@ -1,11 +1,4 @@
 {
-  "framework": "nextjs",
-  "installCommand": "yarn install",
-  "functions": {
-    "src/app/api/**/*.ts": {
-      "maxDuration": 10
-    }
-  },
   "headers": [
     {
       "source": "/(.*)",

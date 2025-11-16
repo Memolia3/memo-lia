@@ -3,6 +3,9 @@ import { checkRateLimit } from "@/lib/rate-limit";
 import { hasDangerousProtocol, isValidUrl, sanitizeHtml } from "@/utils/sanitize";
 import { NextRequest, NextResponse } from "next/server";
 
+// Vercelの関数タイムアウト設定（10秒）
+export const maxDuration = 10;
+
 interface UrlMetadata {
   title?: string;
   description?: string;
