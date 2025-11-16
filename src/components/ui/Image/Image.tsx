@@ -41,15 +41,23 @@ export const Image: React.FC<ImageProps> = ({ name, size = "md", className, styl
     return sizeMap[sizeStr as keyof typeof sizeMap] || 24;
   };
 
+  const sizeValue = getSizeValue(size);
+  // 大きな画像（2xl以上）は優先読み込み、それ以外は遅延読み込み
+  const isPriority = size === "2xl" || size === "3xl";
+
   return (
     <NextImage
       src={imagePaths[name]}
       alt={alt || `${name} image`}
-      width={getSizeValue(size)}
-      height={getSizeValue(size)}
+      width={sizeValue}
+      height={sizeValue}
       className={cn(sizeStyles[size], className)}
       style={style}
-      priority
+      priority={isPriority}
+      loading={isPriority ? undefined : "lazy"}
+      fetchPriority={isPriority ? "high" : "auto"}
+      quality={90}
+      sizes={`${sizeValue}px`}
     />
   );
 };

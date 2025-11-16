@@ -66,11 +66,36 @@ self.addEventListener("fetch", event => {
     return;
   }
 
-  // 通常のキャッシュ処理 - Network First戦略
+  // 静的アセットのキャッシュ戦略（Cache First）
+  if (
+    url.pathname.startsWith("/_next/static") ||
+    url.pathname.startsWith("/assets") ||
+    url.pathname.match(/\.(jpg|jpeg|png|gif|webp|avif|svg|ico|css|js|woff|woff2|ttf|eot)$/)
+  ) {
+    event.respondWith(
+      caches.match(event.request).then(cachedResponse => {
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+        return fetch(event.request).then(fetchResponse => {
+          if (fetchResponse.status === 200) {
+            const cacheCopy = fetchResponse.clone();
+            caches.open(STATIC_CACHE_NAME).then(cache => {
+              cache.put(event.request, cacheCopy);
+            });
+          }
+          return fetchResponse;
+        });
+      })
+    );
+    return;
+  }
+
+  // 通常のキャッシュ処理 - Network First戦略（Stale-While-Revalidate）
   event.respondWith(
     caches.open(DYNAMIC_CACHE_NAME).then(cache => {
-      return fetch(event.request)
-        .then(fetchResponse => {
+      return caches.match(event.request).then(cachedResponse => {
+        const fetchPromise = fetch(event.request).then(fetchResponse => {
           // リダイレクトレスポンスはキャッシュしない
           if (
             fetchResponse.type === "opaqueredirect" ||
@@ -85,11 +110,11 @@ self.addEventListener("fetch", event => {
           }
 
           return fetchResponse;
-        })
-        .catch(() => {
-          // ネットワークエラーの場合はキャッシュから返す
-          return caches.match(event.request);
         });
+
+        // キャッシュがあれば即座に返し、バックグラウンドで更新
+        return cachedResponse || fetchPromise;
+      });
     })
   );
 });

@@ -1,9 +1,24 @@
-import { Button, Divider, GlassBackground, Icon, Image, Typography } from "@/components/ui";
+"use client";
+
+import { Button, Divider, Icon, Image, Typography } from "@/components/ui";
 import { ROUTE } from "@/constants";
-import { AdSense } from "@/features/google";
 import { isShowAdsense } from "@/utils";
 import { useTranslations } from "next-intl";
+import dynamic from "next/dynamic";
 import Link from "next/link";
+
+// 重いコンポーネントを動的インポート
+const GlassBackground = dynamic(
+  () => import("@/components/ui").then(mod => ({ default: mod.GlassBackground })),
+  {
+    ssr: true,
+  }
+);
+
+const AdSense = dynamic(() => import("@/features/google").then(mod => ({ default: mod.AdSense })), {
+  ssr: false,
+  loading: () => <div className="w-full h-24 bg-gray-100 dark:bg-gray-800 animate-pulse rounded" />,
+});
 
 /**
  * デスクトップ版TOPページ

@@ -101,5 +101,22 @@ export const generateMetadata = (locale: string, options: PageMetaOptions = {}):
     other: {
       "google-adsense-account": process.env.GOOGLE_ADSENSE_ACCOUNT || "",
     },
+    // パフォーマンス最適化のためのメタデータ
+    applicationName: META.OPENGRAPH.SITE_NAME,
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: "default",
+      title: title,
+    },
+    viewport: {
+      width: "device-width",
+      initialScale: 1,
+      maximumScale: 5,
+      userScalable: true,
+    },
+    themeColor: [
+      { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+      { media: "(prefers-color-scheme: dark)", color: "#111827" },
+    ],
   };
 };

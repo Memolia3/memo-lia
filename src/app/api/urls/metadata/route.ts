@@ -53,7 +53,11 @@ export async function POST(request: NextRequest) {
     const cacheKey = url.toLowerCase();
     const cached = metadataCache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-      return NextResponse.json(cached.data);
+      return NextResponse.json(cached.data, {
+        headers: {
+          "Cache-Control": "public, s-maxage=600, stale-while-revalidate=3600",
+        },
+      });
     }
 
     // URLの妥当性チェック
@@ -158,7 +162,11 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    return NextResponse.json(metadata);
+    return NextResponse.json(metadata, {
+      headers: {
+        "Cache-Control": "public, s-maxage=600, stale-while-revalidate=3600",
+      },
+    });
   } catch {
     return NextResponse.json({ error: "Failed to fetch URL metadata" }, { status: 500 });
   }

@@ -7,7 +7,7 @@
   /* Critical styles for initial paint */
   html {
     font-family:
-      "Inter",
+      var(--font-inter),
       system-ui,
       -apple-system,
       sans-serif;

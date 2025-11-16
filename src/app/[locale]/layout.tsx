@@ -4,6 +4,7 @@ import { NotificationProvider } from "@/components/notification";
 import { PWARegister } from "@/components/PWA/PWARegister";
 import { Background } from "@/components/ui";
 import { AuthProvider } from "@/features/auth";
+import { inter } from "@/lib/fonts";
 import type { PageMetaOptions } from "@/types";
 import { generateMetadata as generateMeta, isLocaleEnglish } from "@/utils/meta";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -64,14 +65,26 @@ export default async function LocaleLayout({
   const nonce = headersList.get("x-content-security-policy-nonce");
 
   return (
-    <html lang={locale} className="dark:bg-gray-900 h-full">
+    <html lang={locale} className={`${inter.variable} dark:bg-gray-900 h-full`}>
       <head>
+        {/* Preconnect to Google Fonts */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* Critical CSS preload */}
         <link rel="preload" href="/globals.css" as="style" />
+        {/* Preload critical images */}
+        <link
+          rel="preload"
+          href="/assets/images/memo-lia-icon.png"
+          as="image"
+          type="image/png"
+          fetchPriority="high"
+        />
       </head>
       <body
-        className="antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 h-full"
-        suppressHydrationWarning={true}
+        className={`${inter.className} antialiased bg-white dark:bg-gray-900
+          text-gray-900 dark:text-gray-100 h-full`}
+        suppressHydrationWarning
       >
         <PWARegister />
         <ZoomDetector />
