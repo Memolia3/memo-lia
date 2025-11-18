@@ -91,6 +91,12 @@ self.addEventListener("fetch", event => {
     return;
   }
 
+  // POSTリクエストやその他の非GETリクエストはキャッシュしない
+  if (event.request.method !== "GET") {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   // 通常のキャッシュ処理 - Network First戦略（Stale-While-Revalidate）
   event.respondWith(
     caches.open(DYNAMIC_CACHE_NAME).then(cache => {
@@ -104,8 +110,8 @@ self.addEventListener("fetch", event => {
             return fetchResponse;
           }
 
-          // 正常なレスポンスのみキャッシュ
-          if (fetchResponse.status === 200) {
+          // 正常なレスポンスのみキャッシュ（GETリクエストのみ）
+          if (fetchResponse.status === 200 && event.request.method === "GET") {
             cache.put(event.request, fetchResponse.clone());
           }
 

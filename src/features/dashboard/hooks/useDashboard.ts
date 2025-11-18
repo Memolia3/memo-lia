@@ -22,10 +22,15 @@ export const useDashboard = () => {
     (category: CategoryData) => {
       try {
         // カテゴリ名をURLセーフな形式に変換
-        const urlSafeName = toUrlSafe(category.name);
+        const urlSafeName = toUrlSafe(category.name || "category");
+
+        // カテゴリ名が空の場合はIDのみを使用（フォールバック）
+        const categoryPath = urlSafeName
+          ? `/dashboard/category/${category.id}/${urlSafeName}`
+          : `/dashboard/category/${category.id}/category`;
 
         // カテゴリクリック時の処理（ジャンル表示画面への遷移）
-        router.push(`/dashboard/category/${category.id}/${urlSafeName}`);
+        router.push(categoryPath);
       } catch (error) {
         // ナビゲーションエラーの通知
         showError({

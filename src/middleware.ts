@@ -34,11 +34,12 @@ export async function middleware(request: NextRequest) {
       const nonce = generateNonce();
 
       // CSP ヘッダーに nonce を埋め込む
+      // AdSense用に'unsafe-inline'を追加（AdSenseは動的にインラインスクリプトを生成するため）
       response.headers.set(
         "Content-Security-Policy",
         [
           "default-src 'self'",
-          `script-src 'self' 'nonce-${nonce}' 'unsafe-eval' https://pagead2.googlesyndication.com https://www.googletagservices.com https://www.google-analytics.com`,
+          `script-src 'self' 'nonce-${nonce}' 'unsafe-eval' 'unsafe-inline' https://pagead2.googlesyndication.com https://www.googletagservices.com https://www.google-analytics.com`,
           "style-src 'self' 'unsafe-inline'",
           "img-src 'self' data: https: https://pagead2.googlesyndication.com https://www.google-analytics.com",
           "font-src 'self' data:",
