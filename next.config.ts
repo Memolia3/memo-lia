@@ -34,6 +34,8 @@ const nextConfig: NextConfig = {
     // SSGでの最適化
     optimizePackageImports: ["next-intl", "@tanstack/react-query", "lucide-react", "zustand"],
   },
+  // サーバーコンポーネントの最適化
+  serverExternalPackages: ["@neondatabase/serverless"],
   // コンパイラーの最適化
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",

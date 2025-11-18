@@ -2,7 +2,7 @@ import { getCategoryById, getGenreById } from "@/actions/categories";
 import { auth } from "@/auth";
 import { Container } from "@/components/ui";
 import { getCurrentPageInfo } from "@/utils";
-import { generateMetadata as generateMeta, isLocaleEnglish } from "@/utils/meta";
+import { generateMetadata as generateMeta, generateViewport, isLocaleEnglish } from "@/utils/meta";
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { notFound, redirect } from "next/navigation";
@@ -38,6 +38,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return generateMeta(locale, metaOptions);
 }
+
+/**
+ * Viewport設定を生成
+ */
+export const viewport = generateViewport();
 
 export default async function UrlAddPage({ params }: PageProps) {
   const session = await auth();

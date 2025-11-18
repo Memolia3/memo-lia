@@ -1,3 +1,4 @@
+import { generateViewport } from "@/utils/meta";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
@@ -20,6 +21,11 @@ export async function generateMetadata({ params }: GenreDetailLayoutProps): Prom
     description: t("genreDetail.description", { genreName: decodedGenreName }),
   };
 }
+
+/**
+ * Viewport設定を生成
+ */
+export const viewport = generateViewport();
 
 export default function GenreDetailLayout({ children }: GenreDetailLayoutProps) {
   return <>{children}</>;

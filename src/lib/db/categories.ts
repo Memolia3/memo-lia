@@ -1,5 +1,6 @@
 import { CATEGORY_ERROR_MESSAGES, COMMON_ERROR_MESSAGES } from "@/constants/error-messages";
 import { neon } from "@neondatabase/serverless";
+import { revalidateTag, unstable_cache } from "next/cache";
 
 // Note: ジャンル関連機能は src/lib/db/genres.ts に移動しました
 
@@ -28,9 +29,9 @@ export interface CategoryData {
 // Note: GenreData は src/lib/db/genres.ts に移動しました
 
 /**
- * ユーザーのカテゴリ一覧を取得
+ * ユーザーのカテゴリ一覧を取得（内部実装）
  */
-export async function getCategories(userId: string): Promise<CategoryData[]> {
+async function getCategoriesInternal(userId: string): Promise<CategoryData[]> {
   try {
     const result = await sql`
       SELECT
@@ -74,6 +75,17 @@ export async function getCategories(userId: string): Promise<CategoryData[]> {
   } catch {
     throw new Error(COMMON_ERROR_MESSAGES.FETCH_FAILED);
   }
+}
+
+/**
+ * ユーザーのカテゴリ一覧を取得（キャッシュ付き）
+ * キャッシュ時間: 60秒
+ */
+export async function getCategories(userId: string): Promise<CategoryData[]> {
+  return unstable_cache(async () => getCategoriesInternal(userId), [`categories-${userId}`], {
+    revalidate: 60, // 60秒間キャッシュ
+    tags: [`categories-${userId}`],
+  })();
 }
 
 /**
@@ -262,6 +274,10 @@ export async function createCategory(
     }
 
     const row = result[0] as Record<string, unknown>;
+
+    // カテゴリ作成後、キャッシュを無効化
+    revalidateTag(`categories-${userId}`);
+
     return {
       id: row.id as string,
       userId: row.user_id as string,
@@ -402,6 +418,9 @@ export async function deleteCategory(data: DeleteCategoryData): Promise<string> 
       DELETE FROM categories
       WHERE id = ${categoryId} AND user_id = ${userId}
     `;
+
+    // カテゴリ削除後、キャッシュを無効化
+    revalidateTag(`categories-${userId}`);
 
     return categoryId;
   } catch {

@@ -14,17 +14,22 @@ const AdSense = dynamic(() => import("@/features/google").then(mod => ({ default
   loading: () => <div className="w-full h-24 bg-gray-100 dark:bg-gray-800 animate-pulse rounded" />,
 });
 
+import type { CategoryData } from "@/actions/categories";
 import { useDashboard } from "@/features/dashboard/hooks/useDashboard";
 
 export interface DashboardMobileProps {
   className?: string;
+  initialCategories?: CategoryData[];
 }
 
 /**
  * ダッシュボードモバイル版コンポーネント
  * スマホ画面用のレイアウト
  */
-export const DashboardMobile: React.FC<DashboardMobileProps> = ({ className }) => {
+export const DashboardMobile: React.FC<DashboardMobileProps> = ({
+  className,
+  initialCategories,
+}) => {
   const { isAuthenticated, isLoading, handleCategoryClick } = useDashboard();
   const t = useTranslations("dashboard");
 
@@ -41,7 +46,10 @@ export const DashboardMobile: React.FC<DashboardMobileProps> = ({ className }) =
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col flex-1 min-h-0">
             <ScrollArea className="flex-1 px-4 pb-4 min-h-0">
               <div className="p-1.5">
-                <CategoryGrid onCategoryClick={handleCategoryClick} />
+                <CategoryGrid
+                  categories={initialCategories}
+                  onCategoryClick={handleCategoryClick}
+                />
               </div>
             </ScrollArea>
           </div>

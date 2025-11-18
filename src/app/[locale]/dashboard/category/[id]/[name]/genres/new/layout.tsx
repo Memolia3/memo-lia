@@ -1,4 +1,5 @@
 import { Background } from "@/components/ui";
+import { generateViewport } from "@/utils/meta";
 import { getTranslations } from "next-intl/server";
 
 export async function generateMetadata() {
@@ -9,6 +10,11 @@ export async function generateMetadata() {
     description: t("genreAdd.description"),
   };
 }
+
+/**
+ * Viewport設定を生成
+ */
+export const viewport = generateViewport();
 
 export default function GenreAddLayout({ children }: { children: React.ReactNode }) {
   return <Background>{children}</Background>;

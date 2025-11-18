@@ -6,7 +6,7 @@ import { Background } from "@/components/ui";
 import { AuthProvider } from "@/features/auth";
 import { inter } from "@/lib/fonts";
 import type { PageMetaOptions } from "@/types";
-import { generateMetadata as generateMeta, isLocaleEnglish } from "@/utils/meta";
+import { generateMetadata as generateMeta, generateViewport, isLocaleEnglish } from "@/utils/meta";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
@@ -45,6 +45,11 @@ export async function generateMetadata({
 
   return generateMeta(locale, metaOptions);
 }
+
+/**
+ * Viewport設定を生成
+ */
+export const viewport = generateViewport();
 
 /**
  * ロケールレイアウト

@@ -1,5 +1,5 @@
 import { PageMetaOptions } from "@/types";
-import { generateMetadata as generateMeta, isLocaleEnglish } from "@/utils/meta";
+import { generateMetadata as generateMeta, generateViewport, isLocaleEnglish } from "@/utils/meta";
 import { Metadata } from "next";
 
 /**
@@ -24,6 +24,11 @@ export async function generateMetadata({
 
   return generateMeta(locale, metaOptions);
 }
+
+/**
+ * Viewport設定を生成
+ */
+export const viewport = generateViewport();
 
 /**
  * ダッシュボードレイアウト

@@ -1,6 +1,12 @@
 import { BookmarkletInstaller } from "@/components/PWA/BookmarkletInstaller";
 import { Container } from "@/components/ui";
 import { AuthGuard } from "@/features/auth";
+import { generateViewport } from "@/utils/meta";
+
+/**
+ * Viewport設定を生成
+ */
+export const viewport = generateViewport();
 
 export default async function BookmarkletPage() {
   return (

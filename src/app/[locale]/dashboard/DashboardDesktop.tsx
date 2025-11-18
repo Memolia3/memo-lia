@@ -15,15 +15,21 @@ const AdSense = dynamic(() => import("@/features/google").then(mod => ({ default
   loading: () => <div className="w-full h-24 bg-gray-100 dark:bg-gray-800 animate-pulse rounded" />,
 });
 
+import type { CategoryData } from "@/actions/categories";
+
 export interface DashboardDesktopProps {
   className?: string;
+  initialCategories?: CategoryData[];
 }
 
 /**
  * ダッシュボードデスクトップ版コンポーネント
  * PC画面用のレイアウト
  */
-export const DashboardDesktop: React.FC<DashboardDesktopProps> = ({ className }) => {
+export const DashboardDesktop: React.FC<DashboardDesktopProps> = ({
+  className,
+  initialCategories,
+}) => {
   const { isAuthenticated, isLoading, handleCategoryClick } = useDashboard();
   const t = useTranslations("dashboard");
 
@@ -43,7 +49,10 @@ export const DashboardDesktop: React.FC<DashboardDesktopProps> = ({ className })
               {/* スクロール可能エリア（タイトル無し） */}
               <ScrollArea className="flex-1 px-4 sm:px-6 py-4 sm:py-6 zoom-safe">
                 <div className="p-1.5 zoom-container">
-                  <CategoryGrid onCategoryClick={handleCategoryClick} />
+                  <CategoryGrid
+                    categories={initialCategories}
+                    onCategoryClick={handleCategoryClick}
+                  />
                 </div>
               </ScrollArea>
             </div>

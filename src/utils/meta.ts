@@ -1,6 +1,6 @@
 import { LOCALE_CONFIG, LOCALES, META } from "@/constants/meta";
 import type { PageMetaOptions } from "@/types";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 /**
  * ブラウザが英語かどうかを判定する
@@ -108,12 +108,20 @@ export const generateMetadata = (locale: string, options: PageMetaOptions = {}):
       statusBarStyle: "default",
       title: title,
     },
-    viewport: {
-      width: "device-width",
-      initialScale: 1,
-      maximumScale: 5,
-      userScalable: true,
-    },
+  };
+};
+
+/**
+ * Viewport設定を生成する関数
+ * Next.js 15では、viewportとthemeColorは別のexportとして定義する必要があります
+ * @returns Viewport設定
+ */
+export const generateViewport = (): Viewport => {
+  return {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
     themeColor: [
       { media: "(prefers-color-scheme: light)", color: "#ffffff" },
       { media: "(prefers-color-scheme: dark)", color: "#111827" },
