@@ -27,7 +27,7 @@ export default async function NewGenrePage({ params }: NewGenrePageProps) {
       </div>
       {/* スマホ画面 */}
       <div className="block lg:hidden h-full">
-        <Container maxWidth="7xl" className="h-full overflow-hidden">
+        <Container maxWidth="7xl" className="h-full">
           <GenreAddMobile categoryId={id} categoryName={decodeURIComponent(name)} />
         </Container>
       </div>

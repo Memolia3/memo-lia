@@ -17,7 +17,7 @@ export default function AuthPage() {
       </div>
       {/* スマホ画面 */}
       <div className="block lg:hidden flex-1">
-        <Container maxWidth="7xl" className="h-full w-full overflow-hidden">
+        <Container maxWidth="7xl" className="h-full w-full">
           <AuthMobile />
         </Container>
       </div>

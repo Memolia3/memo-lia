@@ -18,7 +18,7 @@ export default function NewCategoryPage() {
       </div>
       {/* スマホ画面 */}
       <div className="block lg:hidden h-full">
-        <Container maxWidth="7xl" className="h-full overflow-hidden">
+        <Container maxWidth="7xl" className="h-full">
           <CategoryAddMobile />
         </Container>
       </div>

@@ -46,7 +46,7 @@ export default function Top() {
       </div>
       {/* スマホ画面 */}
       <div className="block lg:hidden flex-1">
-        <Container maxWidth="7xl" className="h-full overflow-hidden">
+        <Container maxWidth="7xl" className="h-full">
           <TopMobile />
         </Container>
       </div>

@@ -17,7 +17,7 @@ export default async function BookmarkletPage() {
       </div>
       {/* スマホ画面 */}
       <div className="block lg:hidden h-full">
-        <Container maxWidth="7xl" className="h-full overflow-hidden">
+        <Container maxWidth="7xl" className="h-full">
           <div className="h-full flex items-center justify-center p-4">
             <BookmarkletInstaller />
           </div>

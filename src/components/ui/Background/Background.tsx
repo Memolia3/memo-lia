@@ -43,7 +43,12 @@ export const Background: React.FC<BackgroundProps> = ({ className, children, pad
       </div>
 
       {/* メインコンテンツ */}
-      <div className={cn("relative z-10 h-full overflow-hidden", paddingStyles[padding])}>
+      <div
+        className={cn(
+          "relative z-10 h-full overflow-y-auto lg:overflow-hidden",
+          paddingStyles[padding]
+        )}
+      >
         {children}
       </div>
     </div>
