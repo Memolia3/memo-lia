@@ -19,7 +19,7 @@ export const UrlGrid: React.FC<UrlGridProps> = memo(
           <Loading
             size="md"
             variant="spinner"
-            text={t("urls.loading")}
+            text={t("loading")}
             showBackground={false}
             className="flex-row gap-3 py-0"
           />
@@ -46,10 +46,8 @@ export const UrlGrid: React.FC<UrlGridProps> = memo(
               />
             </svg>
           </div>
-          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
-            {t("urls.empty")}
-          </h3>
-          <p className="text-gray-500 dark:text-gray-400">{t("urls.emptyDescription")}</p>
+            <p className="text-lg font-semibold text-gray-700 dark:text-gray-300">{t("empty")}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">{t("emptyDescription")}</p>
         </div>
       );
     }

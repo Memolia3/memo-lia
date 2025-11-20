@@ -6,6 +6,7 @@ import { AuthGuard } from "@/components/ui/AuthGuard";
 import { getTranslations } from "next-intl/server";
 import { GenreDetailDesktop } from "./GenreDetailDesktop";
 import { GenreDetailMobile } from "./GenreDetailMobile";
+import { GenreDetailProvider } from "./GenreDetailProvider";
 
 import { Metadata } from "next";
 
@@ -189,28 +190,28 @@ export default async function GenreDetailPage({ params }: GenreDetailPageProps) 
           }),
         }}
       />
-      {/* PC画面 */}
-      <div className="hidden lg:block h-full">
-        <Container maxWidth="7xl" className="h-full">
-          <GenreDetailDesktop
-            category={category}
-            genreId={genreId}
-            initialUrls={urls}
-            locale={locale}
-          />
+      <GenreDetailProvider>
+        <Container padding="md" maxWidth="7xl" className="h-full">
+          {/* PC画面 */}
+          <div className="hidden lg:block h-full">
+            <GenreDetailDesktop
+              category={category}
+              genreId={genreId}
+              initialUrls={urls}
+              locale={locale}
+            />
+          </div>
+          {/* スマホ画面 */}
+          <div className="block lg:hidden h-full">
+            <GenreDetailMobile
+              category={category}
+              genreId={genreId}
+              initialUrls={urls}
+              locale={locale}
+            />
+          </div>
         </Container>
-      </div>
-      {/* スマホ画面 */}
-      <div className="block lg:hidden h-full">
-        <Container maxWidth="7xl" className="h-full">
-          <GenreDetailMobile
-            category={category}
-            genreId={genreId}
-            initialUrls={urls}
-            locale={locale}
-          />
-        </Container>
-      </div>
+      </GenreDetailProvider>
     </AuthGuard>
   );
 }
