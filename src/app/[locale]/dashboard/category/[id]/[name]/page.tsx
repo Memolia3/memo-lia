@@ -47,8 +47,10 @@ export async function generateMetadata({ params }: CategoryDetailPageProps): Pro
       default: category.name,
       template: "%s | MemoLia",
     },
+    description: `${category.name}のカテゴリに含まれるジャンルとURLを管理・整理できます。`,
     openGraph: {
       title: `${category.name} | MemoLia`,
+      description: `${category.name}のカテゴリに含まれるジャンルとURLを管理・整理できます。`,
     },
   };
 }

@@ -33,8 +33,49 @@ const TopMobile = dynamic(
  * TOPページ
  */
 export default function Top() {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://memo-lia.memolia8.com";
+
   return (
     <div className="flex flex-col h-full">
+      {/* WebSite Schema */}
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "MemoLia",
+            url: baseUrl,
+            description: "お気に入りのURLを整理して保管するアプリ",
+            inLanguage: ["ja", "en"],
+            potentialAction: {
+              "@type": "SearchAction",
+              target: {
+                "@type": "EntryPoint",
+                urlTemplate: `${baseUrl}/search?q={search_term_string}`,
+              },
+              "query-input": "required name=search_term_string",
+            },
+          }),
+        }}
+      />
+      {/* Organization Schema */}
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "MemoLia",
+            url: baseUrl,
+            logo: `${baseUrl}/assets/images/memo-lia-icon.png`,
+            description: "URL保管・整理アプリケーション",
+            sameAs: [],
+          }),
+        }}
+      />
       <Suspense fallback={null}>
         <AuthRedirectHandler />
       </Suspense>

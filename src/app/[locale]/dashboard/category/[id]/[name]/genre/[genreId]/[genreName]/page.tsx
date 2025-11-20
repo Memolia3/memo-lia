@@ -53,8 +53,12 @@ export async function generateMetadata({ params }: GenreDetailPageProps): Promis
       default: `${genre.name} | ${category.name}`,
       template: "%s | MemoLia",
     },
+    description:
+      `${category.name}カテゴリの${genre.name}ジャンルに保存されたURLを管理できます。`,
     openGraph: {
       title: `${genre.name} | ${category.name} | MemoLia`,
+      description:
+        `${category.name}カテゴリの${genre.name}ジャンルに保存されたURLを管理できます。`,
     },
   };
 }
