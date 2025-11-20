@@ -2,6 +2,7 @@ import { COMMON_ERROR_MESSAGES, GENRE_ERROR_MESSAGES } from "@/constants/error-m
 import { executeTransactionWithErrorHandling } from "@/lib/db/transaction";
 import { Genre } from "@/types/database";
 import { neon } from "@neondatabase/serverless";
+import { revalidateTag } from "next/cache";
 
 const sql = neon(process.env.DATABASE_URL!);
 
@@ -258,6 +259,11 @@ export async function createGenre(userId: string, genreData: CreateGenreData): P
     Object.values(GENRE_ERROR_MESSAGES)
   );
 
+  // キャッシュを無効化
+  revalidateTag(`category-${genreData.categoryId}`);
+  revalidateTag(`user-${userId}`);
+  revalidateTag(`category-detail-${genreData.categoryId}`);
+
   return {
     id: result.id as string,
     userId: result.user_id as string,
@@ -351,6 +357,15 @@ export async function deleteGenre(genreId: string, userId: string): Promise<stri
 
     if (result.length === 0) {
       throw new Error(GENRE_ERROR_MESSAGES.GENRE_NOT_FOUND);
+    }
+
+    // キャッシュを無効化
+    const genre = await getGenreById(genreId, userId);
+    if (genre) {
+      revalidateTag(`category-${genre.category_id}`);
+      revalidateTag(`user-${userId}`);
+      revalidateTag(`category-detail-${genre.category_id}`);
+      revalidateTag(`genre-${genreId}`);
     }
 
     return genreId;

@@ -1,3 +1,4 @@
+
 import {
     COMMON_ERROR_MESSAGES,
     GENRE_ERROR_MESSAGES,
@@ -5,6 +6,7 @@ import {
 } from "@/constants/error-messages";
 import { executeTransactionWithErrorHandling } from "@/lib/db/transaction";
 import { neon } from "@neondatabase/serverless";
+import { revalidateTag } from "next/cache";
 
 const sql = neon(process.env.DATABASE_URL!);
 
@@ -89,47 +91,82 @@ export const createUrl = async (data: CreateUrlData): Promise<UrlData> => {
 
       const categoryId = genreResult[0].category_id as string;
 
-      // URL作成
-      const urlResult = await sql`
-        INSERT INTO urls (
-          user_id, title, url, description, favicon_url
-        ) VALUES (
-          ${data.userId}, ${data.title.trim()}, ${data.url.trim()},
-          ${data.description?.trim() || null}, ${data.faviconUrl || null}
-        ) RETURNING *
+      // 既存のURLを確認
+      const existingUrlResult = await sql`
+        SELECT * FROM urls
+        WHERE user_id = ${data.userId} AND url = ${data.url.trim()}
       `;
 
-      if (!urlResult[0]) {
-        throw new Error(COMMON_ERROR_MESSAGES.CREATE_FAILED);
+      let urlId: string;
+      let newUrl: Record<string, unknown>;
+
+      if (existingUrlResult.length > 0) {
+        // 既存のURLを使用
+        newUrl = existingUrlResult[0] as Record<string, unknown>;
+        urlId = newUrl.id as string;
+      } else {
+        // 新規URL作成
+        const urlResult = await sql`
+          INSERT INTO urls (
+            user_id, title, url, description, favicon_url
+          ) VALUES (
+            ${data.userId}, ${data.title.trim()}, ${data.url.trim()},
+            ${data.description?.trim() || null}, ${data.faviconUrl || null}
+          ) RETURNING *
+        `;
+
+        if (!urlResult[0]) {
+          throw new Error(COMMON_ERROR_MESSAGES.CREATE_FAILED);
+        }
+        newUrl = urlResult[0] as Record<string, unknown>;
+        urlId = newUrl.id as string;
       }
 
-      const newUrl = urlResult[0] as Record<string, unknown>;
-
-      // URL-ジャンル関係作成
-      await sql`
-        INSERT INTO url_categories (url_id, category_id, genre_id, user_id)
-        VALUES (${newUrl.id}, ${categoryId}, ${data.genreId}, ${data.userId})
+      // URL-ジャンル関係の存在確認
+      const existingRelation = await sql`
+        SELECT 1 FROM url_categories
+        WHERE url_id = ${urlId} AND genre_id = ${data.genreId} AND user_id = ${data.userId}
       `;
 
-      // ジャンルの更新日を更新
-      await sql`
-        UPDATE genres
-        SET updated_at = now()
-        WHERE id = ${data.genreId} AND user_id = ${data.userId}
-      `;
+      if (existingRelation.length === 0) {
+        // URL-ジャンル関係作成
+        await sql`
+          INSERT INTO url_categories (url_id, category_id, genre_id, user_id)
+          VALUES (${urlId}, ${categoryId}, ${data.genreId}, ${data.userId})
+        `;
 
-      // カテゴリの更新日を更新
-      await sql`
-        UPDATE categories
-        SET updated_at = now()
-        WHERE id = ${categoryId} AND user_id = ${data.userId}
-      `;
+        // ジャンルの更新日を更新
+        await sql`
+          UPDATE genres
+          SET updated_at = now()
+          WHERE id = ${data.genreId} AND user_id = ${data.userId}
+        `;
+
+        // カテゴリの更新日を更新
+        await sql`
+          UPDATE categories
+          SET updated_at = now()
+          WHERE id = ${categoryId} AND user_id = ${data.userId}
+        `;
+      }
 
       return newUrl;
     },
     COMMON_ERROR_MESSAGES.CREATE_FAILED,
     knownErrors
   );
+
+  // キャッシュを無効化
+  const genreResult = await sql`
+    SELECT category_id FROM genres WHERE id = ${data.genreId}
+  `;
+  const categoryId = genreResult[0]?.category_id as string;
+
+  revalidateTag(`genre-${data.genreId}`);
+  revalidateTag(`category-${categoryId}`);
+  revalidateTag(`user-${data.userId}`);
+  revalidateTag(`genre-detail-${data.genreId}`);
+  revalidateTag(`category-detail-${categoryId}`);
 
   return {
     id: result.id as string,
@@ -230,6 +267,13 @@ export const deleteUrl = async (urlId: string, userId: string): Promise<void> =>
       SET updated_at = now()
       WHERE id = ${category_id} AND user_id = ${userId}
     `;
+
+    // キャッシュを無効化
+    revalidateTag(`genre-${genre_id}`);
+    revalidateTag(`category-${category_id}`);
+    revalidateTag(`user-${userId}`);
+    revalidateTag(`genre-detail-${genre_id}`);
+    revalidateTag(`category-detail-${category_id}`);
   } catch (error) {
     throw error;
   }

@@ -4,22 +4,34 @@ import { auth } from "@/auth";
 import { createUrl, CreateUrlData, deleteUrl, getUrlsByGenre, UrlData } from "@/lib/db/urls";
 import { getTranslations } from "next-intl/server";
 
-export async function createUrlAction(data: Omit<CreateUrlData, "userId">): Promise<UrlData> {
+export type CreateUrlResult =
+  | { success: true; data: UrlData }
+  | { success: false; error: string };
+
+export async function createUrlAction(data: Omit<CreateUrlData, "userId">): Promise<CreateUrlResult> {
   const t = await getTranslations("errors");
   const session = await auth();
 
   if (!session?.user?.id) {
-    throw new Error(t("authRequired"));
+    return { success: false, error: t("authRequired") };
   }
 
   if (!data.genreId) {
-    throw new Error(t("genreIdRequired"));
+    return { success: false, error: t("genreIdRequired") };
   }
 
-  return await createUrl({
-    ...data,
-    userId: session.user.id,
-  });
+  try {
+    const result = await createUrl({
+      ...data,
+      userId: session.user.id,
+    });
+    return { success: true, data: result };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : t("unknownError"),
+    };
+  }
 }
 
 export async function getUrlsByGenreAction(

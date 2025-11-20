@@ -63,13 +63,17 @@ export default function UrlAddDesktop({ category, genre, locale, className }: Ur
         // メタデータ取得に失敗した場合は元のデータを使用
       }
 
-      await createUrlAction({
+      const result = await createUrlAction({
         genreId: genre.id,
         title: urlMetadata.title!,
         url: data.url,
         description: urlMetadata.description,
         faviconUrl: urlMetadata.faviconUrl,
       });
+
+      if (!result.success) {
+        throw new Error(result.error);
+      }
 
       addNotification({
         type: "success",

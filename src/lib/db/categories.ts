@@ -1,3 +1,4 @@
+// HTTP フェッチモードでDB接続を最適化
 import { CATEGORY_ERROR_MESSAGES, COMMON_ERROR_MESSAGES } from "@/constants/error-messages";
 import { neon } from "@neondatabase/serverless";
 import { revalidateTag, unstable_cache } from "next/cache";

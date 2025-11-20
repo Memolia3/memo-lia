@@ -1,5 +1,4 @@
 import { getCategoryById, getGenreById } from "@/actions/categories";
-import { getUrlsByGenreAction } from "@/actions/urls";
 import { auth } from "@/auth";
 import { Container } from "@/components/ui";
 import { AuthGuard } from "@/components/ui/AuthGuard";
@@ -89,32 +88,16 @@ export default async function GenreDetailPage({ params }: GenreDetailPageProps) 
     );
   }
 
-  // カテゴリ情報とジャンル情報を取得
-  const [category, genre] = await Promise.all([
-    getCategoryById(id, userId),
-    getGenreById(genreId, userId),
-  ]);
-
-  if (!category) {
-    return (
-      <AuthGuard isAuthenticated={true} isLoading={false}>
-        <Container maxWidth="7xl" className="h-full">
-          <div className="flex items-center justify-center h-full">
-            <div className="text-center">
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-                {t("categoryNotFound.title")}
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400">
-                {t("categoryNotFound.description")}
-              </p>
-            </div>
-          </div>
-        </Container>
-      </AuthGuard>
-    );
+  // 最適化: 単一クエリ + キャッシュでカテゴリ、ジャンル、URLを取得
+  let genreDetailData;
+  try {
+    const { getCachedGenreDetail } = await import("@/lib/db/genre-detail-cached");
+    genreDetailData = await getCachedGenreDetail(id, genreId, userId, 20);
+  } catch {
+    genreDetailData = null;
   }
 
-  if (!genre) {
+  if (!genreDetailData) {
     return (
       <AuthGuard isAuthenticated={true} isLoading={false}>
         <Container maxWidth="7xl" className="h-full">
@@ -131,14 +114,7 @@ export default async function GenreDetailPage({ params }: GenreDetailPageProps) 
     );
   }
 
-  // URL一覧を取得（エラー時はクライアントサイドで再取得させるためにundefinedとする）
-  let urls;
-  try {
-    urls = await getUrlsByGenreAction(genreId);
-  } catch {
-    // エラーハンドリングはクライアントサイドに任せる
-    urls = undefined;
-  }
+  const { category, genre, urls } = genreDetailData;
 
   return (
     <AuthGuard isAuthenticated={true} isLoading={false}>

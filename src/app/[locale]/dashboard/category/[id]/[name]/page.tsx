@@ -1,4 +1,4 @@
-import { getCategoryById, getGenresByCategory } from "@/actions/categories";
+import { getCategoryById } from "@/actions/categories";
 import { auth } from "@/auth";
 import { Container } from "@/components/ui";
 import { AuthGuard } from "@/components/ui/AuthGuard";
@@ -57,7 +57,7 @@ export default async function CategoryDetailPage({ params }: CategoryDetailPageP
   if (!userId) {
     return (
       <AuthGuard isAuthenticated={false} isLoading={false}>
-        <Container padding="md" maxWidth="7xl" className="h-full">
+        <Container maxWidth="7xl" className="h-full">
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
               <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
@@ -71,13 +71,19 @@ export default async function CategoryDetailPage({ params }: CategoryDetailPageP
     );
   }
 
-  // カテゴリ情報を取得
-  const category = await getCategoryById(id, userId);
+  // 最適化: 単一クエリ + キャッシュでカテゴリとジャンルを取得
+  let categoryDetailData;
+  try {
+    const { getCachedCategoryDetail } = await import("@/lib/db/category-detail-cached");
+    categoryDetailData = await getCachedCategoryDetail(id, userId);
+  } catch {
+    categoryDetailData = null;
+  }
 
-  if (!category) {
+  if (!categoryDetailData) {
     return (
       <AuthGuard isAuthenticated={true} isLoading={false}>
-        <Container padding="md" maxWidth="7xl" className="h-full">
+        <Container maxWidth="7xl" className="h-full">
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
               <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
@@ -91,14 +97,7 @@ export default async function CategoryDetailPage({ params }: CategoryDetailPageP
     );
   }
 
-  // ジャンル一覧を取得（エラー時はクライアントサイドで再取得させるためにundefinedとする）
-  let genres;
-  try {
-    genres = await getGenresByCategory(id, userId);
-  } catch {
-    // エラーハンドリングはクライアントサイドに任せる
-    genres = undefined;
-  }
+  const { category, genres: initialGenres } = categoryDetailData;
 
   return (
     <AuthGuard isAuthenticated={true} isLoading={false}>
@@ -145,11 +144,15 @@ export default async function CategoryDetailPage({ params }: CategoryDetailPageP
       <Container padding="md" maxWidth="7xl" className="h-full">
         {/* PC画面 */}
         <div className="hidden lg:block h-full">
-          <CategoryDetailDesktop category={category} initialGenres={genres} locale={locale} />
+          <CategoryDetailDesktop
+            category={category}
+            initialGenres={initialGenres}
+            locale={locale}
+          />
         </div>
         {/* スマホ画面 */}
         <div className="block lg:hidden h-full">
-          <CategoryDetailMobile category={category} initialGenres={genres} locale={locale} />
+          <CategoryDetailMobile category={category} initialGenres={initialGenres} locale={locale} />
         </div>
       </Container>
     </AuthGuard>

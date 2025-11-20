@@ -95,6 +95,7 @@ export const UrlCard: React.FC<UrlCardProps> = memo(({ url, onClick, onDelete, c
               alt={`${url.title} favicon`}
               width={32}
               height={32}
+              loading="lazy"
               className="w-8 h-8 rounded object-cover group-hover:scale-110 transition-transform duration-300"
               onError={e => {
                 // ファビコン読み込み失敗時のフォールバック
