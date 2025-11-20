@@ -6,4 +6,5 @@ export interface UrlGridProps {
   onUrlDelete?: (urlId: string) => void;
   isLoading?: boolean;
   className?: string;
+  onEndReached?: () => void;
 }

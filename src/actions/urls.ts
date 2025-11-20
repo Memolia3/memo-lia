@@ -22,7 +22,11 @@ export async function createUrlAction(data: Omit<CreateUrlData, "userId">): Prom
   });
 }
 
-export async function getUrlsByGenreAction(genreId: string): Promise<UrlData[]> {
+export async function getUrlsByGenreAction(
+  genreId: string,
+  page: number = 1,
+  limit: number = 20
+): Promise<UrlData[]> {
   const t = await getTranslations("errors");
   const session = await auth();
 
@@ -34,7 +38,8 @@ export async function getUrlsByGenreAction(genreId: string): Promise<UrlData[]> 
     throw new Error(t("genreIdRequired"));
   }
 
-  return await getUrlsByGenre(genreId, session.user.id);
+  const offset = (page - 1) * limit;
+  return await getUrlsByGenre(genreId, session.user.id, offset, limit);
 }
 
 export async function deleteUrlAction(urlId: string): Promise<void> {

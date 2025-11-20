@@ -6,12 +6,42 @@ import { getTranslations } from "next-intl/server";
 import { CategoryDetailDesktop } from "./CategoryDetailDesktop";
 import { CategoryDetailMobile } from "./CategoryDetailMobile";
 
+import { Metadata } from "next";
+
 interface CategoryDetailPageProps {
   params: Promise<{
     locale: string;
     id: string;
     name: string;
   }>;
+}
+
+export async function generateMetadata({ params }: CategoryDetailPageProps): Promise<Metadata> {
+  const { locale, id } = await params;
+  const t = await getTranslations({ locale, namespace: "categoryDetail" });
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    return {
+      title: t("authRequired.title"),
+    };
+  }
+
+  const category = await getCategoryById(id, userId);
+
+  if (!category) {
+    return {
+      title: t("notFound.title"),
+    };
+  }
+
+  return {
+    title: category.name,
+    openGraph: {
+      title: category.name,
+    },
+  };
 }
 
 export default async function CategoryDetailPage({ params }: CategoryDetailPageProps) {
@@ -70,6 +100,46 @@ export default async function CategoryDetailPage({ params }: CategoryDetailPageP
 
   return (
     <AuthGuard isAuthenticated={true} isLoading={false}>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: category.name,
+            description: `${category.name}のカテゴリ詳細ページです。`,
+            url:
+              `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/dashboard/category/` +
+              `${category.id}/${category.name}`,
+            breadcrumb: {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Home",
+                  item: `${process.env.NEXT_PUBLIC_APP_URL}/${locale}`,
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Dashboard",
+                  item: `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/dashboard`,
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: category.name,
+                  item:
+                    `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/dashboard/category/` +
+                    `${category.id}/${category.name}`,
+                },
+              ],
+            },
+          }),
+        }}
+      />
       <Container padding="md" maxWidth="7xl" className="h-full">
         {/* PC画面 */}
         <div className="hidden lg:block h-full">

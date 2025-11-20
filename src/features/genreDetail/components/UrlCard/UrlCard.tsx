@@ -4,7 +4,6 @@ import { Typography } from "@/components/ui";
 import { cn } from "@/utils";
 import { ExternalLink, Globe, MoreVertical, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import { memo, useEffect, useRef, useState } from "react";
 import { UrlCardProps } from "./UrlCard.types";
 
@@ -90,7 +89,8 @@ export const UrlCard: React.FC<UrlCardProps> = memo(({ url, onClick, onDelete, c
         {/* Favicon */}
         <div className="flex-shrink-0">
           {url.faviconUrl ? (
-            <Image
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
               src={url.faviconUrl}
               alt={`${url.title} favicon`}
               width={32}

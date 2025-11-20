@@ -1,7 +1,7 @@
 "use client";
 
 import { AppHeader } from "@/components/layout";
-import { Button, Divider, Icon, Loading, ScrollArea, Typography, UserInfo } from "@/components/ui";
+import { Button, Divider, Icon, Loading, Typography, UserInfo } from "@/components/ui";
 import { UrlCreateButton, UrlGrid, useGenreDetail } from "@/features/genreDetail";
 import { AdSense } from "@/features/google";
 import { cn, isShowAdsense } from "@/utils";
@@ -41,6 +41,8 @@ export const GenreDetailMobile: React.FC<GenreDetailMobileProps> = ({
     handleUrlClick,
     handleUrlDelete,
     handleCreateUrl,
+    fetchNextPage,
+    hasNextPage,
   } = useGenreDetail(category.id, genreId, category.userId, { initialUrls });
 
   if (isLoading) {
@@ -152,16 +154,17 @@ export const GenreDetailMobile: React.FC<GenreDetailMobileProps> = ({
             </div>
 
             {/* スクロール可能なURL一覧エリア */}
-            <ScrollArea className="flex-1 px-4 pb-4">
-              <div className="p-1.5">
+            <div className="flex-1 min-h-0 px-4 pb-4">
+              <div className="h-full p-1.5">
                 <UrlGrid
                   urls={urls}
                   onUrlClick={handleUrlClick}
                   onUrlDelete={handleUrlDelete}
                   isLoading={urlsLoading}
+                  onEndReached={() => hasNextPage && fetchNextPage()}
                 />
               </div>
-            </ScrollArea>
+            </div>
           </div>
         </div>
       </main>

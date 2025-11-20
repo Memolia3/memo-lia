@@ -5,6 +5,7 @@ import { deleteUrlAction, getUrlsByGenreAction } from "@/actions/urls";
 import { UrlData } from "@/features/genreDetail";
 import { useNotificationHelpers } from "@/hooks/useNotificationHelpers";
 import { Genre } from "@/types/database";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -19,6 +20,9 @@ interface UseGenreDetailReturn {
   handleUrlClick: (url: UrlData) => void;
   handleUrlDelete: (urlId: string) => Promise<void>;
   handleCreateUrl: () => void;
+  fetchNextPage: () => void;
+  hasNextPage: boolean;
+  isFetchingNextPage: boolean;
 }
 
 export const useGenreDetail = (
@@ -28,14 +32,40 @@ export const useGenreDetail = (
   options: { initialUrls?: UrlData[] } = {}
 ): UseGenreDetailReturn => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { showSuccess, showError } = useNotificationHelpers();
   const t = useTranslations("genreDetail.urls");
   const { initialUrls } = options;
+
   const [genre, setGenre] = useState<Genre | null>(null);
-  const [urls, setUrls] = useState<UrlData[]>(initialUrls || []);
   const [isLoading, setIsLoading] = useState(true);
-  const [urlsLoading, setUrlsLoading] = useState(!initialUrls);
   const [error, setError] = useState<Error | null>(null);
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading: isQueryLoading,
+    error: queryError,
+  } = useInfiniteQuery({
+    queryKey: ["urls", genreId],
+    queryFn: ({ pageParam = 1 }) => getUrlsByGenreAction(genreId, pageParam),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.length === 20 ? allPages.length + 1 : undefined;
+    },
+    initialData: initialUrls
+      ? {
+          pages: [initialUrls],
+          pageParams: [1],
+        }
+      : undefined,
+    enabled: !!genreId,
+  });
+
+  const urls = data ? data.pages.flatMap(page => page) : [];
+  const urlsLoading = isQueryLoading;
 
   useEffect(() => {
     const fetchGenre = async () => {
@@ -62,25 +92,6 @@ export const useGenreDetail = (
       fetchGenre();
     }
   }, [genreId, userId]);
-
-  // URL取得を独立したuseEffectで管理
-  useEffect(() => {
-    const fetchUrls = async () => {
-      if (!genreId || !genre || initialUrls) return;
-
-      try {
-        setUrlsLoading(true);
-        const urlData = await getUrlsByGenreAction(genreId);
-        setUrls(urlData);
-      } catch {
-        setUrls([]); // エラー時は空配列
-      } finally {
-        setUrlsLoading(false);
-      }
-    };
-
-    fetchUrls();
-  }, [genreId, genre, initialUrls]);
 
   const handleBackToCategory = useCallback(() => {
     // カテゴリ詳細ページに戻る
@@ -109,8 +120,9 @@ export const useGenreDetail = (
       // Server ActionでURLを削除
       await deleteUrlAction(urlId);
 
-      // ローカル状態からも削除
-      setUrls(prevUrls => prevUrls.filter(url => url.id !== urlId));
+      // キャッシュを無効化して再取得（または手動でキャッシュ更新）
+      // ここではシンプルにinvalidateQueriesを使用
+      queryClient.invalidateQueries({ queryKey: ["urls", genreId] });
 
       // 成功通知
       showSuccess({
@@ -156,10 +168,13 @@ export const useGenreDetail = (
     urls,
     isLoading,
     urlsLoading,
-    error,
+    error: error || (queryError as Error),
     handleBackToCategory,
     handleUrlClick,
     handleUrlDelete,
     handleCreateUrl,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
   };
 };

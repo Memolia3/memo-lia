@@ -7,6 +7,8 @@ import { getTranslations } from "next-intl/server";
 import { GenreDetailDesktop } from "./GenreDetailDesktop";
 import { GenreDetailMobile } from "./GenreDetailMobile";
 
+import { Metadata } from "next";
+
 interface GenreDetailPageProps {
   params: Promise<{
     locale: string;
@@ -15,6 +17,37 @@ interface GenreDetailPageProps {
     genreId: string;
     genreName: string;
   }>;
+}
+
+export async function generateMetadata({ params }: GenreDetailPageProps): Promise<Metadata> {
+  const { locale, id, genreId } = await params;
+  const t = await getTranslations({ locale, namespace: "genreDetail" });
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    return {
+      title: t("authRequired.title"),
+    };
+  }
+
+  const [category, genre] = await Promise.all([
+    getCategoryById(id, userId),
+    getGenreById(genreId, userId),
+  ]);
+
+  if (!category || !genre) {
+    return {
+      title: t("notFound.title"),
+    };
+  }
+
+  return {
+    title: `${genre.name} | ${category.name}`,
+    openGraph: {
+      title: `${genre.name} | ${category.name}`,
+    },
+  };
 }
 
 export default async function GenreDetailPage({ params }: GenreDetailPageProps) {
@@ -95,6 +128,54 @@ export default async function GenreDetailPage({ params }: GenreDetailPageProps) 
 
   return (
     <AuthGuard isAuthenticated={true} isLoading={false}>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: genre.name,
+            description: `${category.name} > ${genre.name}のジャンル詳細ページです。`,
+            url:
+              `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/dashboard/category/` +
+              `${category.id}/${category.name}/genre/${genre.id}/${genre.name}`,
+            breadcrumb: {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Home",
+                  item: `${process.env.NEXT_PUBLIC_APP_URL}/${locale}`,
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Dashboard",
+                  item: `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/dashboard`,
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: category.name,
+                  item:
+                    `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/dashboard/category/` +
+                    `${category.id}/${category.name}`,
+                },
+                {
+                  "@type": "ListItem",
+                  position: 4,
+                  name: genre.name,
+                  item:
+                    `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/dashboard/category/` +
+                    `${category.id}/${category.name}/genre/${genre.id}/${genre.name}`,
+                },
+              ],
+            },
+          }),
+        }}
+      />
       {/* PC画面 */}
       <div className="hidden lg:block h-full">
         <Container maxWidth="7xl" className="h-full">

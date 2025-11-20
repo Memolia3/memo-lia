@@ -4,12 +4,13 @@ import { Loading } from "@/components/ui";
 import { cn } from "@/utils";
 import { useTranslations } from "next-intl";
 import { memo } from "react";
-import { UrlCard } from "../UrlCard";
+import { Virtuoso } from "react-virtuoso";
+import { UrlCard, UrlData } from "../UrlCard";
 import { UrlGridProps } from "./UrlGrid.types";
 
 export const UrlGrid: React.FC<UrlGridProps> = memo(
-  ({ urls, onUrlClick, onUrlDelete, isLoading = false, className }) => {
-    const t = useTranslations("genreDetail");
+  ({ urls, onUrlClick, onUrlDelete, isLoading = false, className, onEndReached }) => {
+    const t = useTranslations("genreDetail.urls");
 
     // URL取得中のローディング表示
     if (isLoading) {
@@ -54,10 +55,17 @@ export const UrlGrid: React.FC<UrlGridProps> = memo(
     }
 
     return (
-      <div className={cn("flex flex-col gap-4 w-full", className)}>
-        {urls.map(url => (
-          <UrlCard key={url.id} url={url} onClick={onUrlClick} onDelete={onUrlDelete} />
-        ))}
+      <div className={cn("w-full h-full", className)}>
+        <Virtuoso
+          data={urls}
+          itemContent={(index: number, url: UrlData) => (
+            <div className="pb-4 px-1">
+              <UrlCard url={url} onClick={onUrlClick} onDelete={onUrlDelete} />
+            </div>
+          )}
+          style={{ height: "100%" }}
+          endReached={onEndReached}
+        />
       </div>
     );
   }

@@ -1,7 +1,7 @@
 import {
-  COMMON_ERROR_MESSAGES,
-  GENRE_ERROR_MESSAGES,
-  URL_ERROR_MESSAGES,
+    COMMON_ERROR_MESSAGES,
+    GENRE_ERROR_MESSAGES,
+    URL_ERROR_MESSAGES,
 } from "@/constants/error-messages";
 import { executeTransactionWithErrorHandling } from "@/lib/db/transaction";
 import { neon } from "@neondatabase/serverless";
@@ -146,7 +146,12 @@ export const createUrl = async (data: CreateUrlData): Promise<UrlData> => {
   };
 };
 
-export const getUrlsByGenre = async (genreId: string, userId: string): Promise<UrlData[]> => {
+export const getUrlsByGenre = async (
+  genreId: string,
+  userId: string,
+  offset: number = 0,
+  limit: number = 20
+): Promise<UrlData[]> => {
   try {
     const result = await sql`
       SELECT
@@ -165,7 +170,7 @@ export const getUrlsByGenre = async (genreId: string, userId: string): Promise<U
       INNER JOIN url_categories uc ON u.id = uc.url_id
       WHERE uc.genre_id = ${genreId} AND uc.user_id = ${userId}
       ORDER BY u.created_at DESC
-      LIMIT 100
+      LIMIT ${limit} OFFSET ${offset}
     `;
 
     return result.map((row: Record<string, unknown>) => ({
