@@ -9,9 +9,10 @@ import { useEffect, useMemo, useState } from "react";
 /**
  * カテゴリ一覧を取得するフック
  */
-export const useCategories = (userId: string) => {
+export const useCategories = (userId: string, options: { enabled?: boolean } = {}) => {
+  const { enabled = true } = options;
   const [categories, setCategories] = useState<CategoryData[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(enabled);
   const [error, setError] = useState<Error | null>(null);
   const { showError } = useNotificationHelpers();
   const t = useTranslations("dashboard");
@@ -27,7 +28,10 @@ export const useCategories = (userId: string) => {
   );
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId || !enabled) {
+      setIsLoading(false);
+      return;
+    }
 
     const fetchCategories = async () => {
       setIsLoading(true);
@@ -54,7 +58,7 @@ export const useCategories = (userId: string) => {
     };
 
     fetchCategories();
-  }, [userId, showError, errorMessages]);
+  }, [userId, showError, errorMessages, enabled]);
 
   return {
     data: categories,

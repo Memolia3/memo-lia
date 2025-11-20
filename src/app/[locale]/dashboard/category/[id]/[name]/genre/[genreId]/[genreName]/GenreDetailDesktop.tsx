@@ -14,9 +14,12 @@ interface CategoryData {
   userId: string;
 }
 
+import { UrlData } from "@/features/genreDetail";
+
 export interface GenreDetailDesktopProps {
   category: CategoryData;
   genreId: string;
+  initialUrls?: UrlData[];
   locale: string;
   className?: string;
 }
@@ -24,6 +27,7 @@ export interface GenreDetailDesktopProps {
 export const GenreDetailDesktop: React.FC<GenreDetailDesktopProps> = ({
   category,
   genreId,
+  initialUrls,
   locale,
   className,
 }) => {
@@ -38,7 +42,7 @@ export const GenreDetailDesktop: React.FC<GenreDetailDesktopProps> = ({
     handleUrlClick,
     handleUrlDelete,
     handleCreateUrl,
-  } = useGenreDetail(category.id, genreId, category.userId);
+  } = useGenreDetail(category.id, genreId, category.userId, { initialUrls });
 
   if (isLoading) {
     return (

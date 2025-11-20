@@ -1,4 +1,5 @@
 import { getCategoryById, getGenreById } from "@/actions/categories";
+import { getUrlsByGenreAction } from "@/actions/urls";
 import { auth } from "@/auth";
 import { Container } from "@/components/ui";
 import { AuthGuard } from "@/components/ui/AuthGuard";
@@ -83,18 +84,37 @@ export default async function GenreDetailPage({ params }: GenreDetailPageProps) 
     );
   }
 
+  // URL一覧を取得（エラー時はクライアントサイドで再取得させるためにundefinedとする）
+  let urls;
+  try {
+    urls = await getUrlsByGenreAction(genreId);
+  } catch {
+    // エラーハンドリングはクライアントサイドに任せる
+    urls = undefined;
+  }
+
   return (
     <AuthGuard isAuthenticated={true} isLoading={false}>
       {/* PC画面 */}
       <div className="hidden lg:block h-full">
         <Container maxWidth="7xl" className="h-full">
-          <GenreDetailDesktop category={category} genreId={genreId} locale={locale} />
+          <GenreDetailDesktop
+            category={category}
+            genreId={genreId}
+            initialUrls={urls}
+            locale={locale}
+          />
         </Container>
       </div>
       {/* スマホ画面 */}
       <div className="block lg:hidden h-full">
         <Container maxWidth="7xl" className="h-full">
-          <GenreDetailMobile category={category} genreId={genreId} locale={locale} />
+          <GenreDetailMobile
+            category={category}
+            genreId={genreId}
+            initialUrls={urls}
+            locale={locale}
+          />
         </Container>
       </div>
     </AuthGuard>

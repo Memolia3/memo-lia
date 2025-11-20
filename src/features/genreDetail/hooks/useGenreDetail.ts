@@ -24,15 +24,17 @@ interface UseGenreDetailReturn {
 export const useGenreDetail = (
   categoryId: string,
   genreId: string,
-  userId: string
+  userId: string,
+  options: { initialUrls?: UrlData[] } = {}
 ): UseGenreDetailReturn => {
   const router = useRouter();
   const { showSuccess, showError } = useNotificationHelpers();
   const t = useTranslations("genreDetail.urls");
+  const { initialUrls } = options;
   const [genre, setGenre] = useState<Genre | null>(null);
-  const [urls, setUrls] = useState<UrlData[]>([]);
+  const [urls, setUrls] = useState<UrlData[]>(initialUrls || []);
   const [isLoading, setIsLoading] = useState(true);
-  const [urlsLoading, setUrlsLoading] = useState(false);
+  const [urlsLoading, setUrlsLoading] = useState(!initialUrls);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
@@ -64,7 +66,7 @@ export const useGenreDetail = (
   // URL取得を独立したuseEffectで管理
   useEffect(() => {
     const fetchUrls = async () => {
-      if (!genreId || !genre) return;
+      if (!genreId || !genre || initialUrls) return;
 
       try {
         setUrlsLoading(true);
@@ -78,7 +80,7 @@ export const useGenreDetail = (
     };
 
     fetchUrls();
-  }, [genreId, genre]);
+  }, [genreId, genre, initialUrls]);
 
   const handleBackToCategory = useCallback(() => {
     // カテゴリ詳細ページに戻る

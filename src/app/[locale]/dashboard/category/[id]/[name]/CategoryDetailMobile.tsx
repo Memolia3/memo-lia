@@ -14,11 +14,16 @@ import { useTranslations } from "next-intl";
 
 export const CategoryDetailMobile: React.FC<CategoryDetailMobileProps> = ({
   category,
+  initialGenres,
   className,
 }) => {
   const t = useTranslations("categoryDetail");
   const { handleBackToDashboard, handleCreateGenre } = useCategoryDetail(category);
-  const { genres, isLoading, error, handleGenreDelete } = useGenres(category.id, category.userId);
+  const { genres, isLoading, error, handleGenreDelete } = useGenres(
+    category.id,
+    category.userId,
+    { initialData: initialGenres }
+  );
 
   return (
     <div className={cn("h-full flex flex-col", className)}>

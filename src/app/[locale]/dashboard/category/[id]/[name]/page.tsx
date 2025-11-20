@@ -1,4 +1,4 @@
-import { getCategoryById } from "@/actions/categories";
+import { getCategoryById, getGenresByCategory } from "@/actions/categories";
 import { auth } from "@/auth";
 import { Container } from "@/components/ui";
 import { AuthGuard } from "@/components/ui/AuthGuard";
@@ -59,16 +59,25 @@ export default async function CategoryDetailPage({ params }: CategoryDetailPageP
     );
   }
 
+  // ジャンル一覧を取得（エラー時はクライアントサイドで再取得させるためにundefinedとする）
+  let genres;
+  try {
+    genres = await getGenresByCategory(id, userId);
+  } catch {
+    // エラーハンドリングはクライアントサイドに任せる
+    genres = undefined;
+  }
+
   return (
     <AuthGuard isAuthenticated={true} isLoading={false}>
       <Container padding="md" maxWidth="7xl" className="h-full">
         {/* PC画面 */}
         <div className="hidden lg:block h-full">
-          <CategoryDetailDesktop category={category} locale={locale} />
+          <CategoryDetailDesktop category={category} initialGenres={genres} locale={locale} />
         </div>
         {/* スマホ画面 */}
         <div className="block lg:hidden h-full">
-          <CategoryDetailMobile category={category} locale={locale} />
+          <CategoryDetailMobile category={category} initialGenres={genres} locale={locale} />
         </div>
       </Container>
     </AuthGuard>

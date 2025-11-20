@@ -5,10 +5,15 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { GenreData } from "../types";
 
-export const useGenres = (categoryId: string, userId: string) => {
+export const useGenres = (
+  categoryId: string,
+  userId: string,
+  options: { initialData?: GenreData[] } = {}
+) => {
   const t = useTranslations("categoryDetail");
-  const [genres, setGenres] = useState<GenreData[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { initialData } = options;
+  const [genres, setGenres] = useState<GenreData[]>(initialData || []);
+  const [isLoading, setIsLoading] = useState(!initialData);
   const [error, setError] = useState<Error | null>(null);
 
   // 翻訳メッセージをuseMemoで安定化
@@ -35,10 +40,10 @@ export const useGenres = (categoryId: string, userId: string) => {
   }, []);
 
   useEffect(() => {
-    if (categoryId && userId) {
+    if (categoryId && userId && !initialData) {
       fetchGenres();
     }
-  }, [fetchGenres, categoryId, userId]);
+  }, [fetchGenres, categoryId, userId, initialData]);
 
   // ジャンル追加後のリフレッシュ用
   const addGenre = useCallback((newGenre: GenreData) => {

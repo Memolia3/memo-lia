@@ -14,9 +14,12 @@ interface CategoryData {
   userId: string;
 }
 
+import { UrlData } from "@/features/genreDetail";
+
 export interface GenreDetailMobileProps {
   category: CategoryData;
   genreId: string;
+  initialUrls?: UrlData[];
   locale: string;
   className?: string;
 }
@@ -24,6 +27,7 @@ export interface GenreDetailMobileProps {
 export const GenreDetailMobile: React.FC<GenreDetailMobileProps> = ({
   category,
   genreId,
+  initialUrls,
   className,
 }) => {
   const t = useTranslations("genreDetail");
@@ -37,7 +41,7 @@ export const GenreDetailMobile: React.FC<GenreDetailMobileProps> = ({
     handleUrlClick,
     handleUrlDelete,
     handleCreateUrl,
-  } = useGenreDetail(category.id, genreId, category.userId);
+  } = useGenreDetail(category.id, genreId, category.userId, { initialUrls });
 
   if (isLoading) {
     return (

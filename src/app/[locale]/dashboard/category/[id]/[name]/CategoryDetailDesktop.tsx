@@ -14,12 +14,17 @@ import { useTranslations } from "next-intl";
 
 export const CategoryDetailDesktop: React.FC<CategoryDetailDesktopProps> = ({
   category,
+  initialGenres,
   locale,
   className,
 }) => {
   const t = useTranslations("categoryDetail");
   const { handleBackToDashboard, handleCreateGenre } = useCategoryDetail(category);
-  const { genres, isLoading, error, handleGenreDelete } = useGenres(category.id, category.userId);
+  const { genres, isLoading, error, handleGenreDelete } = useGenres(
+    category.id,
+    category.userId,
+    { initialData: initialGenres }
+  );
 
   return (
     <div className={cn("h-full flex flex-col zoom-safe", className)}>

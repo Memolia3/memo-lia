@@ -35,28 +35,29 @@ export const CategoryGrid: React.FC<CategoryGridProps> = memo(
       data: fetchedCategories = [],
       isLoading: categoriesLoading,
       error: categoriesError,
-    } = useCategories(memoizedUserId);
+    } = useCategories(memoizedUserId, {
+      enabled: propCategories === undefined,
+    });
 
     // ローカル状態管理
-    const [localCategories, setLocalCategories] = useState<CategoryData[]>([]);
-    const [isInitialized, setIsInitialized] = useState(false);
+    const [localCategories, setLocalCategories] = useState<CategoryData[]>(propCategories || []);
+    const [isInitialized, setIsInitialized] = useState(!!propCategories);
 
-    // プロパティで渡されたデータまたはフェッチしたデータを使用
-    const categories = propCategories?.length ? propCategories : localCategories;
-    const isLoading = propCategories?.length ? false : categoriesLoading;
-    const error = propCategories?.length ? null : categoriesError;
-
-    // 初期化状態を管理
+    // プロパティまたはフェッチしたデータで初期化
     useEffect(() => {
-      if (propCategories?.length) {
-        // プロパティでカテゴリが渡されている場合は即座に初期化完了
+      if (propCategories !== undefined) {
+        setLocalCategories(propCategories);
         setIsInitialized(true);
-      } else {
-        // フェッチしたデータで初期化
+      } else if (fetchedCategories.length > 0 || !categoriesLoading) {
         setLocalCategories(fetchedCategories);
         setIsInitialized(true);
       }
-    }, [fetchedCategories, propCategories?.length]);
+    }, [fetchedCategories, propCategories, categoriesLoading]);
+
+    // 表示用データは常にローカル状態を使用
+    const categories = localCategories;
+    const isLoading = propCategories === undefined ? categoriesLoading : false;
+    const error = propCategories === undefined ? categoriesError : null;
 
     // カテゴリ削除ハンドラー
     const handleCategoryDelete = useCallback(
