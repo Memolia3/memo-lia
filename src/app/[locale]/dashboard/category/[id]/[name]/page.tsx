@@ -24,10 +24,7 @@ export async function generateMetadata({ params }: CategoryDetailPageProps): Pro
 
   if (!userId) {
     return {
-      title: {
-        default: t("authRequired.title"),
-        template: "%s | MemoLia",
-      },
+      title: `${t("authRequired.title")} | MemoLia`,
     };
   }
 
@@ -35,18 +32,12 @@ export async function generateMetadata({ params }: CategoryDetailPageProps): Pro
 
   if (!category) {
     return {
-      title: {
-        default: t("notFound.title"),
-        template: "%s | MemoLia",
-      },
+      title: `${t("notFound.title")} | MemoLia`,
     };
   }
 
   return {
-    title: {
-      default: category.name,
-      template: "%s | MemoLia",
-    },
+    title: `${category.name} | MemoLia`,
     description: `${category.name}のカテゴリに含まれるジャンルとURLを管理・整理できます。`,
     openGraph: {
       title: `${category.name} | MemoLia`,
