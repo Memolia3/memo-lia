@@ -24,7 +24,10 @@ export async function generateMetadata({ params }: CategoryDetailPageProps): Pro
 
   if (!userId) {
     return {
-      title: t("authRequired.title"),
+      title: {
+        default: t("authRequired.title"),
+        template: "%s | MemoLia",
+      },
     };
   }
 
@@ -32,14 +35,20 @@ export async function generateMetadata({ params }: CategoryDetailPageProps): Pro
 
   if (!category) {
     return {
-      title: t("notFound.title"),
+      title: {
+        default: t("notFound.title"),
+        template: "%s | MemoLia",
+      },
     };
   }
 
   return {
-    title: category.name,
+    title: {
+      default: category.name,
+      template: "%s | MemoLia",
+    },
     openGraph: {
-      title: category.name,
+      title: `${category.name} | MemoLia`,
     },
   };
 }

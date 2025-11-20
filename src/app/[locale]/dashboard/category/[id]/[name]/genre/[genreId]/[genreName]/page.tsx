@@ -27,7 +27,10 @@ export async function generateMetadata({ params }: GenreDetailPageProps): Promis
 
   if (!userId) {
     return {
-      title: t("authRequired.title"),
+      title: {
+        default: t("authRequired.title"),
+        template: "%s | MemoLia",
+      },
     };
   }
 
@@ -38,14 +41,20 @@ export async function generateMetadata({ params }: GenreDetailPageProps): Promis
 
   if (!category || !genre) {
     return {
-      title: t("notFound.title"),
+      title: {
+        default: t("notFound.title"),
+        template: "%s | MemoLia",
+      },
     };
   }
 
   return {
-    title: `${genre.name} | ${category.name}`,
+    title: {
+      default: `${genre.name} | ${category.name}`,
+      template: "%s | MemoLia",
+    },
     openGraph: {
-      title: `${genre.name} | ${category.name}`,
+      title: `${genre.name} | ${category.name} | MemoLia`,
     },
   };
 }
