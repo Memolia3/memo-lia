@@ -21,8 +21,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   for (const locale of locales) {
     for (const path of staticPaths) {
+      // defaultLocale (en) の場合はプレフィックスなし、それ以外はプレフィックスあり
+      const localePath = locale === "en" ? "" : `/${locale}`;
+      const urlPath = path === "/" ? "" : path;
+
       entries.push({
-        url: `${baseUrl}/${locale}${path === "/" ? "" : path}`,
+        url: `${baseUrl}${localePath}${urlPath}`,
         lastModified: now,
         changeFrequency: "weekly",
         priority: path === "/" ? 1 : 0.7,
