@@ -25,11 +25,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
       const localePath = locale === "en" ? "" : `/${locale}`;
       const urlPath = path === "/" ? "" : path;
 
+      // 優先度の設定
+      let priority = 0.7;
+      if (path === "/") {
+        priority = 1.0;
+      } else if (path === "/bookmarklet") {
+        priority = 0.5;
+      }
+
       entries.push({
         url: `${baseUrl}${localePath}${urlPath}`,
         lastModified: now,
         changeFrequency: "weekly",
-        priority: path === "/" ? 1 : 0.7,
+        priority,
       });
     }
   }
