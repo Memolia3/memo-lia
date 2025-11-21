@@ -43,7 +43,17 @@ export async function generateMetadata({
     },
   };
 
-  return generateMeta(locale, metaOptions);
+  const metadata = await generateMeta(locale, metaOptions);
+
+  return {
+    ...metadata,
+    manifest: "/manifest.json",
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: "default",
+      title: "MemoLia",
+    },
+  };
 }
 
 /**

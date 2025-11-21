@@ -12,13 +12,13 @@
       "src": "/assets/images/memo-lia-pwa-icon.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
       "src": "/assets/images/memo-lia-pwa-icon.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ],
   "categories": ["productivity", "utilities"],
