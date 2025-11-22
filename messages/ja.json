@@ -424,14 +424,12 @@
       "fetchingMetadata": "URLの情報を取得中..."
     },
     "success": {
-      "message": "URL作成完了",
       "title": "URL作成完了",
-      "description": "URLが正常に作成されました。"
+      "message": "URLが正常に作成されました。"
     },
     "error": {
-      "message": "URL作成エラー",
       "title": "URL作成エラー",
-      "description": "URLの作成に失敗しました。"
+      "message": "URLの作成に失敗しました。"
     }
   },
   "users": {

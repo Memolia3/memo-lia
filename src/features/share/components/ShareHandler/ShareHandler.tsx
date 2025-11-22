@@ -170,11 +170,6 @@ export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData, 
                 transition-all duration-200"
               placeholder={tForm("placeholders.url")}
             />
-            {isValidating && (
-              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-              </div>
-            )}
           </div>
         </div>
 
@@ -282,7 +277,7 @@ export const ShareHandler: React.FC<ShareHandlerProps> = ({ locale, sharedData, 
             <Button
               type="submit"
               disabled={!selectedGenreId || isLoading || genresLoading || isValidating}
-              className="min-w-[120px]"
+              className="w-[140px]"
             >
               {isLoading ? t("saving") : t("save")}
             </Button>

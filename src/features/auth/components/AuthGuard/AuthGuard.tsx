@@ -24,13 +24,26 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
   const t = useTranslations("auth");
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated && !isSharePage) {
-      // 現在のパスが/authでない場合のみリダイレクト
-      if (typeof window !== "undefined" && !window.location.pathname.includes("/auth")) {
-        router.push("/auth");
+    if (!isLoading && !isAuthenticated) {
+      if (!isSharePage) {
+        // 通常ページ: 即座にリダイレクト
+        if (typeof window !== "undefined" && !window.location.pathname.includes("/auth")) {
+          router.push("/auth");
+        }
+      } else {
+        // 共有ページ: 3秒後にリダイレクト
+        const timer = setTimeout(() => {
+          const callbackUrl =
+            typeof window !== "undefined"
+              ? `${window.location.pathname}${window.location.search}`
+              : `/${locale}`;
+          router.push(`/${locale}/auth?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+        }, 3000);
+
+        return () => clearTimeout(timer);
       }
     }
-  }, [isAuthenticated, isLoading, router, isSharePage]);
+  }, [isAuthenticated, isLoading, router, isSharePage, locale]);
 
   if (isLoading) {
     return (

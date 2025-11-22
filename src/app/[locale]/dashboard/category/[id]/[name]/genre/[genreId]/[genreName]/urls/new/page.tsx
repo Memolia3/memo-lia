@@ -1,4 +1,4 @@
-import { getCategoryById, getGenreById } from "@/actions/categories";
+import { getGenreById } from "@/actions/categories";
 import { auth } from "@/auth";
 import { Container } from "@/components/ui";
 import { getCurrentPageInfo } from "@/utils";
@@ -50,22 +50,20 @@ export default async function UrlAddPage({ params }: PageProps) {
     redirect("/auth");
   }
 
-  const { locale, id, genreId } = await params;
+  const { locale, genreId } = await params;
   const userId = session.user.id;
 
   try {
-    const [category, genre] = await Promise.all([
-      getCategoryById(id, userId),
-      getGenreById(genreId, userId),
-    ]);
-
-    if (!category) {
-      notFound();
-    }
+    const genre = await getGenreById(genreId, userId);
 
     if (!genre) {
       notFound();
     }
+
+    const category = {
+      id: genre.categoryId,
+      name: genre.categoryName || "",
+    };
 
     return (
       <>

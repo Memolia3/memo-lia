@@ -1,6 +1,5 @@
 import { COMMON_ERROR_MESSAGES, GENRE_ERROR_MESSAGES } from "@/constants/error-messages";
 import { executeTransactionWithErrorHandling } from "@/lib/db/transaction";
-import { Genre } from "@/types/database";
 import { neon } from "@neondatabase/serverless";
 import { revalidateTag } from "next/cache";
 
@@ -13,6 +12,7 @@ export interface GenreData {
   id: string;
   userId: string;
   categoryId: string;
+  categoryName?: string;
   name: string;
   description?: string;
   color?: string;
@@ -92,7 +92,7 @@ export async function getGenresByCategory(
 /**
  * ジャンルをIDで取得
  */
-export const getGenreById = async (genreId: string, userId: string): Promise<Genre | null> => {
+export const getGenreById = async (genreId: string, userId: string): Promise<GenreData | null> => {
   try {
     const result = await sql`
       SELECT
@@ -120,16 +120,17 @@ export const getGenreById = async (genreId: string, userId: string): Promise<Gen
     const row = result[0] as Record<string, unknown>;
     return {
       id: row.id as string,
-      user_id: row.user_id as string,
-      category_id: row.category_id as string,
+      userId: row.user_id as string,
+      categoryId: row.category_id as string,
+      categoryName: row.category_name as string,
       name: row.name as string,
       description: row.description as string | undefined,
       color: row.color as string | undefined,
       icon: row.icon as string | undefined,
-      sort_order: row.sort_order as number,
-      is_active: row.is_active as boolean,
-      created_at: row.created_at as Date,
-      updated_at: row.updated_at as Date,
+      sortOrder: row.sort_order as number,
+      isActive: row.is_active as boolean,
+      createdAt: row.created_at as string,
+      updatedAt: row.updated_at as string,
     };
   } catch {
     throw new Error(COMMON_ERROR_MESSAGES.FETCH_FAILED);
@@ -362,9 +363,9 @@ export async function deleteGenre(genreId: string, userId: string): Promise<stri
     // キャッシュを無効化
     const genre = await getGenreById(genreId, userId);
     if (genre) {
-      revalidateTag(`category-${genre.category_id}`);
+      revalidateTag(`category-${genre.categoryId}`);
       revalidateTag(`user-${userId}`);
-      revalidateTag(`category-detail-${genre.category_id}`);
+      revalidateTag(`category-detail-${genre.categoryId}`);
       revalidateTag(`genre-${genreId}`);
     }
 

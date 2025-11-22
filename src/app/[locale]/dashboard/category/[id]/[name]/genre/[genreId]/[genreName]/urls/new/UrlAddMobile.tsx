@@ -79,7 +79,6 @@ export default function UrlAddMobile({ category, genre, locale, className }: Url
         type: "success",
         message: t("success.message"),
         title: t("success.title"),
-        description: t("success.description"),
       });
 
       const encodedCategoryName = encodeURIComponent(category.name);
@@ -92,7 +91,7 @@ export default function UrlAddMobile({ category, genre, locale, className }: Url
         type: "error",
         message: t("error.message"),
         title: t("error.title"),
-        description: error instanceof Error ? error.message : t("error.description"),
+        description: error instanceof Error ? error.message : undefined,
       });
     } finally {
       setIsLoading(false);

@@ -4,14 +4,14 @@ import { getGenreById } from "@/actions/categories";
 import { deleteUrlAction, getUrlsByGenreAction } from "@/actions/urls";
 import { UrlData } from "@/features/genreDetail";
 import { useNotificationHelpers } from "@/hooks/useNotificationHelpers";
-import { Genre } from "@/types/database";
+import { GenreData } from "@/lib/db/genres"; // GenreDataをインポート
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 interface UseGenreDetailReturn {
-  genre: Genre | null;
+  genre: GenreData | null; // Genre -> GenreData
   urls: UrlData[];
   isLoading: boolean;
   urlsLoading: boolean;
@@ -37,7 +37,7 @@ export const useGenreDetail = (
   const t = useTranslations("genreDetail.urls");
   const { initialUrls } = options;
 
-  const [genre, setGenre] = useState<Genre | null>(null);
+  const [genre, setGenre] = useState<GenreData | null>(null); // Genre -> GenreData
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
