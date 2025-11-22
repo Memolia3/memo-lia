@@ -6,7 +6,6 @@ const urlsToCache = [
   "/manifest.json",
   "/assets/images/memo-lia-pwa-icon.png",
   "/assets/images/memo-lia-icon.png",
-  "/favicon.ico",
 ];
 
 self.addEventListener("install", event => {
