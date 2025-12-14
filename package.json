@@ -28,7 +28,7 @@
     "autoprefixer": "^10.4.21",
     "clsx": "^2.1.1",
     "lucide-react": "^0.542.0",
-    "next": "15.2.3",
+    "next": "15.2.8",
     "next-auth": "^5.0.0-beta.25",
     "next-intl": "^4.0.2",
     "postcss": "^8.5.6",
