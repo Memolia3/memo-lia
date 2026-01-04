@@ -612,6 +612,8 @@ NextAuth.jsはJWTベースのセッション管理を採用している。
 - UrlPreview: URLプレビューコンポーネント
 - BookmarkletInstaller: ブックマークレットインストーラー
 - NotificationContainer: 通知コンテナ
+- AdSense: Google AdSense広告コンポーネント
+- SpeedInsights: Vercel Speed Insightsコンポーネント
 
 ## 7. セキュリティ設計
 
@@ -655,12 +657,17 @@ NextAuth.jsはJWTベースのセッション管理を採用している。
 #### Content-Security-Policy (CSP)
 
 - default-src 'self'
-- script-src 'self' 'nonce-{nonce}' 'unsafe-eval' 'unsafe-inline' (AdSense用)
+- script-src 'self' 'nonce-{nonce}' 'unsafe-eval' 'unsafe-inline'
+  https://pagead2.googlesyndication.com https://www.googletagservices.com
+  https://www.google-analytics.com (AdSense用)
 - style-src 'self' 'unsafe-inline'
-- img-src 'self' data: https:
+- img-src 'self' data: https: https://pagead2.googlesyndication.com
+  https://www.google-analytics.com
 - font-src 'self' data:
-- connect-src 'self'
-- frame-src 'self' (AdSense用)
+- connect-src 'self' https://www.google-analytics.com
+  https://pagead2.googlesyndication.com
+- frame-src 'self' https://googleads.g.doubleclick.net
+  https://tpc.googlesyndication.com (AdSense用)
 - object-src 'none'
 - base-uri 'self'
 - form-action 'self'
@@ -696,6 +703,13 @@ NextAuth.jsはJWTベースのセッション管理を採用している。
 
 - メモリベースのキャッシュ（10分間）
 - 最大1000件まで保持
+
+#### Service Workerキャッシュ
+
+- 静的アセットのキャッシュ（Cache First戦略）
+- 動的コンテンツのキャッシュ（Network First戦略、Stale-While-Revalidate）
+- POSTリクエストはキャッシュしない（直接fetch）
+- GETリクエストのみキャッシュ対象
 
 ### 8.2 最適化手法
 
@@ -830,9 +844,11 @@ NextAuth.jsはJWTベースのセッション管理を採用している。
 
 #### パフォーマンス監視
 
-- Vercel Analyticsによるパフォーマンス監視
-- Web Vitalsの計測
+- Vercel Speed Insightsによるパフォーマンス監視
+- Web Vitalsの計測（FCP, LCP, INP, CLS, FID, TTFB）
+- Real Experience Score（RES）の計測
 - エラー率の監視
+- パフォーマンスメトリクスの可視化
 
 #### エラーログ
 
@@ -894,6 +910,7 @@ NextAuth.jsはJWTベースのセッション管理を採用している。
 
 ## 13. 変更履歴
 
-| 日付       | バージョン | 変更内容 | 変更者 |
-| ---------- | ---------- | -------- | ------ |
-| 2025-12-04 | 1.0        | 初版作成 | -      |
+| 日付       | バージョン | 変更内容                                                                                                            | 変更者 |
+| ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------- | ------ |
+| 2025-12-04 | 1.0        | 初版作成                                                                                                            | -      |
+| 2025-01-04 | 1.1        | AdSense機能とSpeed Insights機能の追加、CSP設定の更新（unsafe-inline追加）、Service WorkerのPOSTリクエスト処理の追加 | -      |
