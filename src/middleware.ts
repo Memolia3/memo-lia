@@ -21,7 +21,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // セキュリティヘッダーの追加
+  // next-intlのミドルウェアに処理を委譲
+  // localePrefix: "as-needed"の設定により、デフォルトロケール（en）の場合は
+  // URLにプレフィックスを付けずに処理される
+  // ルートURL（/）は、ミドルウェアが内部で/enにリライトする
   const response = intlMiddleware(request);
 
   // レスポンスがNextResponseの場合のみヘッダーを追加
