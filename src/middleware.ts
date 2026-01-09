@@ -61,7 +61,9 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // ミドルウェアを適用するパス
+    // ルートパスを明示的に含める（next-intlがデフォルトロケールにリダイレクトするため必要）
+    "/",
+    // ミドルウェアを適用するパス（API、静的ファイルを除く）
     "/((?!api|_next|_vercel|.*\\..*).*)",
   ],
 };
