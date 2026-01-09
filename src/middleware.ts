@@ -13,6 +13,32 @@ function generateNonce(): string {
   return btoa(String.fromCharCode.apply(null, Array.from(array)));
 }
 
+/**
+ * Accept-Languageヘッダーからロケールを検出
+ */
+function detectLocale(request: NextRequest): "ja" | "en" {
+  const acceptLanguage = request.headers.get("accept-language") || "";
+  // 日本語が優先されている場合は"ja"を返す
+  if (acceptLanguage.toLowerCase().includes("ja")) {
+    return "ja";
+  }
+  return "en";
+}
+
+/**
+ * キャッシュ無効化ヘッダーを追加
+ */
+function addNoCacheHeaders(response: NextResponse): void {
+  response.headers.set(
+    "Cache-Control",
+    "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+  );
+  response.headers.set("Pragma", "no-cache");
+  response.headers.set("Expires", "0");
+  response.headers.set("Surrogate-Control", "no-store");
+  response.headers.set("Vary", "Accept-Language");
+}
+
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
@@ -21,15 +47,27 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // ルートパスの場合は言語検出してリダイレクト
+  if (pathname === "/") {
+    const locale = detectLocale(request);
+    const url = request.nextUrl.clone();
+    url.pathname = `/${locale}`;
+    const redirectResponse = NextResponse.redirect(url, { status: 307 });
+    addNoCacheHeaders(redirectResponse);
+    return redirectResponse;
+  }
+
   // next-intlのミドルウェアに処理を委譲
-  // localePrefix: "always"の設定により、すべてのロケールでURLにプレフィックスが付く
   const intlResponse = await intlMiddleware(request);
 
-  // レスポンスがない場合はデフォルトロケールにリダイレクト
+  // レスポンスがない場合は言語検出してリダイレクト
   if (!intlResponse) {
+    const locale = detectLocale(request);
     const url = request.nextUrl.clone();
-    url.pathname = `/en${pathname}`;
-    return NextResponse.redirect(url);
+    url.pathname = `/${locale}${pathname}`;
+    const redirectResponse = NextResponse.redirect(url, { status: 307 });
+    addNoCacheHeaders(redirectResponse);
+    return redirectResponse;
   }
 
   const response = intlResponse;
@@ -37,14 +75,8 @@ export async function middleware(request: NextRequest) {
   // レスポンスにヘッダーを追加
   if (response.headers) {
     // リダイレクトレスポンスの場合はキャッシュを無効化
-    // これによりVercelエッジキャッシュの問題を防ぐ
     if (response.status >= 300 && response.status < 400) {
-      response.headers.set(
-        "Cache-Control",
-        "no-store, no-cache, must-revalidate, proxy-revalidate"
-      );
-      response.headers.set("Pragma", "no-cache");
-      response.headers.set("Expires", "0");
+      addNoCacheHeaders(response as NextResponse);
     }
 
     // HSTSヘッダー（本番環境のみ）
