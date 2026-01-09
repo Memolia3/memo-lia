@@ -23,10 +23,30 @@ export async function middleware(request: NextRequest) {
 
   // next-intlのミドルウェアに処理を委譲
   // localePrefix: "always"の設定により、すべてのロケールでURLにプレフィックスが付く
-  const response = intlMiddleware(request);
+  const intlResponse = await intlMiddleware(request);
 
-  // レスポンスがNextResponseの場合のみヘッダーを追加
-  if (response instanceof NextResponse) {
+  // レスポンスがない場合はデフォルトロケールにリダイレクト
+  if (!intlResponse) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/en${pathname}`;
+    return NextResponse.redirect(url);
+  }
+
+  const response = intlResponse;
+
+  // レスポンスにヘッダーを追加
+  if (response.headers) {
+    // リダイレクトレスポンスの場合はキャッシュを無効化
+    // これによりVercelエッジキャッシュの問題を防ぐ
+    if (response.status >= 300 && response.status < 400) {
+      response.headers.set(
+        "Cache-Control",
+        "no-store, no-cache, must-revalidate, proxy-revalidate"
+      );
+      response.headers.set("Pragma", "no-cache");
+      response.headers.set("Expires", "0");
+    }
+
     // HSTSヘッダー（本番環境のみ）
     if (process.env.NODE_ENV === "production") {
       response.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
