@@ -21,21 +21,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // ルートURL（/）の場合は、明示的にロケールを検出してリダイレクト
-  if (pathname === "/") {
-    // Accept-Languageヘッダーからロケールを検出
-    const acceptLanguage = request.headers.get("accept-language") || "";
-    const locale = acceptLanguage.startsWith("ja") ? "ja" : routing.defaultLocale;
-
-    // ロケールプレフィックス付きURLにリダイレクト
-    const url = request.nextUrl.clone();
-    url.pathname = `/${locale}`;
-    return NextResponse.redirect(url);
-  }
-
   // next-intlのミドルウェアに処理を委譲
-  // localePrefix: "as-needed"の設定により、デフォルトロケール（en）の場合は
-  // URLにプレフィックスを付けずに処理される
+  // localePrefix: "always"の設定により、すべてのロケールでURLにプレフィックスが付く
   const response = intlMiddleware(request);
 
   // レスポンスがNextResponseの場合のみヘッダーを追加
