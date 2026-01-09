@@ -50,13 +50,13 @@ export async function middleware(request: NextRequest) {
   // ルートパスの場合は言語検出してリダイレクト（next-intlより先に処理）
   if (pathname === "/") {
     const locale = detectLocale(request);
-    const url = request.nextUrl.clone();
-    url.pathname = `/${locale}`;
-    const redirectResponse = NextResponse.redirect(url, { status: 307 });
+    // 絶対URLでリダイレクト（Vercelエッジ環境で確実に動作するため）
+    const redirectUrl = new URL(`/${locale}`, request.url);
+    const redirectResponse = NextResponse.redirect(redirectUrl, { status: 307 });
     // キャッシュを完全に無効化（Vercelエッジキャッシュも含む）
     addNoCacheHeaders(redirectResponse);
-    // リダイレクトループを防ぐため、X-Redirect-Fromヘッダーを追加
-    redirectResponse.headers.set("X-Redirect-From", "/");
+    // Locationヘッダーを明示的に絶対URLで設定（念のため）
+    redirectResponse.headers.set("Location", redirectUrl.toString());
     return redirectResponse;
   }
 
@@ -76,6 +76,14 @@ export async function middleware(request: NextRequest) {
     // リダイレクトレスポンスの場合はキャッシュを無効化
     if (response.status >= 300 && response.status < 400) {
       addNoCacheHeaders(response as NextResponse);
+      // リダイレクトループを防ぐ：Locationヘッダーが`/`を指している場合は修正
+      const location = response.headers.get("location");
+      if (location && (location === "/" || location.endsWith("/"))) {
+        // `/`へのリダイレクトを防ぐため、デフォルトロケールにリダイレクト
+        const locale = detectLocale(request);
+        const redirectUrl = new URL(`/${locale}`, request.url);
+        response.headers.set("Location", redirectUrl.toString());
+      }
     }
 
     // HSTSヘッダー（本番環境のみ）
