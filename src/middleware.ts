@@ -35,11 +35,27 @@ export async function middleware(request: NextRequest) {
 
       // CSP ヘッダーに nonce を埋め込む
       // AdSense用に'unsafe-inline'を追加（AdSenseは動的にインラインスクリプトを生成するため）
+      const scriptSources = [
+        "'self'",
+        `'nonce-${nonce}'`,
+        "'unsafe-eval'",
+        "'unsafe-inline'",
+        "https://pagead2.googlesyndication.com",
+        "https://www.googletagservices.com",
+        "https://www.google-analytics.com",
+      ];
+
+      // Vercel Liveは開発環境やプレビュー環境でのみ許可（本番環境では不要）
+      // VERCEL_ENVがproductionでない場合のみ許可
+      if (process.env.VERCEL_ENV !== "production") {
+        scriptSources.push("https://vercel.live");
+      }
+
       response.headers.set(
         "Content-Security-Policy",
         [
           "default-src 'self'",
-          `script-src 'self' 'nonce-${nonce}' 'unsafe-eval' 'unsafe-inline' https://pagead2.googlesyndication.com https://www.googletagservices.com https://www.google-analytics.com`,
+          `script-src ${scriptSources.join(" ")}`,
           "style-src 'self' 'unsafe-inline'",
           "img-src 'self' data: https: https://pagead2.googlesyndication.com https://www.google-analytics.com",
           "font-src 'self' data:",
@@ -72,7 +88,7 @@ export const config = {
   matcher: [
     // ルートパスを明示的に含める
     "/",
-    // ミドルウェアを適用するパス（API、静的ファイル、favicon、manifest等を除く）
-    "/((?!api|_next/static|_next/image|favicon.ico|manifest.json|robots.txt|sitemap.xml|.*\\..*).*)",
+    // ミドルウェアを適用するパス（API、静的ファイル、favicon、manifest、CSS等を除く）
+    "/((?!api|_next/static|_next/image|favicon.ico|manifest.json|robots.txt|sitemap.xml|globals.css|.*\\..*).*)",
   ],
 };

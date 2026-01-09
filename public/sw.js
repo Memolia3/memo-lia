@@ -1,5 +1,5 @@
-const STATIC_CACHE_NAME = "memolia-static-v4";
-const DYNAMIC_CACHE_NAME = "memolia-dynamic-v4";
+const STATIC_CACHE_NAME = "memolia-static-v5";
+const DYNAMIC_CACHE_NAME = "memolia-dynamic-v5";
 
 const urlsToCache = [
   // ルートパス"/"はリダイレクトされるためキャッシュしない
@@ -39,6 +39,11 @@ self.addEventListener("activate", event => {
 
 self.addEventListener("fetch", event => {
   const url = new URL(event.request.url);
+
+  // chrome-extensionやその他の非HTTPスキームのリクエストは処理しない
+  if (url.protocol !== "http:" && url.protocol !== "https:") {
+    return;
+  }
 
   // ルートパス"/"はリダイレクトされるため、Service Workerを完全にバイパスする
   // event.respondWithを呼ばないことで、リクエストを通常のネットワークリクエストとして処理
@@ -83,11 +88,21 @@ self.addEventListener("fetch", event => {
           return cachedResponse;
         }
         return fetch(event.request).then(fetchResponse => {
-          if (fetchResponse.status === 200) {
-            const cacheCopy = fetchResponse.clone();
-            caches.open(STATIC_CACHE_NAME).then(cache => {
-              cache.put(event.request, cacheCopy);
-            });
+          // 正常なレスポンスのみキャッシュ（200ステータスで、リクエストがHTTP/HTTPSの場合）
+          if (
+            fetchResponse.status === 200 &&
+            (url.protocol === "http:" || url.protocol === "https:")
+          ) {
+            try {
+              const cacheCopy = fetchResponse.clone();
+              caches.open(STATIC_CACHE_NAME).then(cache => {
+                cache.put(event.request, cacheCopy).catch(() => {
+                  // キャッシュエラーは無視（chrome-extensionなどで発生する可能性がある）
+                });
+              });
+            } catch {
+              // キャッシュエラーは無視
+            }
           }
           return fetchResponse;
         });
@@ -117,9 +132,19 @@ self.addEventListener("fetch", event => {
             return fetchResponse;
           }
 
-          // 正常なレスポンスのみキャッシュ（GETリクエストのみ）
-          if (fetchResponse.status === 200 && event.request.method === "GET") {
-            cache.put(event.request, fetchResponse.clone());
+          // 正常なレスポンスのみキャッシュ（GETリクエストのみ、HTTP/HTTPSの場合）
+          if (
+            fetchResponse.status === 200 &&
+            event.request.method === "GET" &&
+            (url.protocol === "http:" || url.protocol === "https:")
+          ) {
+            try {
+              cache.put(event.request, fetchResponse.clone()).catch(() => {
+                // キャッシュエラーは無視（chrome-extensionなどで発生する可能性がある）
+              });
+            } catch {
+              // キャッシュエラーは無視
+            }
           }
 
           return fetchResponse;
