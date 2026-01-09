@@ -46,8 +46,13 @@ export async function middleware(request: NextRequest) {
       ];
 
       // Vercel Liveは開発環境やプレビュー環境でのみ許可（本番環境では不要）
-      // VERCEL_ENVがproductionでない場合のみ許可
-      if (process.env.VERCEL_ENV !== "production") {
+      // 本番環境のドメイン（memo-lia.memolia8.com）でない場合のみ許可
+      const hostname = request.nextUrl.hostname;
+      const isProductionDomain = hostname === "memo-lia.memolia8.com";
+      const vercelEnv = process.env.VERCEL_ENV || process.env.NEXT_PUBLIC_VERCEL_ENV;
+
+      // 本番ドメインでない、またはVERCEL_ENVがproductionでない場合のみ許可
+      if (!isProductionDomain || (vercelEnv && vercelEnv !== "production")) {
         scriptSources.push("https://vercel.live");
       }
 

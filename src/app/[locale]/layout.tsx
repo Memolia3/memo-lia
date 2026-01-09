@@ -1,7 +1,7 @@
+import { PWARegister } from "@/components/PWA/PWARegister";
 import { GlobalErrorBoundary } from "@/components/error";
 import { ZoomDetector } from "@/components/layout";
 import { NotificationProvider } from "@/components/notification";
-import { PWARegister } from "@/components/PWA/PWARegister";
 import { Background } from "@/components/ui";
 import { AuthProvider } from "@/features/auth";
 import { inter } from "@/lib/fonts";
@@ -85,16 +85,6 @@ export default async function LocaleLayout({
         {/* Preconnect to Google Fonts */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Critical CSS preload */}
-        <link rel="preload" href="/globals.css" as="style" />
-        {/* Preload critical images */}
-        <link
-          rel="preload"
-          href="/assets/images/memo-lia-icon.png"
-          as="image"
-          type="image/png"
-          fetchPriority="high"
-        />
       </head>
       <body
         className={`${inter.className} antialiased bg-white dark:bg-gray-900
