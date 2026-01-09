@@ -1,6 +1,6 @@
 import { routing } from "@/i18n/routing";
-import { redirect } from "next/navigation";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 /**
  * ルートページ
@@ -12,10 +12,7 @@ export default async function RootPage() {
   const acceptLanguage = headersList.get("accept-language") || "";
   const locale = acceptLanguage.startsWith("ja") ? "ja" : routing.defaultLocale;
 
-  // localePrefix: "as-needed"の設定により、デフォルトロケール（en）の場合は
-  // URLにプレフィックスを付けずに処理される
-  // しかし、Next.jsのApp Routerの構造上、/[locale]/page.tsxにマッチさせるため、
-  // デフォルトロケールでも/enにリダイレクトする
+  // localePrefix: "always"の設定により、すべてのロケールでURLにプレフィックスが付く
+  // ルートURL（/）は、/[locale]/page.tsxにマッチさせるため、/enまたは/jaにリダイレクトする
   redirect(`/${locale}`);
 }
-
