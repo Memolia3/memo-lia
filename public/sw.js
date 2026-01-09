@@ -1,5 +1,5 @@
-const STATIC_CACHE_NAME = "memolia-static-v3";
-const DYNAMIC_CACHE_NAME = "memolia-dynamic-v3";
+const STATIC_CACHE_NAME = "memolia-static-v4";
+const DYNAMIC_CACHE_NAME = "memolia-dynamic-v4";
 
 const urlsToCache = [
   // ルートパス"/"はリダイレクトされるためキャッシュしない
@@ -40,14 +40,10 @@ self.addEventListener("activate", event => {
 self.addEventListener("fetch", event => {
   const url = new URL(event.request.url);
 
-  // ルートパス"/"はリダイレクトされるため、Service Workerを通さずに直接fetchする
+  // ルートパス"/"はリダイレクトされるため、Service Workerを完全にバイパスする
+  // event.respondWithを呼ばないことで、リクエストを通常のネットワークリクエストとして処理
   if (url.pathname === "/" && event.request.method === "GET") {
-    event.respondWith(
-      fetch(event.request, {
-        redirect: "follow", // リダイレクトを自動的に追従
-      })
-    );
-    return;
+    return; // Service Workerを通さずに、通常のネットワークリクエストとして処理
   }
 
   // 共有ターゲットの処理 - リダイレクトレスポンスをキャッシュしない
