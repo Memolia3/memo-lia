@@ -47,27 +47,26 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // ルートパスの場合は言語検出してリダイレクト
+  // ルートパスの場合は言語検出してリダイレクト（next-intlより先に処理）
   if (pathname === "/") {
     const locale = detectLocale(request);
     const url = request.nextUrl.clone();
     url.pathname = `/${locale}`;
     const redirectResponse = NextResponse.redirect(url, { status: 307 });
+    // キャッシュを完全に無効化（Vercelエッジキャッシュも含む）
     addNoCacheHeaders(redirectResponse);
+    // リダイレクトループを防ぐため、X-Redirect-Fromヘッダーを追加
+    redirectResponse.headers.set("X-Redirect-From", "/");
     return redirectResponse;
   }
 
-  // next-intlのミドルウェアに処理を委譲
+  // ロケールプレフィックスがあるパス（/en, /ja）はnext-intlに委譲
+  // ロケールプレフィックスがないパスもnext-intlが処理する
   const intlResponse = await intlMiddleware(request);
 
-  // レスポンスがない場合は言語検出してリダイレクト
+  // レスポンスがない場合はnext()を返す（通常は発生しない）
   if (!intlResponse) {
-    const locale = detectLocale(request);
-    const url = request.nextUrl.clone();
-    url.pathname = `/${locale}${pathname}`;
-    const redirectResponse = NextResponse.redirect(url, { status: 307 });
-    addNoCacheHeaders(redirectResponse);
-    return redirectResponse;
+    return NextResponse.next();
   }
 
   const response = intlResponse;
