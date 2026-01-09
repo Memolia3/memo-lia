@@ -1,8 +1,8 @@
-const STATIC_CACHE_NAME = "memolia-static-v2";
-const DYNAMIC_CACHE_NAME = "memolia-dynamic-v2";
+const STATIC_CACHE_NAME = "memolia-static-v3";
+const DYNAMIC_CACHE_NAME = "memolia-dynamic-v3";
 
 const urlsToCache = [
-  "/",
+  // ルートパス"/"はリダイレクトされるためキャッシュしない
   "/manifest.json",
   "/assets/images/memo-lia-pwa-icon.png",
   "/assets/images/memo-lia-icon.png",
@@ -39,6 +39,16 @@ self.addEventListener("activate", event => {
 
 self.addEventListener("fetch", event => {
   const url = new URL(event.request.url);
+
+  // ルートパス"/"はリダイレクトされるため、Service Workerを通さずに直接fetchする
+  if (url.pathname === "/" && event.request.method === "GET") {
+    event.respondWith(
+      fetch(event.request, {
+        redirect: "follow", // リダイレクトを自動的に追従
+      })
+    );
+    return;
+  }
 
   // 共有ターゲットの処理 - リダイレクトレスポンスをキャッシュしない
   if (url.pathname === "/share" && event.request.method === "GET") {
@@ -100,7 +110,9 @@ self.addEventListener("fetch", event => {
   event.respondWith(
     caches.open(DYNAMIC_CACHE_NAME).then(cache => {
       return caches.match(event.request).then(cachedResponse => {
-        const fetchPromise = fetch(event.request).then(fetchResponse => {
+        const fetchPromise = fetch(event.request, {
+          redirect: "follow", // リダイレクトを自動的に追従
+        }).then(fetchResponse => {
           // リダイレクトレスポンスはキャッシュしない
           if (
             fetchResponse.type === "opaqueredirect" ||
